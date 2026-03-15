@@ -1,0 +1,85 @@
+Y COMBINATOR — COMPREHENSIVE INTELLIGENCE DATABASE (Updated Feb 2026)
+
+PORTFOLIO OVERVIEW:
+- 5,300+ companies funded, worth $800B+ in aggregate
+- 100+ unicorns ($1B+ valuation), 12+ public companies
+- 70,000-80,000 applications/year; ~1% acceptance rate
+- Alumni behind 60% of the past decade's unicorns
+
+RECENT BATCHES (2025-2026) — AI TRAJECTORY:
+- W25: ~36% AI agents (58/163). Whole batch grew 10% WoW — "never happened before" (Garry Tan)
+- X25 (Spring): 46% AI agents (67/144), 50%+ agentic AI overall
+- S25: 88% AI-native (141/160). Only 10 companies without AI.
+- F25: 92% AI — highest ever. 21 software dev cos, 13 AI infra cos.
+- 25% of YC startups: 95% of code written by AI ("vibe coding accepted")
+- Companies reaching $10M revenue with teams of <10 people
+
+YC NOW RUNS 4 BATCHES/YEAR: Winter (W), Spring (X), Summer (S), Fall (F)
+- ~150 companies per batch (down from ~250)
+- Spring 2026: On-time deadline Feb 9. Decisions by March 13.
+- Deal: $500K for 7% equity (SAFE) + uncapped MFN SAFE
+
+INDUSTRY BREAKDOWN (S25):
+- B2B Software/SaaS: 68% (108 companies)
+- Deep Technology: 11% (17), B2C Consumer: 8% (12)
+- Fintech/Logistics/GovTech: 11% (17), Industrial: 4% (6)
+- FinTech resurgence: 100 deals through Sept 2025 (65.4% increase over all 2024)
+
+TEAM COMPOSITION:
+- 63% have exactly 2 founders, 18% solo founders
+- 50:50 equity split preferred for 2 founders — 70:30 raises red flags
+- Technical + domain expertise combo is strongest signal
+
+TRACTION BENCHMARKS AT DEMO DAY:
+- Top Tier (5-10%): $150K-$500K ARR, raise $2M at $20-25M post-money
+- Mid Tier (60%): $3-5K/month revenue, raise $2M at $20M post-money
+- Lower Tier: Pre-revenue, struggling to sign customers
+- MVP in private beta is table stakes for 2025-2026
+
+RFS SPRING 2026 (10 CATEGORIES):
+1. Cursor for Product Managers — AI-native product discovery
+2. AI-Native Hedge Funds — Swarms of AI agents analyzing financials
+3. AI-Native Agencies — Service businesses at software-like margins via AI
+4. Stablecoin Financial Services — DeFi benefits under compliance
+5. AI for Government — Processing forms/applications at scale
+6. Modern Metal Mills — Software-defined manufacturing
+7. AI Guidance for Physical Work — Real-time AI coaching via wearables
+8. Large Spatial Models — Foundation models for geometry/physical structures
+9. Infra for Government Fraud Hunters — False Claims Act investigations
+10. Make LLMs Easy to Train — Developer tools for model training
+
+RFS FALL 2025 (KEY THEMES):
+- Retraining workers for AI economy
+- Multi-agent system infrastructure
+- AI-native enterprise software ("Cursor for sales, HR, accounting")
+- The first 10-person $100B company
+Core thesis: AI is the foundation, not a feature. Removing AI = business can't exist.
+
+GARRY TAN (President & CEO):
+- "This is by far the best time in the history of startups to be starting one." (Dec 2025)
+- "You don't need a team of 50 or 100 engineers. You don't have to raise as much."
+- "It's not the flashiest resume or the boldest pitch but something far rarer: earnestness."
+- "First principles thinking" — believe what no one believes yet
+- A new discovery from interacting with the technology itself
+
+DALTON CALDWELL (Partner Emeritus — departed mid-2025):
+- "You don't need to spend dozens of hours on the application. A lot of the folks that get in just apply."
+- On tarpit ideas: "they attract founders because the problem remains unsolved and buyers say they'd love a solution — but they've been tried over and over again."
+
+MICHAEL SEIBEL (Partner Emeritus):
+- "If you are not drowning in demand, you don't have product-market fit."
+- "Being 80% accurate and 100% clear is better than the reverse."
+- The "60-second rule": you must earn each additional minute of investor attention
+- "Ask how to get 90% of what you want with only 10% of work."
+
+WHAT GETS REJECTED (~97% of applicants):
+- Vague descriptions — reviewer doesn't know what company does
+- Buzzwords and jargon obscuring rather than clarifying
+- No technical founder / reliance on contractors
+- Zero proof of execution — long descriptions with no evidence of building
+- No paying users for B2B ("If users don't pay, you don't have a product yet")
+- Fashionable ideas over authentic domain expertise
+- Tarpit ideas — feel compelling but are dead ends
+- Market deemed too small for venture returns
+- Weak customer acquisition strategy
+- Applications that look AI-generated/template-filled

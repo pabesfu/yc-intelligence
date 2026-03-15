@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YC Batch Intelligence 2025 — Every Company, Every Batch, All the Data</title>
+    <meta name="description" content="Complete data from all 4 YC batches in 2025: 589 companies analyzed. AI trajectory, industry breakdown, team composition, traction benchmarks. Plus: AI-powered application builder.">
+    <meta property="og:title" content="YC Batch Intelligence 2025 — 589 Companies, 4 Batches, All the Data">
+    <meta property="og:description" content="The most comprehensive analysis of every Y Combinator batch in 2025. W25, X25, S25, F25. Plus AI application builder.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yc-intelligence.pabesfu.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="YC Batch Intelligence 2025 — 589 Companies Analyzed">
+    <meta name="twitter:description" content="Complete data from all 4 YC batches in 2025. AI trajectory from 36% to 92%. Plus AI application builder.">
+
+    <!-- Fonts: Space Grotesk (body) + Fraunces (display) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        yc: '#F26522',
+                        ycDark: '#D4551A',
+                        ycLight: '#FF8A50',
+                        dark: {
+                            700: '#1e1e3a',
+                            800: '#16162e',
+                            900: '#0f0f23',
+                            950: '#0a0a1a'
+                        }
+                    },
+                    fontFamily: {
+                        body: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+                        display: ['"Fraunces"', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Space Grotesk', system-ui, sans-serif;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .font-display {
+            font-family: 'Fraunces', Georgia, serif;
+        }
+
+        /* -- Bilingual toggle -- */
+        [data-lang="es"] { display: none; }
+        body.lang-es [data-lang="es"] { display: revert; }
+        body.lang-es [data-lang="en"] { display: none; }
+
+        /* -- Animations -- */
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .scroll-fade {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .scroll-fade.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bar-fill {
+            animation: barGrow 1.5s ease-out forwards;
+        }
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        .countdown-pulse {
+            animation: countdownPulse 3s ease-in-out infinite;
+        }
+        @keyframes countdownPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(242,101,34,0.4); }
+            50% { box-shadow: 0 0 0 12px rgba(242,101,34,0); }
+        }
+
+        /* -- Glass card style -- */
+        .glass-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(242,101,34,0.08);
+        }
+
+        .glass-card-static {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .glass-card-subtle {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+
+        /* -- Interactive States -- */
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(242,101,34,0.12);
+        }
+
+        .quote-card {
+            transition: all 0.3s ease;
+        }
+        .quote-card:hover {
+            transform: scale(1.02);
+            border-color: rgba(242,101,34,0.3);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #F26522;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* -- Visual Effects -- */
+        .glow {
+            box-shadow: 0 0 60px rgba(242,101,34,0.15);
+        }
+        .glow-sm {
+            box-shadow: 0 0 30px rgba(242,101,34,0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #F26522, #FF8A50, #FFB088);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* -- Language toggle pill -- */
+        .lang-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            padding: 3px;
+            border-radius: 9999px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .lang-btn {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: rgba(255,255,255,0.4);
+            background: transparent;
+            border: none;
+            letter-spacing: 0.5px;
+        }
+        .lang-btn.active {
+            background: #F26522;
+            color: white;
+            box-shadow: 0 2px 8px rgba(242,101,34,0.3);
+        }
+
+        /* -- Media Players -- */
+        audio::-webkit-media-controls-panel {
+            background: #16162e;
+        }
+        video {
+            background: #0a0a1a;
+        }
+
+        /* -- Responsive fine-tuning -- */
+        @media (max-width: 640px) {
+            .hero-title {
+                font-size: 2.25rem;
+                line-height: 1.15;
+            }
+            .hero-subtitle {
+                font-size: 1.125rem;
+            }
+            .bar-label-detail {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-dark-950 text-gray-100">
+
+<!-- ================================================================
+     STICKY NAV
+     ================================================================ -->
+<nav id="stickyNav" class="fixed top-0 left-0 right-0 z-50 bg-dark-950/85 backdrop-blur-xl border-b border-white/[0.06] transform -translate-y-full transition-transform duration-300">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+        <a href="#" class="flex items-center gap-2">
+            <div class="w-7 h-7 bg-yc rounded flex items-center justify-center">
+                <span class="text-sm font-black text-white">Y</span>
+            </div>
+            <span class="text-sm font-bold text-white">YC Intelligence</span>
+        </a>
+        <div class="hidden md:flex items-center gap-6">
+            <a href="#intelligence" class="nav-link text-xs text-gray-400 hover:text-white transition-colors">
+                <span data-lang="en">Batch Data</span><span data-lang="es">Datos de Batch</span>
+            </a>
+            <a href="#alumni" class="nav-link text-xs text-gray-400 hover:text-white transition-colors">
+                <span data-lang="en">Alumni</span><span data-lang="es">Alumni</span>
+            </a>
+            <a href="#numbers" class="nav-link text-xs text-gray-400 hover:text-white transition-colors">
+                <span data-lang="en">Numbers</span><span data-lang="es">Numeros</span>
+            </a>
+            <a href="#quotes" class="nav-link text-xs text-gray-400 hover:text-white transition-colors">
+                <span data-lang="en">Quotes</span><span data-lang="es">Citas</span>
+            </a>
+            <a href="#media" class="nav-link text-xs text-gray-400 hover:text-white transition-colors">
+                <span data-lang="en">Podcast</span><span data-lang="es">Podcast</span>
+            </a>
+            <a href="#resources" class="nav-link text-xs text-gray-400 hover:text-white transition-colors">
+                <span data-lang="en">Reports</span><span data-lang="es">Reportes</span>
+            </a>
+            <a href="#founder" class="nav-link text-xs text-gray-400 hover:text-white transition-colors">
+                <span data-lang="en">Founder</span><span data-lang="es">Fundador</span>
+            </a>
+            <!-- Nav language toggle -->
+            <div class="lang-toggle">
+                <button onclick="setLang('en')" class="lang-btn active" id="navLangEN">EN</button>
+                <button onclick="setLang('es')" class="lang-btn" id="navLangES">ES</button>
+            </div>
+        </div>
+        <a href="#access" class="px-4 py-1.5 bg-yc hover:bg-ycDark text-white rounded-lg text-xs font-bold transition-colors">
+            <span data-lang="en">Get Access</span><span data-lang="es">Acceder</span>
+        </a>
+    </div>
+</nav>
+
+
+<!-- ================================================================
+     1. HERO
+     ================================================================ -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <!-- Background layers -->
+    <div class="absolute inset-0 bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950"></div>
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-yc/5 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-purple-600/3 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/3 left-1/6 w-[200px] h-[200px] bg-blue-600/3 rounded-full blur-3xl"></div>
+
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center fade-in">
+        <!-- Hero language toggle -->
+        <div class="flex justify-center mb-6">
+            <div class="lang-toggle">
+                <button onclick="setLang('en')" class="lang-btn active" id="heroLangEN">EN</button>
+                <button onclick="setLang('es')" class="lang-btn" id="heroLangES">ES</button>
+            </div>
+        </div>
+
+        <!-- Pulsing badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-yc/10 border border-yc/20 rounded-full mb-8 countdown-pulse">
+            <div class="w-2 h-2 bg-yc rounded-full animate-pulse"></div>
+            <span data-lang="en" class="text-xs font-medium text-yc">Spring 2026 Batch &mdash; Applications Open Now</span>
+            <span data-lang="es" class="text-xs font-medium text-yc">Batch Spring 2026 &mdash; Aplicaciones Abiertas</span>
+        </div>
+
+        <!-- Main headline -->
+        <h1 class="font-display hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-6 tracking-tight">
+            <span data-lang="en">Every <span class="gradient-text">YC Batch</span> in 2025.<br>
+            <span class="hero-subtitle text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-400 font-normal tracking-normal">589 Companies. All the Data.</span></span>
+            <span data-lang="es">Cada <span class="gradient-text">Batch de YC</span> en 2025.<br>
+            <span class="hero-subtitle text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-400 font-normal tracking-normal">589 Empresas. Toda la Data.</span></span>
+        </h1>
+
+        <p data-lang="en" class="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-4 leading-relaxed">
+            The most comprehensive analysis of <strong class="text-white">every Y Combinator batch in 2025</strong> &mdash; W25, X25, S25, and F25. AI trajectory, industry breakdown, team composition, traction benchmarks, and RFS alignment for Spring 2026.
+        </p>
+        <p data-lang="es" class="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-4 leading-relaxed">
+            El analisis mas completo de <strong class="text-white">cada batch de Y Combinator en 2025</strong> &mdash; W25, X25, S25 y F25. Trayectoria IA, desglose por industria, composicion de equipos, benchmarks de traccion y alineacion con RFS para Spring 2026.
+        </p>
+
+        <p data-lang="en" class="text-sm sm:text-base text-gray-500 max-w-xl mx-auto mb-10">
+            <strong class="text-yc">Plus:</strong> an AI-powered application builder with coaching on all 29 questions.
+        </p>
+        <p data-lang="es" class="text-sm sm:text-base text-gray-500 max-w-xl mx-auto mb-10">
+            <strong class="text-yc">Ademas:</strong> un constructor de aplicaciones con IA y coaching en las 29 preguntas.
+        </p>
+
+        <!-- CTA buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+            <a href="#intelligence" class="w-full sm:w-auto text-center px-8 py-4 bg-gradient-to-r from-yc to-orange-600 hover:from-ycDark hover:to-orange-700 text-white rounded-2xl font-bold text-lg transition-all hover:shadow-2xl hover:shadow-yc/20 active:scale-95">
+                <span data-lang="en">Explore the Data</span><span data-lang="es">Explorar los Datos</span>
+            </a>
+            <a href="#access" class="w-full sm:w-auto text-center px-8 py-4 glass-card-static hover:bg-white/[0.06] text-white rounded-2xl font-medium text-lg transition-all">
+                <span data-lang="en">Build Your Application</span><span data-lang="es">Construir Tu Aplicacion</span>
+            </a>
+        </div>
+
+        <!-- Check marks -->
+        <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 text-xs sm:text-sm text-gray-500">
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span data-lang="en">4 batches analyzed</span><span data-lang="es">4 batches analizados</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span data-lang="en">589 companies</span><span data-lang="es">589 empresas</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span data-lang="en">AI application builder</span><span data-lang="es">Constructor de aplicaciones IA</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span data-lang="en">Podcast &amp; video</span><span data-lang="es">Podcast y video</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     2. STATS BAR
+     ================================================================ -->
+<section class="py-8 border-y border-white/[0.06] bg-white/[0.02]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 text-center">
+        <div>
+            <p class="text-2xl sm:text-3xl font-bold text-white">5,300+</p>
+            <p class="text-xs text-gray-500 mt-1">
+                <span data-lang="en">Companies Funded</span><span data-lang="es">Empresas Fondeadas</span>
+            </p>
+        </div>
+        <div>
+            <p class="text-2xl sm:text-3xl font-bold text-yc">$800B+</p>
+            <p class="text-xs text-gray-500 mt-1">
+                <span data-lang="en">Portfolio Value</span><span data-lang="es">Valor de Portfolio</span>
+            </p>
+        </div>
+        <div>
+            <p class="text-2xl sm:text-3xl font-bold text-white">100+</p>
+            <p class="text-xs text-gray-500 mt-1">
+                <span data-lang="en">Unicorns Created</span><span data-lang="es">Unicornios Creados</span>
+            </p>
+        </div>
+        <div>
+            <p class="text-2xl sm:text-3xl font-bold text-yc">~1%</p>
+            <p class="text-xs text-gray-500 mt-1">
+                <span data-lang="en">Acceptance Rate</span><span data-lang="es">Tasa de Aceptacion</span>
+            </p>
+        </div>
+        <div class="col-span-2 sm:col-span-1">
+            <p class="text-2xl sm:text-3xl font-bold text-white">92%</p>
+            <p class="text-xs text-gray-500 mt-1">
+                <span data-lang="en">AI in F25 Batch</span><span data-lang="es">IA en Batch F25</span>
+            </p>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     3. WHAT YOU GET -- 3 cards
+     ================================================================ -->
+<section class="py-24 sm:py-28 px-4 sm:px-6 scroll-fade">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16 sm:mb-20">
+            <span class="text-xs font-bold text-yc uppercase tracking-widest">
+                <span data-lang="en">What You Get</span><span data-lang="es">Lo Que Obtienes</span>
+            </span>
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-bold mt-3 mb-4">Data + Media + Builder</h2>
+            <p data-lang="en" class="text-gray-400 max-w-xl mx-auto">Complete intelligence from all 4 YC batches in 2025, deep-dive media content, and a step-by-step AI application builder.</p>
+            <p data-lang="es" class="text-gray-400 max-w-xl mx-auto">Inteligencia completa de los 4 batches de YC en 2025, contenido multimedia detallado, y un constructor de aplicaciones paso a paso con IA.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 sm:gap-8">
+            <!-- Card 1: The Data -->
+            <div class="glass-card rounded-3xl p-7 sm:p-9 text-center stat-card relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-yc/5 rounded-bl-full"></div>
+                <div class="w-14 h-14 bg-yc/10 rounded-2xl flex items-center justify-center mx-auto mb-5">
+                    <svg class="w-7 h-7 text-yc" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                </div>
+                <div class="text-xs font-bold text-yc mb-3 uppercase tracking-wide">
+                    <span data-lang="en">The Data</span><span data-lang="es">Los Datos</span>
+                </div>
+                <h3 class="text-lg font-bold mb-3">
+                    <span data-lang="en">All 4 Batches, 589 Companies</span><span data-lang="es">Los 4 Batches, 589 Empresas</span>
+                </h3>
+                <p data-lang="en" class="text-sm text-gray-400 leading-relaxed">Complete analysis of W25, X25, S25, and F25: AI trajectory (36%&rarr;92%), industry breakdowns, team composition, traction benchmarks, and RFS mapping for Spring 2026.</p>
+                <p data-lang="es" class="text-sm text-gray-400 leading-relaxed">Analisis completo de W25, X25, S25 y F25: trayectoria IA (36%&rarr;92%), desglose por industria, composicion de equipos, benchmarks de traccion y mapeo RFS para Spring 2026.</p>
+            </div>
+
+            <!-- Card 2: The Media -->
+            <div class="glass-card rounded-3xl p-7 sm:p-9 text-center stat-card relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-bl-full"></div>
+                <div class="w-14 h-14 bg-purple-500/10 rounded-2xl flex items-center justify-center mx-auto mb-5">
+                    <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+                </div>
+                <div class="text-xs font-bold text-purple-400 mb-3 uppercase tracking-wide">
+                    <span data-lang="en">The Media</span><span data-lang="es">Los Medios</span>
+                </div>
+                <h3 class="text-lg font-bold mb-3">
+                    <span data-lang="en">Podcast &amp; Video Analysis</span><span data-lang="es">Podcast y Analisis en Video</span>
+                </h3>
+                <p data-lang="en" class="text-sm text-gray-400 leading-relaxed">Deep-dive podcast and video overview dissecting what makes YC batches tick, partner quotes, and what to expect for Spring 2026 applicants.</p>
+                <p data-lang="es" class="text-sm text-gray-400 leading-relaxed">Podcast y video detallado analizando que hace funcionar a los batches de YC, citas de partners, y que esperar como aplicante a Spring 2026.</p>
+            </div>
+
+            <!-- Card 3: The Builder -->
+            <div class="glass-card rounded-3xl p-7 sm:p-9 text-center stat-card relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-green-500/5 rounded-bl-full"></div>
+                <div class="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center mx-auto mb-5">
+                    <svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                </div>
+                <div class="text-xs font-bold text-green-400 mb-3 uppercase tracking-wide">
+                    <span data-lang="en">The Builder</span><span data-lang="es">El Constructor</span>
+                </div>
+                <h3 class="text-lg font-bold mb-3">
+                    <span data-lang="en">AI-Powered Application</span><span data-lang="es">Aplicacion con IA</span>
+                </h3>
+                <p data-lang="en" class="text-sm text-gray-400 leading-relaxed">All 29 YC questions, AI coaching with Gemini, buzzword detection, RFS alignment scoring, and one-click export when you are ready to submit.</p>
+                <p data-lang="es" class="text-sm text-gray-400 leading-relaxed">Las 29 preguntas de YC, coaching con IA Gemini, deteccion de buzzwords, scoring de alineacion RFS, y exportacion en un click cuando estes listo.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     4. ALUMNI SUCCESS
+     ================================================================ -->
+<section id="alumni" class="py-24 sm:py-28 px-4 sm:px-6 bg-white/[0.01] border-y border-white/[0.04] scroll-fade">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16 sm:mb-20">
+            <span class="text-xs font-bold text-yc uppercase tracking-widest">
+                <span data-lang="en">The Network</span><span data-lang="es">La Red</span>
+            </span>
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-bold mt-3 mb-4">
+                <span data-lang="en">They All Started With One Application</span><span data-lang="es">Todos Empezaron con Una Aplicacion</span>
+            </h2>
+            <p data-lang="en" class="text-gray-400 max-w-2xl mx-auto">The most valuable startup accelerator ever. These companies all filled out the same form you are about to fill.</p>
+            <p data-lang="es" class="text-gray-400 max-w-2xl mx-auto">La aceleradora de startups mas valiosa de la historia. Todas estas empresas llenaron el mismo formulario que tu estas por llenar.</p>
+        </div>
+
+        <!-- Top 4 alumni cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5 mb-8 sm:mb-12">
+            <div class="glass-card rounded-3xl p-5 sm:p-7 text-center stat-card">
+                <p class="text-xl sm:text-2xl font-bold text-white mb-1">Stripe</p>
+                <p class="text-xs text-gray-500 mb-2">YC S09</p>
+                <p class="text-lg font-bold text-yc">$95B</p>
+                <p class="text-[10px] text-gray-600">
+                    <span data-lang="en">Peak valuation</span><span data-lang="es">Valuacion maxima</span>
+                </p>
+            </div>
+            <div class="glass-card rounded-3xl p-5 sm:p-7 text-center stat-card">
+                <p class="text-xl sm:text-2xl font-bold text-white mb-1">Airbnb</p>
+                <p class="text-xs text-gray-500 mb-2">YC W09</p>
+                <p class="text-lg font-bold text-yc">$75B</p>
+                <p class="text-[10px] text-gray-600">
+                    <span data-lang="en">Market cap (public)</span><span data-lang="es">Cap. de mercado (publica)</span>
+                </p>
+            </div>
+            <div class="glass-card rounded-3xl p-5 sm:p-7 text-center stat-card">
+                <p class="text-xl sm:text-2xl font-bold text-white mb-1">DoorDash</p>
+                <p class="text-xs text-gray-500 mb-2">YC S13</p>
+                <p class="text-lg font-bold text-yc">$60B</p>
+                <p class="text-[10px] text-gray-600">
+                    <span data-lang="en">Market cap (public)</span><span data-lang="es">Cap. de mercado (publica)</span>
+                </p>
+            </div>
+            <div class="glass-card rounded-3xl p-5 sm:p-7 text-center stat-card">
+                <p class="text-xl sm:text-2xl font-bold text-white mb-1">Coinbase</p>
+                <p class="text-xs text-gray-500 mb-2">YC S12</p>
+                <p class="text-lg font-bold text-yc">$52B</p>
+                <p class="text-[10px] text-gray-600">
+                    <span data-lang="en">Market cap (public)</span><span data-lang="es">Cap. de mercado (publica)</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Second row: smaller alumni cards -->
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-3 sm:gap-4">
+            <div class="glass-card-subtle rounded-2xl p-3 text-center stat-card">
+                <p class="text-sm font-bold text-white">Dropbox</p>
+                <p class="text-[10px] text-gray-600">S07 | $8B IPO</p>
+            </div>
+            <div class="glass-card-subtle rounded-2xl p-3 text-center stat-card">
+                <p class="text-sm font-bold text-white">Instacart</p>
+                <p class="text-[10px] text-gray-600">S12 | $10B IPO</p>
+            </div>
+            <div class="glass-card-subtle rounded-2xl p-3 text-center stat-card">
+                <p class="text-sm font-bold text-white">Gusto</p>
+                <p class="text-[10px] text-gray-600">W12 | $10B</p>
+            </div>
+            <div class="glass-card-subtle rounded-2xl p-3 text-center stat-card">
+                <p class="text-sm font-bold text-white">Brex</p>
+                <p class="text-[10px] text-gray-600">W17 | $12B</p>
+            </div>
+            <div class="glass-card-subtle rounded-2xl p-3 text-center stat-card">
+                <p class="text-sm font-bold text-white">Cruise</p>
+                <p class="text-[10px] text-gray-600">W14 | $30B</p>
+            </div>
+            <div class="glass-card-subtle rounded-2xl p-3 text-center stat-card">
+                <p class="text-sm font-bold text-white">Reddit</p>
+                <p class="text-[10px] text-gray-600">S05 | $6B IPO</p>
+            </div>
+        </div>
+
+        <p class="text-center text-xs text-gray-600 mt-6">+ Twitch, Zapier, GitLab, Segment, PlanGrid, and 5,200+ more</p>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     5. BATCH INTELLIGENCE -- The Main Section
+     ================================================================ -->
+<section id="intelligence" class="py-24 sm:py-28 px-4 sm:px-6 scroll-fade">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16 sm:mb-20">
+            <span class="text-xs font-bold text-yc uppercase tracking-widest">
+                <span data-lang="en">Complete 2025 Data</span><span data-lang="es">Data Completa 2025</span>
+            </span>
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-bold mt-3 mb-4">
+                <span data-lang="en">All 4 Batches. 589 Companies. Every Datapoint.</span><span data-lang="es">Los 4 Batches. 589 Empresas. Cada Dato.</span>
+            </h2>
+            <p data-lang="en" class="text-gray-400 max-w-2xl mx-auto">For the first time, YC ran 4 batches in a single year. We analyzed every company across W25, X25, S25, and F25. AI went from 36% to 92%. Here is the full picture.</p>
+            <p data-lang="es" class="text-gray-400 max-w-2xl mx-auto">Por primera vez, YC tuvo 4 batches en un solo ano. Analizamos cada empresa en W25, X25, S25 y F25. La IA paso de 36% a 92%. Aqui esta el panorama completo.</p>
+        </div>
+
+        <!-- AI Trajectory Chart -->
+        <div class="glass-card rounded-3xl p-6 sm:p-9 mb-6 sm:mb-8 glow-sm">
+            <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-6">
+                <span data-lang="en">AI Companies per Batch &mdash; The Exponential Curve</span><span data-lang="es">Empresas de IA por Batch &mdash; La Curva Exponencial</span>
+            </h3>
+            <div class="space-y-4">
+                <!-- W25 -->
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <span class="text-xs font-bold text-gray-400 w-10 shrink-0">W25</span>
+                    <div class="flex-1 bg-white/[0.04] rounded-full h-8 relative overflow-hidden">
+                        <div class="bg-gradient-to-r from-yc/60 to-yc h-full rounded-full bar-fill flex items-center justify-end pr-3" style="width:36%">
+                            <span class="text-xs font-bold text-white">36%</span>
+                        </div>
+                    </div>
+                    <span class="bar-label-detail text-xs text-gray-500 w-40 shrink-0 hidden sm:block">58/163 &mdash; 10% WoW growth</span>
+                </div>
+                <!-- X25 -->
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <span class="text-xs font-bold text-gray-400 w-10 shrink-0">X25</span>
+                    <div class="flex-1 bg-white/[0.04] rounded-full h-8 relative overflow-hidden">
+                        <div class="bg-gradient-to-r from-yc/60 to-yc h-full rounded-full bar-fill flex items-center justify-end pr-3" style="width:46%">
+                            <span class="text-xs font-bold text-white">46%</span>
+                        </div>
+                    </div>
+                    <span class="bar-label-detail text-xs text-gray-500 w-40 shrink-0 hidden sm:block">67/144 &mdash; Agentic AI surge</span>
+                </div>
+                <!-- S25 -->
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <span class="text-xs font-bold text-gray-400 w-10 shrink-0">S25</span>
+                    <div class="flex-1 bg-white/[0.04] rounded-full h-8 relative overflow-hidden">
+                        <div class="bg-gradient-to-r from-yc/60 to-yc h-full rounded-full bar-fill flex items-center justify-end pr-3" style="width:88%">
+                            <span class="text-xs font-bold text-white">88%</span>
+                        </div>
+                    </div>
+                    <span class="bar-label-detail text-xs text-gray-500 w-40 shrink-0 hidden sm:block">141/160 &mdash; Only 10 non-AI</span>
+                </div>
+                <!-- F25 -->
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <span class="text-xs font-bold text-yc w-10 shrink-0">F25</span>
+                    <div class="flex-1 bg-white/[0.04] rounded-full h-8 relative overflow-hidden">
+                        <div class="bg-gradient-to-r from-yc to-orange-500 h-full rounded-full bar-fill flex items-center justify-end pr-3" style="width:92%">
+                            <span class="text-xs font-bold text-white">92%</span>
+                        </div>
+                    </div>
+                    <span class="bar-label-detail text-xs text-yc w-40 shrink-0 font-semibold hidden sm:block">143/155 &mdash; Highest ever</span>
+                </div>
+            </div>
+            <p class="text-xs text-gray-600 mt-5 text-center">
+                <span data-lang="en">Source: YC batch directories, company-by-company analysis. Updated February 2026.</span>
+                <span data-lang="es">Fuente: directorios de batches de YC, analisis empresa por empresa. Actualizado febrero 2026.</span>
+            </p>
+        </div>
+
+        <!-- RFS + Deal Structure grid -->
+        <div class="grid md:grid-cols-2 gap-5 sm:gap-6">
+            <!-- RFS -->
+            <div class="glass-card rounded-3xl p-6 sm:p-7">
+                <h3 class="text-sm font-bold text-yc uppercase tracking-wider mb-5">
+                    <span data-lang="en">RFS Spring 2026 &mdash; What YC Wants</span><span data-lang="es">RFS Spring 2026 &mdash; Lo Que YC Busca</span>
+                </h3>
+                <div class="space-y-2.5">
+                    <div class="flex items-start gap-2.5"><span class="text-yc mt-0.5 font-bold text-xs w-5 shrink-0">1.</span><span class="text-sm text-gray-300">Cursor for Product Managers &mdash; AI-native product discovery</span></div>
+                    <div class="flex items-start gap-2.5"><span class="text-yc mt-0.5 font-bold text-xs w-5 shrink-0">2.</span><span class="text-sm text-gray-300">AI-Native Hedge Funds &mdash; Swarms of AI agents</span></div>
+                    <div class="flex items-start gap-2.5"><span class="text-yc mt-0.5 font-bold text-xs w-5 shrink-0">3.</span><span class="text-sm text-gray-300">AI-Native Agencies &mdash; Software-like margins via AI</span></div>
+                    <div class="flex items-start gap-2.5"><span class="text-yc mt-0.5 font-bold text-xs w-5 shrink-0">4.</span><span class="text-sm text-gray-300">Stablecoin Financial Services</span></div>
+                    <div class="flex items-start gap-2.5"><span class="text-yc mt-0.5 font-bold text-xs w-5 shrink-0">5.</span><span class="text-sm text-gray-300">AI for Government &mdash; Processing at scale</span></div>
+                    <div class="flex items-start gap-2.5"><span class="text-yc mt-0.5 font-bold text-xs w-5 shrink-0">6.</span><span class="text-sm text-gray-300">Modern Metal Mills &mdash; Software-defined manufacturing</span></div>
+                    <div class="flex items-start gap-2.5"><span class="text-yc mt-0.5 font-bold text-xs w-5 shrink-0">7.</span><span class="text-sm text-gray-300">AI Guidance for Physical Work &mdash; Wearables</span></div>
+                    <div class="flex items-start gap-2.5"><span class="text-yc mt-0.5 font-bold text-xs w-5 shrink-0">8.</span><span class="text-sm text-gray-300">Large Spatial Models &mdash; Geometry foundation models</span></div>
+                    <div class="flex items-start gap-2.5"><span class="text-yc mt-0.5 font-bold text-xs w-5 shrink-0">9.</span><span class="text-sm text-gray-300">Infra for Government Fraud Hunters</span></div>
+                    <div class="flex items-start gap-2.5"><span class="text-yc mt-0.5 font-bold text-xs w-5 shrink-0">10.</span><span class="text-sm text-gray-300">Make LLMs Easy to Train &mdash; Developer tools</span></div>
+                </div>
+            </div>
+
+            <!-- Deal Structure -->
+            <div class="glass-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-sm font-bold text-yc uppercase tracking-wider mb-5">
+                        <span data-lang="en">The YC Deal &mdash; Spring 2026</span><span data-lang="es">El Deal de YC &mdash; Spring 2026</span>
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="bg-white/[0.04] rounded-2xl p-4">
+                            <p class="text-2xl font-bold text-white">$500K</p>
+                            <p class="text-xs text-gray-500 mt-1">
+                                <span data-lang="en">Total investment per company</span><span data-lang="es">Inversion total por empresa</span>
+                            </p>
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="bg-white/[0.04] rounded-2xl p-3 flex-1">
+                                <p class="text-base font-bold text-white">$125K</p>
+                                <p class="text-[10px] text-gray-500">Post-money SAFE for 7%</p>
+                            </div>
+                            <div class="bg-white/[0.04] rounded-2xl p-3 flex-1">
+                                <p class="text-base font-bold text-white">$375K</p>
+                                <p class="text-[10px] text-gray-500">Uncapped MFN SAFE</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 bg-white/[0.03] rounded-2xl p-3 border border-white/[0.04]">
+                    <p data-lang="en" class="text-xs text-gray-400"><strong class="text-white">4 batches/year</strong> since 2025: Winter, Spring, Summer, Fall. ~150 companies per batch. ~70,000-80,000 applications annually.</p>
+                    <p data-lang="es" class="text-xs text-gray-400"><strong class="text-white">4 batches/ano</strong> desde 2025: Winter, Spring, Summer, Fall. ~150 empresas por batch. ~70,000-80,000 aplicaciones anuales.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     6. INSIDE THE NUMBERS -- 3 columns
+     ================================================================ -->
+<section id="numbers" class="py-24 sm:py-28 px-4 sm:px-6 bg-white/[0.01] border-y border-white/[0.04] scroll-fade">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16 sm:mb-20">
+            <span class="text-xs font-bold text-yc uppercase tracking-widest">
+                <span data-lang="en">Deep Dive</span><span data-lang="es">Analisis Profundo</span>
+            </span>
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-bold mt-3 mb-4">
+                <span data-lang="en">Inside the Numbers</span><span data-lang="es">Detras de los Numeros</span>
+            </h2>
+            <p data-lang="en" class="text-gray-400 max-w-2xl mx-auto">What the latest YC batches tell us about who gets funded, how teams are structured, and what traction matters.</p>
+            <p data-lang="es" class="text-gray-400 max-w-2xl mx-auto">Lo que los ultimos batches de YC nos dicen sobre quien recibe fondos, como se estructuran los equipos, y que traccion importa.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-5 sm:gap-6 mb-6 sm:mb-8">
+            <!-- Industry Breakdown -->
+            <div class="glass-card rounded-3xl p-6 sm:p-7">
+                <h3 class="text-sm font-bold text-yc uppercase tracking-wider mb-4">
+                    <span data-lang="en">Industry Breakdown (S25)</span><span data-lang="es">Desglose por Industria (S25)</span>
+                </h3>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xs text-gray-300">B2B Software / SaaS</span>
+                            <span class="text-xs text-yc font-bold">68%</span>
+                        </div>
+                        <div class="w-full bg-white/[0.04] rounded-full h-2"><div class="bg-yc h-2 rounded-full" style="width:68%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xs text-gray-300">Deep Technology</span>
+                            <span class="text-xs text-purple-400 font-bold">11%</span>
+                        </div>
+                        <div class="w-full bg-white/[0.04] rounded-full h-2"><div class="bg-purple-400 h-2 rounded-full" style="width:11%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xs text-gray-300">Fintech / Logistics / GovTech</span>
+                            <span class="text-xs text-blue-400 font-bold">11%</span>
+                        </div>
+                        <div class="w-full bg-white/[0.04] rounded-full h-2"><div class="bg-blue-400 h-2 rounded-full" style="width:11%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xs text-gray-300">B2C Consumer</span>
+                            <span class="text-xs text-green-400 font-bold">8%</span>
+                        </div>
+                        <div class="w-full bg-white/[0.04] rounded-full h-2"><div class="bg-green-400 h-2 rounded-full" style="width:8%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xs text-gray-300">Industrial / Hardware</span>
+                            <span class="text-xs text-gray-400 font-bold">4%</span>
+                        </div>
+                        <div class="w-full bg-white/[0.04] rounded-full h-2"><div class="bg-gray-400 h-2 rounded-full" style="width:4%"></div></div>
+                    </div>
+                </div>
+                <p class="text-[10px] text-gray-600 mt-4">
+                    <span data-lang="en">108 of 160 companies in S25 are B2B SaaS</span><span data-lang="es">108 de 160 empresas en S25 son B2B SaaS</span>
+                </p>
+            </div>
+
+            <!-- Team Composition -->
+            <div class="glass-card rounded-3xl p-6 sm:p-7">
+                <h3 class="text-sm font-bold text-yc uppercase tracking-wider mb-4">
+                    <span data-lang="en">Team Composition</span><span data-lang="es">Composicion del Equipo</span>
+                </h3>
+                <div class="space-y-3">
+                    <div class="bg-white/[0.04] rounded-2xl p-4 text-center">
+                        <p class="text-3xl font-bold text-white">63%</p>
+                        <p class="text-xs text-gray-500 mt-1">
+                            <span data-lang="en">have exactly 2 founders</span><span data-lang="es">tienen exactamente 2 founders</span>
+                        </p>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="bg-white/[0.04] rounded-2xl p-3 flex-1 text-center">
+                            <p class="text-xl font-bold text-white">18%</p>
+                            <p class="text-[10px] text-gray-500">Solo founders</p>
+                        </div>
+                        <div class="bg-white/[0.04] rounded-2xl p-3 flex-1 text-center">
+                            <p class="text-xl font-bold text-white">19%</p>
+                            <p class="text-[10px] text-gray-500">3+ founders</p>
+                        </div>
+                    </div>
+                    <div class="bg-yc/5 border border-yc/20 rounded-2xl p-3">
+                        <p data-lang="en" class="text-xs text-gray-300"><span class="text-yc font-semibold">50:50 split</span> is preferred for 2-person teams. 70:30 raises red flags with YC partners.</p>
+                        <p data-lang="es" class="text-xs text-gray-300"><span class="text-yc font-semibold">Split 50:50</span> es preferido para equipos de 2. Un 70:30 levanta red flags con los partners de YC.</p>
+                    </div>
+                    <p data-lang="en" class="text-xs text-gray-400">Technical + domain expertise combo is the strongest signal for partners.</p>
+                    <p data-lang="es" class="text-xs text-gray-400">La combinacion tecnico + experiencia de dominio es la senal mas fuerte para los partners.</p>
+                </div>
+            </div>
+
+            <!-- Traction Benchmarks -->
+            <div class="glass-card rounded-3xl p-6 sm:p-7">
+                <h3 class="text-sm font-bold text-yc uppercase tracking-wider mb-4">
+                    <span data-lang="en">Traction at Demo Day</span><span data-lang="es">Traccion en Demo Day</span>
+                </h3>
+                <div class="space-y-3">
+                    <div class="bg-white/[0.04] rounded-2xl p-4 border-l-2 border-green-400">
+                        <p class="text-xs font-bold text-green-400 uppercase mb-1">Top 5-10%</p>
+                        <p class="text-sm font-bold text-white">$150K-$500K ARR</p>
+                        <p data-lang="en" class="text-xs text-gray-500">Raise $2M at $20-25M post-money</p>
+                        <p data-lang="es" class="text-xs text-gray-500">Levantan $2M a $20-25M post-money</p>
+                    </div>
+                    <div class="bg-white/[0.04] rounded-2xl p-4 border-l-2 border-blue-400">
+                        <p class="text-xs font-bold text-blue-400 uppercase mb-1">Mid Tier (60%)</p>
+                        <p class="text-sm font-bold text-white">$3-5K/month revenue</p>
+                        <p data-lang="en" class="text-xs text-gray-500">Raise $2M at $20M post-money</p>
+                        <p data-lang="es" class="text-xs text-gray-500">Levantan $2M a $20M post-money</p>
+                    </div>
+                    <div class="bg-white/[0.04] rounded-2xl p-4 border-l-2 border-yellow-400">
+                        <p class="text-xs font-bold text-yellow-400 uppercase mb-1">Lower Tier</p>
+                        <p class="text-sm font-bold text-white">Pre-revenue</p>
+                        <p data-lang="en" class="text-xs text-gray-500">Struggle to close post-batch</p>
+                        <p data-lang="es" class="text-xs text-gray-500">Luchan por cerrar post-batch</p>
+                    </div>
+                    <div class="bg-white/[0.03] rounded-2xl p-3">
+                        <p data-lang="en" class="text-xs text-gray-400"><strong class="text-white">MVP in private beta</strong> is table stakes for 2025-2026. Zero product = almost zero chance.</p>
+                        <p data-lang="es" class="text-xs text-gray-400"><strong class="text-white">MVP en beta privada</strong> es lo minimo para 2025-2026. Sin producto = casi cero oportunidad.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Trend callout -->
+        <div class="glass-card rounded-3xl p-6 sm:p-7">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+                <div class="shrink-0">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-yc/10 rounded-2xl flex items-center justify-center">
+                        <svg class="w-7 h-7 sm:w-8 sm:h-8 text-yc" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                    </div>
+                </div>
+                <div>
+                    <p data-lang="en" class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Key trend:</strong> Companies reaching $10M revenue with teams of fewer than 10 people. 25% of current YC startups have 95% of their code written by AI. The era of the "10-person $100B company" is YC's stated thesis for 2026.</p>
+                    <p data-lang="es" class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Tendencia clave:</strong> Empresas alcanzando $10M en revenue con equipos de menos de 10 personas. 25% de las startups actuales de YC tienen 95% de su codigo escrito por IA. La era de la "empresa de $100B con 10 personas" es la tesis declarada de YC para 2026.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     7. YC PARTNER QUOTES -- 5 quotes
+     ================================================================ -->
+<section id="quotes" class="py-24 sm:py-28 px-4 sm:px-6 scroll-fade">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16 sm:mb-20">
+            <span class="text-xs font-bold text-yc uppercase tracking-widest">
+                <span data-lang="en">From YC Partners</span><span data-lang="es">De Partners de YC</span>
+            </span>
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-bold mt-3 mb-4">
+                <span data-lang="en">What They Are Looking For</span><span data-lang="es">Lo Que Buscan</span>
+            </h2>
+            <p data-lang="en" class="text-gray-400 max-w-xl mx-auto">Direct quotes from the people who decide if you get in.</p>
+            <p data-lang="es" class="text-gray-400 max-w-xl mx-auto">Citas directas de las personas que deciden si entras o no.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5 mb-5">
+            <!-- Quote 1 -->
+            <div class="glass-card rounded-3xl p-6 sm:p-7 quote-card">
+                <svg class="w-6 h-6 text-yc/30 mb-3" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                <p class="text-sm text-gray-300 italic leading-relaxed mb-3">"This is by far the best time in the history of startups to be starting one. You don't need a team of 50 or 100 engineers. You don't have to raise as much."</p>
+                <p class="text-xs text-yc font-semibold">Garry Tan, President &amp; CEO &mdash; Dec 2025</p>
+            </div>
+
+            <!-- Quote 2 -->
+            <div class="glass-card rounded-3xl p-6 sm:p-7 quote-card">
+                <svg class="w-6 h-6 text-yc/30 mb-3" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                <p class="text-sm text-gray-300 italic leading-relaxed mb-3">"It's not the flashiest resume or the boldest pitch but something far rarer: earnestness. First principles thinking &mdash; believe what no one believes yet."</p>
+                <p class="text-xs text-yc font-semibold">Garry Tan, President &amp; CEO</p>
+            </div>
+
+            <!-- Quote 3 -->
+            <div class="glass-card rounded-3xl p-6 sm:p-7 quote-card">
+                <svg class="w-6 h-6 text-yc/30 mb-3" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                <p class="text-sm text-gray-300 italic leading-relaxed mb-3">"Being 80% accurate and 100% clear is better than the reverse. Ask how to get 90% of what you want with only 10% of work."</p>
+                <p class="text-xs text-yc font-semibold">Michael Seibel, Partner Emeritus</p>
+            </div>
+
+            <!-- Quote 4 -->
+            <div class="glass-card rounded-3xl p-6 sm:p-7 quote-card">
+                <svg class="w-6 h-6 text-yc/30 mb-3" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                <p class="text-sm text-gray-300 italic leading-relaxed mb-3">"You don't need to spend dozens of hours on the application. A lot of the folks that get in just apply. The biggest mistake is overthinking it."</p>
+                <p class="text-xs text-yc font-semibold">Dalton Caldwell, Partner Emeritus</p>
+            </div>
+        </div>
+
+        <!-- Quote 5 -- featured -->
+        <div class="glass-card rounded-3xl p-6 sm:p-7 quote-card" style="border-color: rgba(242,101,34,0.15);">
+            <div class="flex items-start gap-4">
+                <svg class="w-6 h-6 text-yc/40 shrink-0 mt-1" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                <div>
+                    <p class="text-sm sm:text-base text-gray-300 italic leading-relaxed mb-3">"If you are not drowning in demand, you don't have product-market fit. The 60-second rule: you must earn each additional minute of investor attention."</p>
+                    <p class="text-xs text-yc font-semibold">Michael Seibel &mdash; The single most important test for your application</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     8. WHAT GETS REJECTED -- 6 rejection cards + validator
+     ================================================================ -->
+<section id="rejected" class="py-24 sm:py-28 px-4 sm:px-6 bg-white/[0.01] border-y border-white/[0.04] scroll-fade">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-14">
+            <span class="text-xs font-bold text-red-400 uppercase tracking-widest">
+                <span data-lang="en">Warning</span><span data-lang="es">Advertencia</span>
+            </span>
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-bold mt-3 mb-4">
+                <span data-lang="en">What Gets You Rejected</span><span data-lang="es">Lo Que Te Rechaza</span>
+            </h2>
+            <p data-lang="en" class="text-gray-400 max-w-2xl mx-auto">~97% of applicants do not get in. Here is what YC partners flag instantly. Our validator catches all of these.</p>
+            <p data-lang="es" class="text-gray-400 max-w-2xl mx-auto">~97% de los aplicantes no entran. Esto es lo que los partners de YC detectan de inmediato. Nuestro validador atrapa todo esto.</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Rejection 1 -->
+            <div class="bg-red-900/10 border border-red-700/20 rounded-2xl p-5 flex items-start gap-3">
+                <span class="text-red-400 mt-0.5 text-lg shrink-0">&#10005;</span>
+                <div>
+                    <p class="text-sm font-medium text-white mb-1">
+                        <span data-lang="en">Vague Descriptions</span><span data-lang="es">Descripciones Vagas</span>
+                    </p>
+                    <p data-lang="en" class="text-xs text-gray-400">Reviewer has no idea what you do after reading your first answer. Instant rejection.</p>
+                    <p data-lang="es" class="text-xs text-gray-400">El revisor no tiene idea de que haces despues de leer tu primera respuesta. Rechazo instantaneo.</p>
+                </div>
+            </div>
+            <!-- Rejection 2 -->
+            <div class="bg-red-900/10 border border-red-700/20 rounded-2xl p-5 flex items-start gap-3">
+                <span class="text-red-400 mt-0.5 text-lg shrink-0">&#10005;</span>
+                <div>
+                    <p class="text-sm font-medium text-white mb-1">
+                        <span data-lang="en">Buzzwords &amp; Jargon</span><span data-lang="es">Buzzwords y Jerga</span>
+                    </p>
+                    <p data-lang="en" class="text-xs text-gray-400">"Synergy," "leverage," "disrupt" &mdash; corporate-speak tells partners you cannot explain clearly.</p>
+                    <p data-lang="es" class="text-xs text-gray-400">"Sinergia," "apalancar," "disruptir" &mdash; el lenguaje corporativo les dice a los partners que no puedes explicar con claridad.</p>
+                </div>
+            </div>
+            <!-- Rejection 3 -->
+            <div class="bg-red-900/10 border border-red-700/20 rounded-2xl p-5 flex items-start gap-3">
+                <span class="text-red-400 mt-0.5 text-lg shrink-0">&#10005;</span>
+                <div>
+                    <p class="text-sm font-medium text-white mb-1">
+                        <span data-lang="en">No Technical Founder</span><span data-lang="es">Sin Founder Tecnico</span>
+                    </p>
+                    <p data-lang="en" class="text-xs text-gray-400">100% outsourced development = you are a PowerPoint company, not a product company.</p>
+                    <p data-lang="es" class="text-xs text-gray-400">100% desarrollo tercerizado = eres una empresa de PowerPoint, no de producto.</p>
+                </div>
+            </div>
+            <!-- Rejection 4 -->
+            <div class="bg-red-900/10 border border-red-700/20 rounded-2xl p-5 flex items-start gap-3">
+                <span class="text-red-400 mt-0.5 text-lg shrink-0">&#10005;</span>
+                <div>
+                    <p class="text-sm font-medium text-white mb-1">
+                        <span data-lang="en">Zero Proof of Execution</span><span data-lang="es">Cero Prueba de Ejecucion</span>
+                    </p>
+                    <p data-lang="en" class="text-xs text-gray-400">Long plans, no building. "We plan to launch in Q3..." &mdash; YC wants companies that SHIP.</p>
+                    <p data-lang="es" class="text-xs text-gray-400">Planes largos, nada construido. "Planeamos lanzar en Q3..." &mdash; YC quiere empresas que LANZAN.</p>
+                </div>
+            </div>
+            <!-- Rejection 5 -->
+            <div class="bg-red-900/10 border border-red-700/20 rounded-2xl p-5 flex items-start gap-3">
+                <span class="text-red-400 mt-0.5 text-lg shrink-0">&#10005;</span>
+                <div>
+                    <p class="text-sm font-medium text-white mb-1">
+                        <span data-lang="en">Tarpit Ideas</span><span data-lang="es">Ideas Trampa (Tarpit)</span>
+                    </p>
+                    <p data-lang="en" class="text-xs text-gray-400">Feel compelling but are dead ends. They attract founders because the problem stays unsolved &mdash; for a reason.</p>
+                    <p data-lang="es" class="text-xs text-gray-400">Parecen convincentes pero son callejones sin salida. Atraen founders porque el problema sigue sin resolver &mdash; por algo sera.</p>
+                </div>
+            </div>
+            <!-- Rejection 6 -->
+            <div class="bg-red-900/10 border border-red-700/20 rounded-2xl p-5 flex items-start gap-3">
+                <span class="text-red-400 mt-0.5 text-lg shrink-0">&#10005;</span>
+                <div>
+                    <p class="text-sm font-medium text-white mb-1">
+                        <span data-lang="en">AI-Generated Applications</span><span data-lang="es">Aplicaciones Generadas por IA</span>
+                    </p>
+                    <p data-lang="en" class="text-xs text-gray-400">Partners can spot template-filled, ChatGPT-written answers immediately. Be authentic.</p>
+                    <p data-lang="es" class="text-xs text-gray-400">Los partners detectan respuestas genericas escritas con ChatGPT de inmediato. Se autentico.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Green validator card -->
+        <div class="mt-6 bg-green-900/10 border border-green-700/20 rounded-2xl p-5 flex items-start gap-3">
+            <svg class="w-5 h-5 text-green-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <p data-lang="en" class="text-sm text-gray-300">Our <strong class="text-green-400">AI Validator</strong> automatically detects buzzwords, vague language, missing data points, and template-like writing. It catches these issues before you submit.</p>
+            <p data-lang="es" class="text-sm text-gray-300">Nuestro <strong class="text-green-400">Validador con IA</strong> detecta automaticamente buzzwords, lenguaje vago, datos faltantes y escritura tipo plantilla. Atrapa estos problemas antes de que envies tu aplicacion.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     9. PODCAST & VIDEO
+     ================================================================ -->
+<section id="media" class="py-24 sm:py-28 px-4 sm:px-6 scroll-fade">
+    <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+            <span class="text-xs font-bold text-yc uppercase tracking-widest">
+                <span data-lang="en">Listen &amp; Watch</span><span data-lang="es">Escucha y Mira</span>
+            </span>
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-bold mt-3 mb-4">
+                <span data-lang="en">Podcast &amp; Video Overview</span><span data-lang="es">Podcast y Video Overview</span>
+            </h2>
+            <p data-lang="en" class="text-gray-400 max-w-xl mx-auto">Deep-dive analysis of every 2025 batch, partner insights, and what it means for Spring 2026 applicants.</p>
+            <p data-lang="es" class="text-gray-400 max-w-xl mx-auto">Analisis profundo de cada batch 2025, insights de partners, y que significa para aplicantes a Spring 2026.</p>
+        </div>
+
+        <!-- Language tabs for media -->
+        <div class="flex justify-center gap-2 mb-8">
+            <button onclick="setMediaLang('en')" id="mediaEN" class="px-4 py-2 rounded-lg text-xs font-bold transition-all bg-yc text-white">English</button>
+            <button onclick="setMediaLang('es')" id="mediaES" class="px-4 py-2 rounded-lg text-xs font-bold transition-all bg-white/[0.04] text-gray-400 border border-white/[0.08] hover:border-white/[0.15]">Espanol</button>
+        </div>
+
+        <!-- EN Media -->
+        <div id="mediaContentEN" class="grid md:grid-cols-2 gap-5 sm:gap-6">
+            <div class="glass-card rounded-3xl p-6 sm:p-7">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-yc/10 rounded-xl flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-yc" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-base">YC 2025 Podcast</h3>
+                        <p class="text-xs text-gray-500">Deep-dive analysis (English)</p>
+                    </div>
+                </div>
+                <audio controls preload="metadata" class="w-full mb-3 rounded-lg" style="height:44px;">
+                    <source src="/static/YC_2025_Podcast_EN.mp3" type="audio/mpeg">
+                </audio>
+                <p class="text-xs text-gray-500">Batch intelligence, AI trajectory, and what YC partners are looking for in Spring 2026.</p>
+            </div>
+            <div class="glass-card rounded-3xl p-6 sm:p-7 flex flex-col items-center justify-center text-center">
+                <div class="w-16 h-16 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                </div>
+                <h3 class="font-bold text-white text-base mb-2">Video Overview</h3>
+                <p class="text-xs text-gray-500">English video coming soon. Switch to Espanol for the video analysis.</p>
+            </div>
+        </div>
+
+        <!-- ES Media -->
+        <div id="mediaContentES" class="hidden grid md:grid-cols-2 gap-5 sm:gap-6">
+            <div class="glass-card rounded-3xl p-6 sm:p-7">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-yc/10 rounded-xl flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-yc" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-base">Podcast YC 2025</h3>
+                        <p class="text-xs text-gray-500">Analisis profundo (Espanol)</p>
+                    </div>
+                </div>
+                <audio controls preload="metadata" class="w-full mb-3 rounded-lg" style="height:44px;">
+                    <source src="/static/YC_2025_Podcast_ES.mp3" type="audio/mpeg">
+                </audio>
+                <p class="text-xs text-gray-500">Inteligencia de batches, trayectoria IA, y lo que buscan los partners de YC para Spring 2026.</p>
+            </div>
+            <div class="glass-card rounded-3xl p-6 sm:p-7">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-base">Video Overview</h3>
+                        <p class="text-xs text-gray-500">Resumen visual (Espanol)</p>
+                    </div>
+                </div>
+                <video controls preload="metadata" class="w-full rounded-lg mb-3 bg-dark-950" style="max-height:220px;">
+                    <source src="/static/YC_2025_Video_ES.mp4" type="video/mp4">
+                </video>
+                <p class="text-xs text-gray-500">Recorrido visual completo de los datos 2025 con insights clave y analisis estrategico.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     10. REPORTS -- PDF download cards
+     ================================================================ -->
+<section id="resources" class="py-24 sm:py-28 px-4 sm:px-6 bg-white/[0.01] border-y border-white/[0.04] scroll-fade">
+    <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+            <span class="text-xs font-bold text-yc uppercase tracking-widest">
+                <span data-lang="en">Free Downloads</span><span data-lang="es">Descargas Gratuitas</span>
+            </span>
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-bold mt-3 mb-4">
+                <span data-lang="en">Research &amp; Intelligence Reports</span><span data-lang="es">Reportes de Investigacion e Inteligencia</span>
+            </h2>
+            <p data-lang="en" class="text-gray-400 max-w-xl mx-auto">Our analysis of every YC batch, compiled into actionable reports for your application.</p>
+            <p data-lang="es" class="text-gray-400 max-w-xl mx-auto">Nuestro analisis de cada batch de YC, compilado en reportes accionables para tu aplicacion.</p>
+        </div>
+
+        <div class="space-y-6">
+            <!-- Full Report -->
+            <div class="glass-card rounded-3xl p-6 sm:p-7">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="w-14 h-14 bg-red-500/10 rounded-xl flex items-center justify-center shrink-0">
+                        <svg class="w-7 h-7 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white">YC 2025 Full Report</h3>
+                        <p data-lang="en" class="text-xs text-gray-500 mt-1">Complete batch-by-batch analysis with AI trajectory, industry breakdown, and team composition data.</p>
+                        <p data-lang="es" class="text-xs text-gray-500 mt-1">Analisis completo batch por batch con trayectoria IA, desglose por industria, y datos de composicion de equipos.</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <a href="/static/YC_2025_Full_Report_EN.pdf" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-xl text-xs font-medium text-white transition-colors">
+                        <span class="text-[10px] bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded font-bold">EN</span>
+                        Download English PDF &rarr;
+                    </a>
+                    <a href="/static/YC_2025_Reporte_Completo_ES.pdf" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-xl text-xs font-medium text-white transition-colors">
+                        <span class="text-[10px] bg-yc/20 text-yc px-1.5 py-0.5 rounded font-bold">ES</span>
+                        Descargar Reporte Completo &rarr;
+                    </a>
+                </div>
+            </div>
+
+            <!-- Strategic Analysis -->
+            <div class="glass-card rounded-3xl p-6 sm:p-7">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="w-14 h-14 bg-blue-500/10 rounded-xl flex items-center justify-center shrink-0">
+                        <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white">YC 2025 Strategic Analysis</h3>
+                        <p data-lang="en" class="text-xs text-gray-500 mt-1">Strategic insights, RFS alignment, market positioning, and application strategies.</p>
+                        <p data-lang="es" class="text-xs text-gray-500 mt-1">Insights estrategicos, alineacion RFS, posicionamiento de mercado, y estrategias de aplicacion.</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <a href="/static/YC_2025_Strategic_Analysis_EN.pdf" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-xl text-xs font-medium text-white transition-colors">
+                        <span class="text-[10px] bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded font-bold">EN</span>
+                        Download English PDF &rarr;
+                    </a>
+                    <a href="/static/YC_2025_Analisis_Estrategico_ES.pdf" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-xl text-xs font-medium text-white transition-colors">
+                        <span class="text-[10px] bg-yc/20 text-yc px-1.5 py-0.5 rounded font-bold">ES</span>
+                        Descargar Analisis Estrategico &rarr;
+                    </a>
+                </div>
+            </div>
+
+            <!-- Application Playbook -->
+            <div class="glass-card rounded-3xl p-6 sm:p-7">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="w-14 h-14 bg-green-500/10 rounded-xl flex items-center justify-center shrink-0">
+                        <svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white">YC Application Playbook 2026</h3>
+                        <p data-lang="en" class="text-xs text-gray-500 mt-1">17-section guide with strategies, examples, and data-backed tips for every YC question.</p>
+                        <p data-lang="es" class="text-xs text-gray-500 mt-1">Guia de 17 secciones con estrategias, ejemplos y tips basados en datos para cada pregunta de YC.</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <a href="/static/YC_Application_Playbook_2026.pdf" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-xl text-xs font-medium text-white transition-colors">
+                        <span class="text-[10px] bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded font-bold">EN</span>
+                        Download Playbook &rarr;
+                    </a>
+                    <a href="/static/YC_Batch_Analysis_2025_2026.pdf" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-xl text-xs font-medium text-white transition-colors">
+                        <span class="text-[10px] bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded font-bold">EN</span>
+                        Download Batch Analysis &rarr;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     10.5. FOUNDER PROFILE — Behind the Research
+     ================================================================ -->
+<section id="founder" class="py-24 sm:py-28 px-4 sm:px-6 scroll-fade">
+    <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+            <span class="text-xs font-bold text-purple-400 uppercase tracking-widest">
+                <span data-lang="en">Behind the Research</span><span data-lang="es">Detras de la Investigacion</span>
+            </span>
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-bold mt-3 mb-4">
+                <span data-lang="en">Built by a Founder, for Founders</span><span data-lang="es">Construido por un Fundador, para Fundadores</span>
+            </h2>
+            <p data-lang="en" class="text-gray-400 max-w-xl mx-auto">This research, the AI application builder, and the entire intelligence platform were built by a founder actively applying to YC S26.</p>
+            <p data-lang="es" class="text-gray-400 max-w-xl mx-auto">Esta investigacion, el constructor de aplicaciones IA, y toda la plataforma de inteligencia fueron construidos por un fundador aplicando activamente a YC S26.</p>
+        </div>
+
+        <div class="glass-card rounded-3xl p-7 sm:p-10">
+            <!-- Founder Header -->
+            <div class="flex flex-col sm:flex-row items-start gap-6 mb-8">
+                <div class="w-20 h-20 bg-gradient-to-br from-yc to-purple-500 rounded-2xl flex items-center justify-center flex-shrink-0 text-2xl font-black text-white shadow-lg shadow-yc/20">PE</div>
+                <div>
+                    <h3 class="text-xl font-bold text-white">Pablo Estrada Fuentes</h3>
+                    <p class="text-sm text-yc font-medium">CEO & Co-Founder, Autonomous (Sellerfy)</p>
+                    <p class="text-xs text-gray-400 mt-1"><span data-lang="en">15 years building companies across 10 countries. Serial entrepreneur. 7 companies, 2 exits. Professor of entrepreneurship 5+ years.</span><span data-lang="es">15 años construyendo empresas en 10 países. Emprendedor serial. 7 empresas, 2 exits. Profesor de emprendimiento 5+ años.</span></p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <a href="https://www.linkedin.com/in/pabloestradaf/" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-[10px] font-bold text-blue-400 hover:bg-blue-500/20 transition-colors">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                            8K followers
+                        </a>
+                        <a href="https://pabesfu.substack.com/" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1 bg-yc/10 border border-yc/20 rounded-full text-[10px] font-bold text-yc hover:bg-yc/20 transition-colors">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+                            6.3K subscribers
+                        </a>
+                        <a href="https://pabesfu.com/" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/[0.04] border border-white/[0.08] rounded-full text-[10px] font-bold text-gray-400 hover:text-white transition-colors">
+                            pabesfu.com
+                        </a>
+                        <a href="https://twitter.com/PabloEstradaF" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/[0.04] border border-white/[0.08] rounded-full text-[10px] font-bold text-gray-400 hover:text-white transition-colors">
+                            @PabloEstradaF
+                        </a>
+                        <a href="https://youtube.com/@mividaenbeta" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-full text-[10px] font-bold text-red-400 hover:bg-red-500/20 transition-colors">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                            YouTube
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Track Record -->
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
+                <div class="bg-green-500/5 border border-green-500/20 rounded-xl p-3 text-center">
+                    <p class="text-xl font-black text-green-400">200</p>
+                    <p class="text-[10px] text-gray-500"><span data-lang="en">Paying Users</span><span data-lang="es">Usuarios Pagando</span></p>
+                    <p class="text-[9px] text-green-400/60">Sellerfy (bootstrapped)</p>
+                </div>
+                <div class="bg-dark-700/50 rounded-xl p-3 text-center">
+                    <p class="text-xl font-black text-white">$15M+</p>
+                    <p class="text-[10px] text-gray-500"><span data-lang="en">Processed Sales</span><span data-lang="es">Ventas Procesadas</span></p>
+                </div>
+                <div class="bg-dark-700/50 rounded-xl p-3 text-center">
+                    <p class="text-xl font-black text-white">140+</p>
+                    <p class="text-[10px] text-gray-500"><span data-lang="en">Enterprise Clients</span><span data-lang="es">Clientes Enterprise</span></p>
+                </div>
+                <div class="bg-dark-700/50 rounded-xl p-3 text-center">
+                    <p class="text-xl font-black text-white">10</p>
+                    <p class="text-[10px] text-gray-500"><span data-lang="en">Countries</span><span data-lang="es">Paises</span></p>
+                </div>
+                <div class="bg-dark-700/50 rounded-xl p-3 text-center">
+                    <p class="text-xl font-black text-white">300+</p>
+                    <p class="text-[10px] text-gray-500"><span data-lang="en">Founders Mentored</span><span data-lang="es">Emprendedores Mentoreados</span></p>
+                </div>
+            </div>
+
+            <!-- Companies Timeline -->
+            <div class="space-y-3 mb-6">
+                <p class="text-[10px] text-gray-500 uppercase font-semibold tracking-wider"><span data-lang="en">Entrepreneurial Journey</span><span data-lang="es">Trayectoria Emprendedora</span></p>
+                <div class="glass-card-subtle rounded-xl p-4 border-l-2 border-cyan-400">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-sm font-bold text-white">Growker <span class="text-cyan-400">— CEO & Founder</span></p>
+                            <p class="text-xs text-gray-400"><span data-lang="en">SaaS for marketplace ops (Miami). Co-founded w/ Schwartzman & Achar. Pivoted to Sellerfy.</span><span data-lang="es">SaaS de operaciones marketplace (Miami). Co-fundado con Schwartzman y Achar. Pivoteó a Sellerfy.</span></p>
+                        </div>
+                        <span class="text-[10px] text-gray-600 flex-shrink-0">2022</span>
+                    </div>
+                </div>
+                <div class="glass-card-subtle rounded-xl p-4 border-l-2 border-yc">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-sm font-bold text-white">Crunch DNA, Inc. <span class="text-yc">— Founder & CEO</span></p>
+                            <p class="text-xs text-gray-400"><span data-lang="en">Ecommerce services. $15M+ across 5 countries (US, MX, CO, GT, AR). Raised $850K seed. Bloomberg, Forbes, CNN.</span><span data-lang="es">Servicios ecommerce. $15M+ en 5 países (US, MX, CO, GT, AR). Levantó $850K seed. Bloomberg, Forbes, CNN.</span></p>
+                        </div>
+                        <span class="text-[10px] text-gray-600 flex-shrink-0">2021–22</span>
+                    </div>
+                </div>
+                <div class="glass-card-subtle rounded-xl p-4 border-l-2 border-green-400">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-sm font-bold text-white">Pillow & Toast <span class="text-green-400">— Co-Founder</span></p>
+                            <p class="text-xs text-gray-400"><span data-lang="en">E-commerce brand on Amazon USA. Kids toys & maternity products.</span><span data-lang="es">Marca ecommerce en Amazon USA. Juguetes y maternidad.</span></p>
+                        </div>
+                        <span class="text-[10px] text-gray-600 flex-shrink-0">2018–20</span>
+                    </div>
+                </div>
+                <div class="glass-card-subtle rounded-xl p-4 border-l-2 border-blue-400">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-sm font-bold text-white">Unconditional Rosie <span class="text-blue-400">— Co-Founder</span></p>
+                            <p class="text-xs text-gray-400"><span data-lang="en">Amazon & Walmart marketplace brand. Wedding & anniversary gifts.</span><span data-lang="es">Marca en Amazon y Walmart. Regalos de boda y aniversario.</span></p>
+                        </div>
+                        <span class="text-[10px] text-gray-600 flex-shrink-0">2016–19</span>
+                    </div>
+                </div>
+                <div class="glass-card-subtle rounded-xl p-4 border-l-2 border-purple-400">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-sm font-bold text-white">The Influence <span class="text-purple-400">— Co-Founder & Commercial Dir.</span></p>
+                            <p class="text-xs text-gray-400"><span data-lang="en">Marketing tech for LATAM. Co-founded w/ Eduardo Benchoam. Tracx partnership. 16 employees. 40% market share. Exited $500K.</span><span data-lang="es">Tech de marketing LATAM. Co-fundada con Eduardo Benchoam. Partnership con Tracx. 16 empleados. 40% del mercado. Exit $500K.</span></p>
+                        </div>
+                        <span class="text-[10px] text-gray-600 flex-shrink-0">2013–17</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Awards & Press Row -->
+            <div class="mb-6">
+                <p class="text-[10px] text-gray-500 uppercase font-semibold tracking-wider mb-2"><span data-lang="en">Recognition & Press</span><span data-lang="es">Reconocimientos y Prensa</span></p>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <a href="https://www.youtube.com/watch?v=Ho9uNoa61m8" target="_blank" class="bg-dark-700/50 rounded-xl p-3 text-center hover:bg-dark-700/70 transition-colors">
+                        <p class="text-xs font-black text-yellow-400">Effie Awards</p>
+                        <p class="text-[10px] text-gray-500">Grand, Gold & Silver</p>
+                    </a>
+                    <a href="https://www.bloomberglinea.com/2022/06/21/startup-the-crunch-se-prepara-para-serie-a-con-la-mision-de-continuar-su-expansion/" target="_blank" class="bg-dark-700/50 rounded-xl p-3 text-center hover:bg-dark-700/70 transition-colors">
+                        <p class="text-xs font-black text-white">Bloomberg</p>
+                        <p class="text-[10px] text-gray-500">Startup Feature</p>
+                    </a>
+                    <a href="https://www.forbes.com.mx/ad-the-crunch-el-marketplace-services-para-crecer-dentro-del-ecommerce/" target="_blank" class="bg-dark-700/50 rounded-xl p-3 text-center hover:bg-dark-700/70 transition-colors">
+                        <p class="text-xs font-black text-white">Forbes</p>
+                        <p class="text-[10px] text-gray-500">Marketplace Services</p>
+                    </a>
+                    <a href="https://cnnespanol.cnn.com/video/cnnee-pkg-alban-zamora-como-hacer-negocio-en-las-redes-sociales/" target="_blank" class="bg-dark-700/50 rounded-xl p-3 text-center hover:bg-dark-700/70 transition-colors">
+                        <p class="text-xs font-black text-white">CNN</p>
+                        <p class="text-[10px] text-gray-500">Top 3 LATAM Tech</p>
+                    </a>
+                </div>
+                <div class="flex flex-wrap gap-2 mt-3 justify-center">
+                    <a href="https://www.soy502.com/articulo/agg-presenta-nominados-gerente-ano" target="_blank" class="px-3 py-1 bg-dark-700/30 rounded-full text-[10px] text-gray-500 hover:text-white transition-colors">Top 3 Young Manager (4K+ applicants)</a>
+                    <span class="px-3 py-1 bg-green-500/10 rounded-full text-[10px] text-green-400">Top 5 Most Innovative Startups</span>
+                    <a href="https://www.youtube.com/watch?v=MIFXsSdEPow" target="_blank" class="px-3 py-1 bg-yc/10 rounded-full text-[10px] text-yc hover:text-white transition-colors">Rober Perna Podcast</a>
+                    <a href="https://youtu.be/2VwQ_2bfTIM" target="_blank" class="px-3 py-1 bg-dark-700/30 rounded-full text-[10px] text-gray-500 hover:text-white transition-colors">UFM Speaker · Prof. 5+ yrs</a>
+                    <a href="https://www.youtube.com/watch?v=3A72t2z6cNY" target="_blank" class="px-3 py-1 bg-dark-700/30 rounded-full text-[10px] text-gray-500 hover:text-white transition-colors">Dionisio Gutiérrez</a>
+                    <a href="https://www.youtube.com/watch?v=0FW94CTrBXM" target="_blank" class="px-3 py-1 bg-dark-700/30 rounded-full text-[10px] text-gray-500 hover:text-white transition-colors">Gov. Documentary</a>
+                </div>
+            </div>
+
+            <!-- Currently Building -->
+            <div class="bg-green-500/5 border border-green-500/20 rounded-xl p-4 mb-3">
+                <div class="flex items-center gap-2 mb-2">
+                    <p class="text-xs font-bold text-green-400 uppercase tracking-wider"><span data-lang="en">Live Product — Sellerfy</span><span data-lang="es">Producto en Vivo — Sellerfy</span></p>
+                    <span class="px-2 py-0.5 bg-green-500/10 text-green-400 text-[10px] font-bold rounded-full"><span data-lang="en">200 PAYING USERS</span><span data-lang="es">200 USUARIOS PAGANDO</span></span>
+                </div>
+                <p class="text-sm text-gray-300"><span data-lang="en">Bootstrapped ecommerce SaaS with <strong class="text-white">200 active paying users</strong>. Live API integrations with Amazon, Shopify, Mercado Libre & WooCommerce. Algorithms for listing optimization, dynamic repricing, competitor tracking, and cross-channel inventory management. Zero outside capital.</span><span data-lang="es">SaaS de ecommerce bootstrapped con <strong class="text-white">200 usuarios activos pagando</strong>. Integraciones API en vivo con Amazon, Shopify, Mercado Libre y WooCommerce. Algoritmos de optimizacion de listings, repricing dinamico, tracking competitivo y gestion de inventario cross-channel. Cero capital externo.</span></p>
+            </div>
+            <div class="bg-yc/5 border border-yc/20 rounded-xl p-4">
+                <p class="text-xs font-bold text-yc uppercase tracking-wider mb-2"><span data-lang="en">The Evolution — Autonomous (Cursor for Ecommerce)</span><span data-lang="es">La Evolucion — Autonomous (Cursor para Ecommerce)</span></p>
+                <p class="text-sm text-gray-300"><span data-lang="en">Building Cursor for ecommerce on top of Sellerfy's foundation. The algorithms and data from 200 paying users are the blueprint for the AI copilot that actually does the work — not just shows dashboards. Token-based pricing like Cursor and Claude Code. Applying to YC S26.</span><span data-lang="es">Construyendo Cursor para ecommerce sobre la base de Sellerfy. Los algoritmos y datos de 200 usuarios pagando son el plano para el copiloto IA que realmente hace el trabajo — no solo muestra dashboards. Pricing basado en tokens como Cursor y Claude Code. Aplicando a YC S26.</span></p>
+                <p class="text-xs text-gray-500 mt-2"><span data-lang="en">Also built and operates a 16-agent AI orchestration system in production — the same technology powering this intelligence platform.</span><span data-lang="es">Tambien construyo y opera un sistema de orquestacion IA de 16 agentes en produccion — la misma tecnologia que impulsa esta plataforma de inteligencia.</span></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     11. LEAD CAPTURE (Access Gate)
+     ================================================================ -->
+<section id="access" class="py-24 sm:py-28 px-4 sm:px-6 scroll-fade">
+    <div class="max-w-xl mx-auto">
+        <div class="glass-card rounded-3xl p-7 sm:p-10 glow">
+            <div class="text-center mb-8">
+                <div class="w-14 h-14 bg-yc rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span class="text-2xl font-black text-white">Y</span>
+                </div>
+                <h2 class="font-display text-2xl sm:text-3xl font-bold mb-2">
+                    <span data-lang="en">Get Full Access</span><span data-lang="es">Obtener Acceso Completo</span>
+                </h2>
+                <p data-lang="en" class="text-sm text-gray-400">Unlock the AI-powered application builder, coaching engine, validation tools, and all research resources.</p>
+                <p data-lang="es" class="text-sm text-gray-400">Desbloquea el constructor de aplicaciones con IA, motor de coaching, herramientas de validacion, y todos los recursos de investigacion.</p>
+            </div>
+
+            <!-- Lead Form -->
+            <form id="leadForm" class="space-y-4" onsubmit="return submitLead(event)">
+                <div>
+                    <label class="text-xs font-medium text-gray-400 block mb-1.5">
+                        <span data-lang="en">Full Name</span><span data-lang="es">Nombre Completo</span> <span class="text-red-400">*</span>
+                    </label>
+                    <input type="text" name="name" required class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:border-yc focus:ring-1 focus:ring-yc/50 outline-none text-sm transition-colors" data-placeholder-en="Your name" data-placeholder-es="Tu nombre" placeholder="Your name">
+                </div>
+                <div>
+                    <label class="text-xs font-medium text-gray-400 block mb-1.5">
+                        <span data-lang="en">Email</span><span data-lang="es">Correo</span> <span class="text-red-400">*</span>
+                    </label>
+                    <input type="email" name="email" required placeholder="founder@startup.com" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:border-yc focus:ring-1 focus:ring-yc/50 outline-none text-sm transition-colors">
+                </div>
+                <div>
+                    <label class="text-xs font-medium text-gray-400 block mb-1.5">
+                        <span data-lang="en">WhatsApp (with country code)</span><span data-lang="es">WhatsApp (con codigo de pais)</span>
+                    </label>
+                    <input type="tel" name="whatsapp" placeholder="+1 555 123 4567" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:border-yc focus:ring-1 focus:ring-yc/50 outline-none text-sm transition-colors">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-medium text-gray-400 block mb-1.5">
+                            <span data-lang="en">Company / Org</span><span data-lang="es">Empresa / Org</span>
+                        </label>
+                        <input type="text" name="company" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:border-yc focus:ring-1 focus:ring-yc/50 outline-none text-sm transition-colors" data-placeholder-en="Your company" data-placeholder-es="Tu empresa" placeholder="Your company">
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-gray-400 block mb-1.5">
+                            <span data-lang="en">Startup Name</span><span data-lang="es">Nombre del Startup</span>
+                        </label>
+                        <input type="text" name="startup" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:border-yc focus:ring-1 focus:ring-yc/50 outline-none text-sm transition-colors" data-placeholder-en="Your startup" data-placeholder-es="Tu startup" placeholder="Your startup">
+                    </div>
+                </div>
+                <button type="submit" id="submitBtn" class="w-full py-4 bg-gradient-to-r from-yc to-orange-600 hover:from-ycDark hover:to-orange-700 text-white rounded-xl font-bold text-base transition-all hover:shadow-lg hover:shadow-yc/20 active:scale-[0.98] mt-2">
+                    <span data-lang="en">Unlock Full Access</span><span data-lang="es">Desbloquear Acceso Completo</span>
+                </button>
+                <p class="text-[11px] text-gray-600 text-center">
+                    <span data-lang="en">No credit card required. Your data is never shared.</span><span data-lang="es">Sin tarjeta de credito. Tus datos nunca se comparten.</span>
+                </p>
+            </form>
+
+            <!-- Success state (hidden by default) -->
+            <div id="successMsg" class="hidden text-center py-8">
+                <div class="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">
+                    <span data-lang="en">You are In!</span><span data-lang="es">Ya Estas Dentro!</span>
+                </h3>
+                <p class="text-sm text-gray-400 mb-6">
+                    <span data-lang="en">Redirecting to the application builder...</span><span data-lang="es">Redirigiendo al constructor de aplicaciones...</span>
+                </p>
+                <div class="w-8 h-8 border-2 border-yc border-t-transparent rounded-full animate-spin mx-auto"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     12. FOOTER
+     ================================================================ -->
+<footer class="py-12 sm:py-14 px-4 sm:px-6 border-t border-white/[0.06] bg-white/[0.01]">
+    <div class="max-w-6xl mx-auto">
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8">
+            <!-- Brand -->
+            <div>
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-8 h-8 bg-yc rounded-lg flex items-center justify-center">
+                        <span class="text-sm font-black text-white">Y</span>
+                    </div>
+                    <span class="text-sm font-bold text-white">YC Batch Intelligence</span>
+                </div>
+                <p data-lang="en" class="text-xs text-gray-500 leading-relaxed">Complete data and AI-powered tools for Y Combinator applicants. Built with data from 5,300+ funded companies.</p>
+                <p data-lang="es" class="text-xs text-gray-500 leading-relaxed">Data completa y herramientas con IA para aplicantes a Y Combinator. Construido con datos de 5,300+ empresas fondeadas.</p>
+            </div>
+
+            <!-- Resource Links -->
+            <div>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
+                    <span data-lang="en">Resources</span><span data-lang="es">Recursos</span>
+                </p>
+                <div class="space-y-2">
+                    <a href="#intelligence" class="block text-xs text-gray-500 hover:text-yc transition-colors">
+                        <span data-lang="en">Batch Intelligence</span><span data-lang="es">Inteligencia de Batches</span>
+                    </a>
+                    <a href="#numbers" class="block text-xs text-gray-500 hover:text-yc transition-colors">
+                        <span data-lang="en">Inside the Numbers</span><span data-lang="es">Detras de los Numeros</span>
+                    </a>
+                    <a href="#quotes" class="block text-xs text-gray-500 hover:text-yc transition-colors">
+                        <span data-lang="en">Partner Quotes</span><span data-lang="es">Citas de Partners</span>
+                    </a>
+                    <a href="#media" class="block text-xs text-gray-500 hover:text-yc transition-colors">
+                        <span data-lang="en">Podcast &amp; Video</span><span data-lang="es">Podcast y Video</span>
+                    </a>
+                    <a href="/static/YC_Application_Playbook_2026.pdf" target="_blank" class="block text-xs text-gray-500 hover:text-yc transition-colors">
+                        <span data-lang="en">Application Playbook (PDF)</span><span data-lang="es">Playbook de Aplicacion (PDF)</span>
+                    </a>
+                    <a href="/static/YC_Batch_Analysis_2025_2026.pdf" target="_blank" class="block text-xs text-gray-500 hover:text-yc transition-colors">
+                        <span data-lang="en">Batch Analysis (PDF)</span><span data-lang="es">Analisis de Batches (PDF)</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- About -->
+            <div>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
+                    <span data-lang="en">About</span><span data-lang="es">Acerca de</span>
+                </p>
+                <div class="space-y-2">
+                    <p data-lang="en" class="text-xs text-gray-500">Built by founders, for founders.</p>
+                    <p data-lang="es" class="text-xs text-gray-500">Hecho por founders, para founders.</p>
+                    <p data-lang="en" class="text-xs text-gray-500">Data sourced from public batch directories and partner talks.</p>
+                    <p data-lang="es" class="text-xs text-gray-500">Data obtenida de directorios publicos de batches y charlas de partners.</p>
+                    <a href="#access" class="block text-xs text-yc hover:text-ycLight transition-colors font-medium">
+                        <span data-lang="en">Get full access &rarr;</span><span data-lang="es">Obtener acceso completo &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-white/[0.06] pt-6 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p class="text-xs text-gray-600">
+                <span data-lang="en">Built with data from 5,300+ YC companies.</span><span data-lang="es">Construido con datos de 5,300+ empresas de YC.</span>
+            </p>
+            <p class="text-xs text-gray-600">
+                <span data-lang="en">Not affiliated with Y Combinator.</span><span data-lang="es">No afiliado con Y Combinator.</span>
+            </p>
+        </div>
+    </div>
+</footer>
+
+
+<!-- ================================================================
+     JAVASCRIPT
+     ================================================================ -->
+<script>
+(function() {
+    'use strict';
+
+    // -- Sticky Nav ---------------------------------------------------
+    var stickyNav = document.getElementById('stickyNav');
+    var ticking = false;
+
+    function onScroll() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                if (window.scrollY > 600) {
+                    stickyNav.style.transform = 'translateY(0)';
+                } else {
+                    stickyNav.style.transform = 'translateY(-100%)';
+                }
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // -- Scroll-fade animations via IntersectionObserver ---------------
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, {
+        threshold: 0.05,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    document.querySelectorAll('.scroll-fade').forEach(function(el) {
+        observer.observe(el);
+    });
+
+    // -- Bar-fill animation -- only animate when visible ---------------
+    var barObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                var bars = entry.target.querySelectorAll('.bar-fill');
+                bars.forEach(function(bar) {
+                    bar.style.animationPlayState = 'running';
+                });
+                barObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.bar-fill').forEach(function(bar) {
+        bar.style.animationPlayState = 'paused';
+    });
+
+    var chartSection = document.querySelector('#intelligence .glow-sm');
+    if (chartSection) {
+        barObserver.observe(chartSection);
+    }
+
+    // -- Check if already captured ------------------------------------
+    if (localStorage.getItem('yc_lead_captured')) {
+        // Already captured -- let them browse freely
+    }
+
+    // -- Initialize language from localStorage ------------------------
+    var savedLang = localStorage.getItem('yc_lang') || 'en';
+    if (savedLang === 'es') {
+        setLang('es');
+    }
+
+})();
+
+// -- Global Language Toggle -------------------------------------------
+function setLang(lang) {
+    localStorage.setItem('yc_lang', lang);
+
+    if (lang === 'es') {
+        document.body.classList.add('lang-es');
+    } else {
+        document.body.classList.remove('lang-es');
+    }
+
+    // Update all lang toggle buttons
+    var allEN = document.querySelectorAll('#navLangEN, #heroLangEN');
+    var allES = document.querySelectorAll('#navLangES, #heroLangES');
+
+    allEN.forEach(function(btn) {
+        btn.classList.toggle('active', lang === 'en');
+    });
+    allES.forEach(function(btn) {
+        btn.classList.toggle('active', lang === 'es');
+    });
+
+    // Update form placeholders
+    document.querySelectorAll('[data-placeholder-en]').forEach(function(input) {
+        input.placeholder = lang === 'es' ? input.getAttribute('data-placeholder-es') : input.getAttribute('data-placeholder-en');
+    });
+
+    // Sync media section if switching global language
+    if (lang === 'es') {
+        setMediaLang('es');
+    } else {
+        setMediaLang('en');
+    }
+}
+
+// -- Media Language Toggle -------------------------------------------
+function setMediaLang(lang) {
+    var enContent = document.getElementById('mediaContentEN');
+    var esContent = document.getElementById('mediaContentES');
+    var enBtn = document.getElementById('mediaEN');
+    var esBtn = document.getElementById('mediaES');
+    if (!enContent || !esContent) return;
+
+    if (lang === 'en') {
+        enContent.classList.remove('hidden');
+        enContent.classList.add('grid');
+        esContent.classList.add('hidden');
+        esContent.classList.remove('grid');
+        enBtn.className = 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-yc text-white';
+        esBtn.className = 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-white/[0.04] text-gray-400 border border-white/[0.08] hover:border-white/[0.15]';
+    } else {
+        esContent.classList.remove('hidden');
+        esContent.classList.add('grid');
+        enContent.classList.add('hidden');
+        enContent.classList.remove('grid');
+        esBtn.className = 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-yc text-white';
+        enBtn.className = 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-white/[0.04] text-gray-400 border border-white/[0.08] hover:border-white/[0.15]';
+    }
+}
+
+// -- Lead Form Submission --------------------------------------------
+async function submitLead(e) {
+    e.preventDefault();
+    var form = document.getElementById('leadForm');
+    var btn = document.getElementById('submitBtn');
+    var data = Object.fromEntries(new FormData(form));
+    var currentLang = localStorage.getItem('yc_lang') || 'en';
+
+    btn.disabled = true;
+    btn.innerHTML = currentLang === 'es' ? 'Enviando...' : 'Submitting...';
+    btn.classList.add('opacity-70');
+
+    // Direct access — no lead gate
+    window.location.href = '/builder';
+    return false;
+}
+</script>
+
+</body>
+</html>

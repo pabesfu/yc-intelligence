@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YC Application Builder — Build Your Application</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { colors: {
+                yc: '#F26522', ycDark: '#D4551A', ycLight: '#FF8A50',
+                dark: { 700: '#1e1e3a', 800: '#16162e', 900: '#0f0f23', 950: '#0a0a1a' }
+            }}}
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.25s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        textarea { scrollbar-width: thin; scrollbar-color: #F26522 #16162e; }
+        textarea::-webkit-scrollbar { width: 5px; }
+        textarea::-webkit-scrollbar-track { background: #16162e; border-radius: 3px; }
+        textarea::-webkit-scrollbar-thumb { background: #F26522; border-radius: 3px; }
+        .sb-item { transition: all 0.15s ease; }
+        .sb-item:hover { background: rgba(242,101,34,0.08); }
+        .sb-item.active { background: rgba(242,101,34,0.14); border-left-color: #F26522; }
+        .tip-card { border-left: 3px solid #F26522; }
+        .glow { box-shadow: 0 0 24px rgba(242,101,34,0.25); }
+        .score-ring { transition: stroke-dashoffset 1s ease; }
+        .badge { font-size: 9px; padding: 1px 5px; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge-ok { background: rgba(74,222,128,0.15); color: #4ade80; }
+        .badge-warn { background: rgba(250,204,21,0.15); color: #facc15; }
+        .badge-error { background: rgba(248,113,113,0.15); color: #f87171; }
+        .badge-info { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+    </style>
+</head>
+<body class="bg-dark-950 text-gray-100 min-h-screen">
+<div id="app" class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-72 bg-dark-900 border-r border-gray-800/60 flex flex-col flex-shrink-0">
+        <div class="p-5 border-b border-gray-800/60">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-yc rounded-lg flex items-center justify-center font-extrabold text-white text-lg">Y</div>
+                <div>
+                    <h1 class="font-bold text-white text-sm leading-tight">YC Application</h1>
+                    <p class="text-[11px] text-gray-500">Your Application</p>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="flex justify-between text-[11px] text-gray-500 mb-1">
+                    <span>Progress</span>
+                    <span id="progressText">0 / 0</span>
+                </div>
+                <div class="w-full bg-dark-800 rounded-full h-1.5">
+                    <div id="progressBar" class="bg-gradient-to-r from-yc to-ycLight h-1.5 rounded-full transition-all duration-500" style="width:0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto py-2" id="sidebarNav"></nav>
+
+        <div class="p-3 border-t border-gray-800/60 space-y-2">
+            <button onclick="runValidation()" class="w-full py-2 px-3 bg-emerald-900/30 hover:bg-emerald-900/50 border border-emerald-700/40 text-emerald-400 hover:text-emerald-300 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-2">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Validate All
+            </button>
+            <button onclick="deepReview()" class="w-full py-2 px-3 bg-purple-900/30 hover:bg-purple-900/50 border border-purple-700/40 text-purple-400 hover:text-purple-300 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-2">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                Deep Analysis (AI)
+            </button>
+            <button onclick="reviewApplication()" class="w-full py-2 px-3 bg-dark-700 hover:bg-dark-800 border border-gray-700 text-gray-300 hover:text-white rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-2">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                AI Score
+            </button>
+            <button onclick="exportApplication()" class="w-full py-2 px-3 bg-yc hover:bg-ycDark text-white rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-2">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Export
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="flex-1 overflow-y-auto">
+        <header class="sticky top-0 z-10 bg-dark-950/80 backdrop-blur-xl border-b border-gray-800/60 px-8 py-3">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p id="sectionGroup" class="text-[11px] text-yc font-semibold uppercase tracking-widest"></p>
+                    <h2 id="sectionTitle" class="text-lg font-bold text-white leading-tight"></h2>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div id="sectionBadges" class="flex items-center gap-1 mr-2"></div>
+                    <span id="sectionCounter" class="text-xs text-gray-500 mr-2"></span>
+                    <button onclick="prevSection()" id="btnPrev" class="px-3 py-1.5 text-xs text-gray-400 hover:text-white border border-gray-700 hover:border-gray-500 rounded-lg transition-colors">&larr; Back</button>
+                    <button onclick="nextSection()" id="btnNext" class="px-4 py-1.5 text-xs bg-yc hover:bg-ycDark text-white rounded-lg font-medium transition-colors">Next &rarr;</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="max-w-3xl mx-auto px-8 py-6">
+            <div id="sectionContent" class="fade-in"></div>
+        </div>
+
+        <!-- Review Modal -->
+        <div id="reviewModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="bg-dark-800 border border-gray-700 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 id="reviewModalTitle" class="text-lg font-bold text-white">Application Review</h3>
+                    <button onclick="closeReview()" class="text-gray-500 hover:text-white text-xl">&times;</button>
+                </div>
+                <div id="reviewContent"></div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+const sections = {{ sections_json | safe }};
+const groups = {{ groups_json | safe }};
+let current = 0;
+const answers = {};
+let validationData = null;
+
+function load() {
+    const s = localStorage.getItem('yc_app_public');
+    if (s) Object.assign(answers, JSON.parse(s));
+}
+function save() { localStorage.setItem('yc_app_public', JSON.stringify(answers)); }
+
+function renderSidebar() {
+    const nav = document.getElementById('sidebarNav');
+    let html = '';
+    let lastGroup = '';
+    sections.forEach((s, i) => {
+        if (s.group_id !== lastGroup) {
+            lastGroup = s.group_id;
+            const g = groups.find(g => g.id === s.group_id);
+            html += `<div class="px-4 pt-3 pb-1 flex items-center gap-2">
+                <svg class="w-3.5 h-3.5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="${g.icon}"/></svg>
+                <span class="text-[10px] font-semibold text-gray-600 uppercase tracking-wider">${g.label}</span>
+            </div>`;
+        }
+        const ans = answers[s.id] || s.prefill || '';
+        const done = ans.trim().length > 0 && !ans.includes('[FILL');
+        const hasFill = ans.includes('[FILL');
+        const act = i === current;
+        const vd = validationData?.sections?.[s.id];
+        const hasIssue = vd && vd.issues.length > 0;
+        const hasWarn = vd && vd.warnings.length > 0;
+
+        let statusIcon;
+        if (hasIssue) {
+            statusIcon = '<svg class="w-3 h-3 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>';
+        } else if (hasFill) {
+            statusIcon = '<svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>';
+        } else if (done) {
+            statusIcon = '<svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>';
+        } else {
+            statusIcon = (i+1);
+        }
+
+        const iconColor = hasIssue ? 'bg-red-400/20 text-red-400' : hasFill ? 'bg-yellow-400/20 text-yellow-400' : done ? 'bg-yc/20 text-yc' : act ? 'bg-gray-700 text-white' : 'bg-gray-800/50 text-gray-600';
+
+        html += `<button onclick="goTo(${i})" class="sb-item w-full text-left px-4 py-1.5 flex items-center gap-2.5 border-l-2 ${act ? 'active border-l-yc text-white' : 'border-l-transparent text-gray-500 hover:text-gray-300'}">
+            <div class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${iconColor}">
+                ${statusIcon}
+            </div>
+            <span class="text-xs truncate flex-1">${s.title}</span>
+            ${hasWarn && !hasIssue ? '<span class="w-1.5 h-1.5 rounded-full bg-yellow-400 flex-shrink-0"></span>' : ''}
+        </button>`;
+    });
+    nav.innerHTML = html;
+
+    const done = sections.filter(s => {
+        const a = (answers[s.id] || s.prefill || '').trim();
+        return a.length > 0 && !a.includes('[FILL');
+    }).length;
+    document.getElementById('progressText').textContent = `${done} / ${sections.length}`;
+    document.getElementById('progressBar').style.width = `${(done/sections.length)*100}%`;
+}
+
+function render() {
+    const s = sections[current];
+    const ans = answers[s.id] !== undefined ? answers[s.id] : (s.prefill || '');
+
+    document.getElementById('sectionGroup').textContent = s.group;
+    document.getElementById('sectionTitle').textContent = s.title;
+    document.getElementById('sectionCounter').textContent = `${current+1} of ${sections.length}`;
+    document.getElementById('btnPrev').style.visibility = current === 0 ? 'hidden' : 'visible';
+    document.getElementById('btnNext').textContent = current === sections.length-1 ? 'Finish' : 'Next \u2192';
+
+    // Section badges from validation
+    const vd = validationData?.sections?.[s.id];
+    let badgesHtml = '';
+    if (vd) {
+        if (vd.badges.includes('data-rich')) badgesHtml += '<span class="badge badge-ok">Data-Rich</span>';
+        if (vd.badges.includes('clean-writing')) badgesHtml += '<span class="badge badge-ok">Clean</span>';
+        if (vd.badges.includes('good-length')) badgesHtml += '<span class="badge badge-info">Good Length</span>';
+        if (vd.stats.buzzwords?.length) badgesHtml += `<span class="badge badge-warn">${vd.stats.buzzwords.length} Buzzwords</span>`;
+        if (vd.issues.length) badgesHtml += `<span class="badge badge-error">${vd.issues.length} Issues</span>`;
+    }
+    document.getElementById('sectionBadges').innerHTML = badgesHtml;
+
+    const charHtml = s.maxLength ? `<span id="cc" class="text-[11px] ${ans.length > s.maxLength ? 'text-red-400' : 'text-gray-500'}">${ans.length}/${s.maxLength}</span>` : '';
+    const wcHtml = s.inputType === 'textarea' ? `<span id="wc" class="text-[11px] text-gray-600">${(ans.trim() ? ans.trim().split(/\s+/).length : 0)} words</span>` : '';
+
+    let inputHtml;
+    if (s.inputType === 'text' || s.inputType === 'url') {
+        inputHtml = `<input type="${s.inputType}" id="inp" value="${esc(ans)}" ${s.maxLength ? `maxlength="${s.maxLength}"` : ''}
+            placeholder="Type your answer..." oninput="onInput(this)"
+            class="w-full bg-dark-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:border-yc focus:ring-1 focus:ring-yc/50 outline-none transition-all text-sm"/>`;
+    } else {
+        inputHtml = `<textarea id="inp" placeholder="Type your answer..." oninput="onInput(this)" rows="7"
+            class="w-full bg-dark-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:border-yc focus:ring-1 focus:ring-yc/50 outline-none transition-all text-sm resize-y min-h-[100px]">${esc(ans)}</textarea>`;
+    }
+
+    // Validation warnings inline
+    let validationHtml = '';
+    if (vd && (vd.issues.length || vd.warnings.length)) {
+        const items = [
+            ...vd.issues.map(i => `<div class="flex items-start gap-2"><span class="text-red-400 mt-0.5 flex-shrink-0">&#10005;</span><span class="text-red-300">${i}</span></div>`),
+            ...vd.warnings.map(w => `<div class="flex items-start gap-2"><span class="text-yellow-400 mt-0.5 flex-shrink-0">&#9888;</span><span class="text-yellow-200/80">${w}</span></div>`),
+        ];
+        validationHtml = `<div class="bg-dark-800/60 border border-gray-700/50 rounded-xl p-3 space-y-1.5 text-xs">${items.join('')}</div>`;
+    }
+
+    document.getElementById('sectionContent').innerHTML = `<div class="fade-in space-y-5">
+        <!-- Coaching callout -->
+        <div class="bg-yc/5 border border-yc/20 rounded-xl px-4 py-3">
+            <p class="text-xs text-yc font-medium flex items-center gap-1.5 mb-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                Coach Insight
+            </p>
+            <p class="text-sm text-gray-300">${s.coaching}</p>
+        </div>
+
+        <!-- Question -->
+        <div class="bg-dark-800/40 border border-gray-800/60 rounded-xl p-4">
+            <p class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mb-1.5">YC Question</p>
+            <p class="text-sm text-white font-medium">${s.question}</p>
+        </div>
+
+        <!-- Input -->
+        <div>
+            <div class="flex items-center justify-between mb-1.5">
+                <label class="text-xs font-medium text-gray-400">Your Answer</label>
+                <div class="flex items-center gap-3">${wcHtml}${charHtml}</div>
+            </div>
+            ${inputHtml}
+        </div>
+
+        <!-- Validation warnings -->
+        ${validationHtml}
+
+        <!-- AI buttons -->
+        <div class="flex items-center gap-3">
+            <button onclick="improve()" id="aiBtn"
+                class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yc to-orange-600 hover:from-ycDark hover:to-orange-700 text-white rounded-xl font-medium text-xs transition-all hover:shadow-lg hover:shadow-yc/20 active:scale-95">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                Improve with AI
+            </button>
+            <span id="aiSt" class="text-[11px] text-gray-500"></span>
+        </div>
+
+        <!-- AI Suggestion -->
+        <div id="aiBox" class="hidden">
+            <div class="bg-dark-800 border border-yc/30 rounded-xl p-4 glow">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-xs font-medium text-yc flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        AI Suggestion
+                    </p>
+                    <div class="flex gap-2">
+                        <button onclick="applySug()" class="text-[11px] px-2.5 py-1 bg-yc/20 text-yc rounded-lg hover:bg-yc/30 transition-colors">Apply</button>
+                        <button onclick="dismissSug()" class="text-[11px] px-2.5 py-1 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors">Dismiss</button>
+                    </div>
+                </div>
+                <p id="aiText" class="text-gray-300 text-sm whitespace-pre-wrap leading-relaxed"></p>
+            </div>
+        </div>
+
+        <!-- Tips -->
+        <div>
+            <p class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-yc" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                YC Intelligence — What Works
+            </p>
+            <div class="space-y-1.5">
+                ${s.tips.map(t => `<div class="tip-card bg-dark-800/40 rounded-lg px-3 py-2"><p class="text-xs text-gray-400">${t}</p></div>`).join('')}
+            </div>
+        </div>
+    </div>`;
+
+    renderSidebar();
+}
+
+function onInput(el) {
+    const s = sections[current];
+    answers[s.id] = el.value;
+    save();
+    if (s.maxLength) {
+        const c = document.getElementById('cc');
+        if (c) { c.textContent = `${el.value.length}/${s.maxLength}`; c.className = `text-[11px] ${el.value.length > s.maxLength ? 'text-red-400' : 'text-gray-500'}`; }
+    }
+    const wc = document.getElementById('wc');
+    if (wc) { wc.textContent = `${el.value.trim() ? el.value.trim().split(/\s+/).length : 0} words`; }
+    renderSidebar();
+}
+
+function goTo(i) { current = i; render(); }
+function nextSection() { if (current < sections.length-1) { current++; render(); } }
+function prevSection() { if (current > 0) { current--; render(); } }
+
+let lastSug = '';
+async function improve() {
+    const s = sections[current];
+    const inp = document.getElementById('inp');
+    const btn = document.getElementById('aiBtn');
+    const st = document.getElementById('aiSt');
+
+    btn.disabled = true;
+    btn.innerHTML = '<svg class="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg> Thinking...';
+    st.textContent = 'Asking Gemini...';
+
+    try {
+        const r = await fetch('/api/suggest', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ section: s.id, question: s.question, answer: inp.value || '', coaching: s.coaching })
+        });
+        const d = await r.json();
+        if (d.error) { st.textContent = `Error: ${d.error}`; }
+        else { lastSug = d.suggestion; document.getElementById('aiText').textContent = d.suggestion; document.getElementById('aiBox').classList.remove('hidden'); st.textContent = 'Review suggestion below'; }
+    } catch(e) { st.textContent = `Error: ${e.message}`; }
+
+    btn.disabled = false;
+    btn.innerHTML = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Improve with AI';
+}
+
+function applySug() {
+    const s = sections[current];
+    const inp = document.getElementById('inp');
+    inp.value = lastSug; answers[s.id] = lastSug; save();
+    document.getElementById('aiBox').classList.add('hidden');
+    document.getElementById('aiSt').textContent = 'Applied!';
+    renderSidebar();
+    if (s.maxLength) { const c = document.getElementById('cc'); if(c) { c.textContent = `${lastSug.length}/${s.maxLength}`; c.className = `text-[11px] ${lastSug.length > s.maxLength ? 'text-red-400' : 'text-gray-500'}`; } }
+}
+function dismissSug() { document.getElementById('aiBox').classList.add('hidden'); document.getElementById('aiSt').textContent = ''; }
+
+// ══════════════════════════════════════════════════════════════════
+// VALIDATION ENGINE (instant, deterministic)
+// ══════════════════════════════════════════════════════════════════
+async function runValidation() {
+    const allAnswers = {};
+    sections.forEach(s => { allAnswers[s.id] = answers[s.id] || s.prefill || ''; });
+
+    try {
+        const r = await fetch('/api/validate', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ answers: allAnswers })
+        });
+        const d = await r.json();
+        validationData = d;
+        render(); // Re-render with validation data
+
+        // Show readiness dashboard
+        showReadinessDashboard(d);
+    } catch(e) { alert('Validation failed: ' + e.message); }
+}
+
+function showReadinessDashboard(d) {
+    const rd = d.readiness;
+    const modal = document.getElementById('reviewModal');
+    const content = document.getElementById('reviewContent');
+    document.getElementById('reviewModalTitle').textContent = 'Application Readiness';
+    modal.classList.remove('hidden');
+
+    const scoreColor = rd.score >= 70 ? 'text-green-400' : rd.score >= 40 ? 'text-yellow-400' : 'text-red-400';
+    const strokeColor = rd.score >= 70 ? '#4ade80' : rd.score >= 40 ? '#facc15' : '#f87171';
+    const offset = 283 - (283 * rd.score / 100);
+
+    let rfsHtml = rd.rfs_alignment.map(r =>
+        `<div class="flex items-center gap-2">
+            <div class="flex-1 text-xs text-gray-300">${r.label}</div>
+            <div class="flex gap-0.5">${Array(5).fill(0).map((_,i) => `<div class="w-2 h-2 rounded-sm ${i < r.strength ? 'bg-yc' : 'bg-gray-700'}"></div>`).join('')}</div>
+        </div>`
+    ).join('');
+
+    let checklistHtml = '';
+    const checks = [
+        [rd.filled_sections === rd.total_sections, `All sections filled (${rd.filled_sections}/${rd.total_sections})`],
+        [rd.fill_markers_remaining === 0, `No [FILL] markers remaining (${rd.fill_markers_remaining} left)`],
+        [rd.total_issues === 0, `No critical issues (${rd.total_issues} found)`],
+        [rd.has_video, 'Founder video link added'],
+        [rd.has_demo, 'Demo URL added'],
+        [rd.total_warnings <= 3, `Warnings under control (${rd.total_warnings} found)`],
+    ];
+    checklistHtml = checks.map(([ok, label]) =>
+        `<div class="flex items-center gap-2 text-xs ${ok ? 'text-green-400' : 'text-gray-400'}">
+            ${ok ? '<svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>'
+                : '<svg class="w-4 h-4 flex-shrink-0 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/></svg>'}
+            <span>${label}</span>
+        </div>`
+    ).join('');
+
+    // Section-by-section scores
+    let sectionScoresHtml = sections.map(s => {
+        const sv = d.sections[s.id];
+        if (!sv) return '';
+        const sc = sv.score;
+        const color = sc >= 80 ? 'bg-green-400' : sc >= 50 ? 'bg-yellow-400' : 'bg-red-400';
+        return `<div class="flex items-center gap-2">
+            <span class="text-[11px] text-gray-500 w-32 truncate">${s.title}</span>
+            <div class="flex-1 bg-gray-800 rounded-full h-1.5"><div class="${color} h-1.5 rounded-full" style="width:${sc}%"></div></div>
+            <span class="text-[11px] ${sc >= 80 ? 'text-green-400' : sc >= 50 ? 'text-yellow-400' : 'text-red-400'} w-8 text-right">${sc}</span>
+        </div>`;
+    }).join('');
+
+    // Consistency issues
+    let consistencyHtml = '';
+    if (rd.consistency_issues.length) {
+        consistencyHtml = `<div class="bg-red-900/20 border border-red-700/30 rounded-xl p-3 mt-4">
+            <p class="text-xs font-semibold text-red-400 uppercase tracking-wider mb-2">Consistency Issues</p>
+            ${rd.consistency_issues.map(i => `<p class="text-xs text-red-300 mb-1">&#8226; ${i}</p>`).join('')}
+        </div>`;
+    }
+
+    content.innerHTML = `
+        <div class="grid grid-cols-2 gap-6">
+            <!-- Left: Score + Checklist -->
+            <div>
+                <div class="flex items-center gap-5 mb-6">
+                    <div class="relative w-20 h-20 flex-shrink-0">
+                        <svg class="w-20 h-20 -rotate-90" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#1e1e3a" stroke-width="8"/>
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="${strokeColor}" stroke-width="8" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="${offset}" class="score-ring"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-xl font-bold ${scoreColor}">${rd.score}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Readiness Score</p>
+                        <p class="text-sm ${rd.ready_to_submit ? 'text-green-400' : 'text-yellow-400'} font-medium">
+                            ${rd.ready_to_submit ? 'Ready to submit!' : 'Not ready yet — fix issues below'}
+                        </p>
+                    </div>
+                </div>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Submission Checklist</p>
+                <div class="space-y-2">${checklistHtml}</div>
+                ${consistencyHtml}
+            </div>
+            <!-- Right: RFS Alignment + Section Scores -->
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">YC RFS 2026 Alignment</p>
+                <div class="space-y-2 mb-6">${rfsHtml || '<p class="text-xs text-gray-600">Run validation with more content</p>'}</div>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Section Scores</p>
+                <div class="space-y-1.5 max-h-60 overflow-y-auto">${sectionScoresHtml}</div>
+            </div>
+        </div>
+    `;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// DEEP REVIEW (AI-powered: writing + business + trends)
+// ══════════════════════════════════════════════════════════════════
+async function deepReview() {
+    const allAnswers = {};
+    sections.forEach(s => { allAnswers[s.id] = answers[s.id] || s.prefill || ''; });
+
+    const modal = document.getElementById('reviewModal');
+    const content = document.getElementById('reviewContent');
+    document.getElementById('reviewModalTitle').textContent = 'Deep Analysis';
+    modal.classList.remove('hidden');
+    content.innerHTML = '<div class="flex items-center justify-center py-12"><svg class="w-8 h-8 animate-spin text-purple-400" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg><span class="ml-3 text-gray-400">Deep analysis with Gemini (writing + business + trends)...</span></div>';
+
+    try {
+        const r = await fetch('/api/deep-review', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ answers: allAnswers })
+        });
+        const d = await r.json();
+        if (d.error) { content.innerHTML = `<p class="text-red-400">${d.error}</p>`; return; }
+
+        const renderDimension = (title, color, icon, dim) => {
+            if (!dim) return '';
+            const scoreColor = dim.score >= 70 ? 'text-green-400' : dim.score >= 40 ? 'text-yellow-400' : 'text-red-400';
+            const fields = Object.entries(dim).filter(([k]) => !['score','fixes'].includes(k));
+            return `<div class="bg-dark-700/50 rounded-xl p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <p class="text-xs font-semibold ${color} uppercase tracking-wider flex items-center gap-1.5">${icon} ${title}</p>
+                    <span class="text-lg font-bold ${scoreColor}">${dim.score}</span>
+                </div>
+                <div class="space-y-2">
+                    ${fields.map(([k,v]) => `<div><p class="text-[10px] text-gray-500 uppercase">${k.replace(/_/g,' ')}</p><p class="text-xs text-gray-300">${v}</p></div>`).join('')}
+                </div>
+                ${dim.fixes?.length ? `<div class="mt-3 pt-3 border-t border-gray-700/50"><p class="text-[10px] text-gray-500 uppercase mb-1.5">Fixes</p>${dim.fixes.map(f => `<p class="text-xs text-gray-400 mb-1">&#8226; ${f}</p>`).join('')}</div>` : ''}
+            </div>`;
+        };
+
+        const overallColor = d.overall_score >= 70 ? 'text-green-400' : d.overall_score >= 40 ? 'text-yellow-400' : 'text-red-400';
+
+        content.innerHTML = `
+            <div class="text-center mb-6">
+                <span class="text-4xl font-bold ${overallColor}">${d.overall_score || '?'}</span>
+                <p class="text-xs text-gray-500 mt-1">Overall Score</p>
+                ${d.one_line_verdict ? `<p class="text-sm text-gray-300 mt-2 italic">"${d.one_line_verdict}"</p>` : ''}
+            </div>
+
+            ${d.top_3_actions?.length ? `<div class="bg-yc/10 border border-yc/30 rounded-xl p-4 mb-6">
+                <p class="text-xs font-semibold text-yc uppercase tracking-wider mb-2">Top 3 Actions — Do These First</p>
+                ${d.top_3_actions.map((a,i) => `<p class="text-sm text-gray-200 mb-1"><span class="text-yc font-bold">${i+1}.</span> ${a}</p>`).join('')}
+            </div>` : ''}
+
+            <div class="grid grid-cols-1 gap-4">
+                ${renderDimension('Writing Quality', 'text-blue-400', '&#9998;', d.writing_quality)}
+                ${renderDimension('Business Logic', 'text-green-400', '&#9878;', d.business_logic)}
+                ${renderDimension('Trend Alignment', 'text-purple-400', '&#9733;', d.trend_alignment)}
+            </div>
+        `;
+    } catch(e) { content.innerHTML = `<p class="text-red-400">Deep review failed: ${e.message}</p>`; }
+}
+
+// ══════════════════════════════════════════════════════════════════
+// QUICK REVIEW (existing)
+// ══════════════════════════════════════════════════════════════════
+async function reviewApplication() {
+    const allAnswers = {};
+    sections.forEach(s => { allAnswers[s.id] = answers[s.id] || s.prefill || ''; });
+
+    const modal = document.getElementById('reviewModal');
+    const content = document.getElementById('reviewContent');
+    document.getElementById('reviewModalTitle').textContent = 'AI Score';
+    modal.classList.remove('hidden');
+    content.innerHTML = '<div class="flex items-center justify-center py-12"><svg class="w-8 h-8 animate-spin text-yc" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg><span class="ml-3 text-gray-400">Gemini is reviewing your application...</span></div>';
+
+    try {
+        const r = await fetch('/api/review', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ answers: allAnswers })
+        });
+        const d = await r.json();
+        if (d.error) { content.innerHTML = `<p class="text-red-400">${d.error}</p>`; return; }
+
+        const scoreColor = d.score >= 70 ? 'text-green-400' : d.score >= 40 ? 'text-yellow-400' : 'text-red-400';
+        const strokeColor = d.score >= 70 ? '#4ade80' : d.score >= 40 ? '#facc15' : '#f87171';
+        const offset = 283 - (283 * d.score / 100);
+
+        content.innerHTML = `
+            <div class="flex items-center gap-6 mb-6">
+                <div class="relative w-24 h-24 flex-shrink-0">
+                    <svg class="w-24 h-24 -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#1e1e3a" stroke-width="8"/>
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="${strokeColor}" stroke-width="8" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="${offset}" class="score-ring"/>
+                    </svg>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="text-2xl font-bold ${scoreColor}">${d.score}</span>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Interview Probability</p>
+                    <p class="text-sm text-gray-300">${d.score >= 70 ? 'Strong application — likely to get an interview.' : d.score >= 40 ? 'Decent foundation but needs work in key areas.' : 'Needs significant improvement before submitting.'}</p>
+                </div>
+            </div>
+            <div class="space-y-4">
+                ${d.strengths?.length ? `<div><p class="text-xs font-semibold text-green-400 uppercase tracking-wider mb-2">Strengths</p><ul class="space-y-1">${d.strengths.map(s=>`<li class="text-sm text-gray-300 flex items-start gap-2"><span class="text-green-400 mt-0.5">+</span>${s}</li>`).join('')}</ul></div>` : ''}
+                ${d.weaknesses?.length ? `<div><p class="text-xs font-semibold text-red-400 uppercase tracking-wider mb-2">Weaknesses</p><ul class="space-y-1">${d.weaknesses.map(s=>`<li class="text-sm text-gray-300 flex items-start gap-2"><span class="text-red-400 mt-0.5">-</span>${s}</li>`).join('')}</ul></div>` : ''}
+                ${d.critical_fixes?.length ? `<div><p class="text-xs font-semibold text-yellow-400 uppercase tracking-wider mb-2">Critical Fixes</p><ul class="space-y-1">${d.critical_fixes.map(s=>`<li class="text-sm text-gray-300 flex items-start gap-2"><span class="text-yellow-400 mt-0.5">!</span>${s}</li>`).join('')}</ul></div>` : ''}
+                ${d.missing?.length ? `<div><p class="text-xs font-semibold text-blue-400 uppercase tracking-wider mb-2">Missing</p><ul class="space-y-1">${d.missing.map(s=>`<li class="text-sm text-gray-300 flex items-start gap-2"><span class="text-blue-400 mt-0.5">?</span>${s}</li>`).join('')}</ul></div>` : ''}
+                ${d.verdict ? `<div class="bg-dark-700 rounded-xl p-4 mt-4"><p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Verdict</p><p class="text-sm text-gray-300 leading-relaxed">${d.verdict}</p></div>` : ''}
+            </div>
+        `;
+    } catch(e) { content.innerHTML = `<p class="text-red-400">Review failed: ${e.message}</p>`; }
+}
+function closeReview() { document.getElementById('reviewModal').classList.add('hidden'); }
+
+async function exportApplication() {
+    const allAnswers = {};
+    sections.forEach(s => { allAnswers[s.id] = answers[s.id] || s.prefill || ''; });
+
+    try {
+        const r = await fetch('/api/export', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ answers: allAnswers })
+        });
+        const d = await r.json();
+        if (d.text) {
+            const blob = new Blob([d.text], {type:'text/plain'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `yc_application_${new Date().toISOString().split('T')[0]}.txt`;
+            a.click(); URL.revokeObjectURL(a.href);
+        }
+    } catch(e) { alert('Export failed: ' + e.message); }
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'ArrowRight' || e.key === 'j') nextSection();
+    if (e.key === 'ArrowLeft' || e.key === 'k') prevSection();
+});
+
+load(); render();
+</script>
+</body>
+</html>
