@@ -23,5 +23,12 @@ jobs:
           script: |
             cd /opt/yc-intelligence
             git pull
-            pip install -r requirements.txt --quiet --break-system-packages
-            systemctl restart yc-intelligence || pkill -f "gunicorn.*yc-intelligence" && sleep 1 && cd /opt/yc-intelligence && nohup gunicorn -b 0.0.0.0:5054 -w 2 app:app --daemon
+            pip install -r requirements.txt --quiet --break-system-packages --ignore-installed 2>/dev/null || true
+            if systemctl is-active --quiet yc-intelligence 2>/dev/null; then
+              systemctl restart yc-intelligence
+            else
+              pkill -f "gunicorn.*app:app.*5054" || true
+              sleep 1
+              cd /opt/yc-intelligence
+              nohup gunicorn -b 0.0.0.0:5054 -w 2 app:app --daemon
+            fi
