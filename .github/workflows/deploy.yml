@@ -23,7 +23,5 @@ jobs:
           script: |
             cd /opt/yc-intelligence
             git pull
-            docker stop yc-intelligence || true
-            docker rm yc-intelligence || true
-            docker build -t yc-intelligence .
-            docker run -d --name yc-intelligence --restart always -p 5054:5054 yc-intelligence
+            pip install -r requirements.txt --quiet
+            systemctl restart yc-intelligence
