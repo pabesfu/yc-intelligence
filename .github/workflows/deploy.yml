@@ -1,18 +1,18 @@
-# Auto-deploy to droplet on push to main
-# REQUIRED: Add DEPLOY_SSH_KEY secret to this repo on GitHub
-#   Settings > Secrets and variables > Actions > New repository secret
-#   Name: DEPLOY_SSH_KEY
-#   Value: SSH private key with access to root@134.199.231.196
+# Auto-deploy to production on push to main
+# Source of truth for container config: /opt/infra/docker/docker-compose.yml
+# REQUIRED secret: DEPLOY_SSH_KEY (SSH key for root@134.199.231.196)
 
-name: Deploy to Droplet
+name: Deploy
 
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
@@ -20,15 +20,27 @@ jobs:
           host: 134.199.231.196
           username: root
           key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script_stop: true
           script: |
+            set -e
+
+            # 1. Pull latest code
             cd /opt/yc-intelligence
-            git pull
-            pip install -r requirements.txt --quiet --break-system-packages --ignore-installed 2>/dev/null || true
-            if systemctl is-active --quiet yc-intelligence 2>/dev/null; then
-              systemctl restart yc-intelligence
+            git pull origin main
+
+            # 2. Rebuild and restart via docker-compose (single source of truth)
+            cd /opt/infra/docker
+            docker compose up -d --build yc-intelligence
+
+            # 3. Wait for startup
+            sleep 8
+
+            # 4. Health check
+            STATUS=$(curl -sf -o /dev/null -w "%{http_code}" http://127.0.0.1:5054/ || echo "000")
+            if [ "$STATUS" = "200" ]; then
+              echo "✓ yc-intelligence deployed and healthy"
             else
-              fuser -k 5054/tcp 2>/dev/null || true
-              sleep 1
-              cd /opt/yc-intelligence
-              gunicorn -b 0.0.0.0:5054 -w 2 -D app:app
+              echo "✗ yc-intelligence unhealthy (HTTP $STATUS)"
+              docker logs yc-intelligence --tail 30
+              exit 1
             fi
