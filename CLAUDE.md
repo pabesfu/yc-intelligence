@@ -51,8 +51,16 @@ yc-intelligence/
 
 This project is PUBLIC — contains no internal Autonomous info.
 
-## Services
-- com.pabesfu.yc-intelligence.plist (port 5054, RunAtLoad)
+## Deploy
+- **Auto-deploy**: Push to `main` → GitHub Actions → SSH → docker compose up -d --build
+- **Infra repo**: `pabesfu/infra` — owns Dockerfile, docker-compose.yml, nginx config
+- **Server path**: `/opt/yc-intelligence/` (git clone of this repo)
+- **Container**: `yc-intelligence` (port 5054)
+- **Compose file**: `/opt/infra/docker/docker-compose.yml`
+- **Nginx config**: `pabesfu/infra` → `nginx/sites/yc`
+- **Domains**: yc.pabesfu.com, wikiyc.com
+- To change Dockerfile or nginx: edit in `pabesfu/infra` repo
+- To change app code: edit here, push to main → auto-deploys
 
 ## Commit Conventions
 feat: / fix: / docs: / ops:
