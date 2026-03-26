@@ -112,7 +112,7 @@ def normalize_company(raw, source="yc-oss"):
             "long_description": raw.get("long_description", ""),
             "website": raw.get("website", ""),
             "yc_url": f"https://www.ycombinator.com/companies/{raw.get('slug', '')}",
-            "batch": raw.get("batch", ""),
+            "batch": normalize_batch(raw.get("batch", "")),
             "industry": raw.get("industry", ""),
             "subindustry": raw.get("subindustry", ""),
             "tags": raw.get("tags", []),
