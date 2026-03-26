@@ -3,731 +3,504 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WikiYC | The Y Combinator Encyclopedia</title>
-  <meta name="description" content="The open encyclopedia of Y Combinator startups. 3,387 companies, 14 batches, 5 years of data. Research, design inspiration, and YC application guide.">
+  <title>WikiYC -- The Y Combinator Encyclopedia</title>
+  <meta name="description" content="The open encyclopedia of Y Combinator startups. 3,387 companies, 14 batches, 5 years of data.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            yc: { DEFAULT: '#F26522', dark: '#D4551A', light: '#FF8A50', dim: '#F2652215', border: '#F2652230' },
-            surface: { 0: '#0c0c0c', 1: '#141414', 2: '#1a1a1a', 3: '#222222', 4: '#2a2a2a', 5: '#333333' },
-            text: { 1: '#f5f5f5', 2: '#b0b0b0', 3: '#777777', 4: '#555555' },
-          },
-        }
-      }
-    }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    *{font-family:'IBM Plex Sans',system-ui,sans-serif;box-sizing:border-box}
-    .font-display{font-family:'Fraunces',serif}
-    .font-mono{font-family:'IBM Plex Mono',monospace}
-    body{background:#0c0c0c;color:#f5f5f5;margin:0}
-    ::selection{background:#F2652240;color:#fff}
-    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#141414}::-webkit-scrollbar-thumb{background:#333;border-radius:3px}::-webkit-scrollbar-thumb:hover{background:#F26522}
+    /* ── TOKENS (design-benchmark method) ───────────────────── */
+    :root {
+      --bg: #09090b; --s1: #111113; --s2: #18181b; --s3: #222225; --s4: #2e2e32; --s5: #3a3a3f;
+      --border: #27272a; --border-h: #3f3f46;
+      --yc: #F26522; --yc-d: #D4551A; --yc-l: #FF8A50;
+      --t1: #fafafa; --t2: #a1a1aa; --t3: #71717a; --t4: #52525b;
+      --blue: #3b82f6; --purple: #a855f7; --green: #22c55e; --rose: #f43f5e; --amber: #f59e0b; --cyan: #06b6d4;
+      --font-d: 'Fraunces', serif; --font-b: 'Space Grotesk', sans-serif; --font-m: 'JetBrains Mono', monospace;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1); --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --shadow-card: 0 1px 2px rgba(0,0,0,.07), 0 8px 24px rgba(0,0,0,.07);
+      --shadow-hover: 0 1px 2px rgba(0,0,0,.07), 0 16px 40px rgba(0,0,0,.12);
+      --shadow-modal: 0 4px 12px rgba(0,0,0,.15), 0 24px 48px rgba(0,0,0,.2);
+      --max-w: 1360px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0 }
+    body { font-family: var(--font-b); background: var(--bg); color: var(--t1); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased }
+    ::selection { background: rgba(242,101,34,.25); color: #fff }
+    ::-webkit-scrollbar { width: 6px } ::-webkit-scrollbar-track { background: var(--s1) } ::-webkit-scrollbar-thumb { background: var(--s4); border-radius: 3px } ::-webkit-scrollbar-thumb:hover { background: var(--yc) }
 
-    /* Reddit-style post hover */
-    .post{border:1px solid transparent;transition:all .15s}
-    .post:hover{border-color:#333;background:#1a1a1a}
+    /* ── UTILITY ────────────────────────────────────────────── */
+    .mx { max-width: var(--max-w); margin: 0 auto; padding: 0 20px }
+    .font-d { font-family: var(--font-d) } .font-m { font-family: var(--font-m) }
+    .tc { color: var(--yc) } .tc2 { color: var(--t2) } .tc3 { color: var(--t3) } .tc4 { color: var(--t4) }
+    .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
 
-    /* Channel pill */
-    .ch-pill{transition:all .15s;border:1px solid #2a2a2a}
-    .ch-pill:hover{border-color:#F2652260;color:#FF8A50}
-    .ch-pill.active{background:#F2652218;border-color:#F26522;color:#FF8A50}
+    /* ── NAV ────────────────────────────────────────────────── */
+    .nav { position: fixed; top: 0; width: 100%; z-index: 50; background: rgba(9,9,11,.92); backdrop-filter: blur(12px) saturate(1.4); border-bottom: 1px solid var(--border); height: 48px }
+    .nav-inner { max-width: var(--max-w); margin: 0 auto; padding: 0 20px; height: 100%; display: flex; align-items: center; gap: 16px }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--t1); font-weight: 700; font-size: 15px }
+    .nav-logo-icon { width: 28px; height: 28px; border-radius: 6px; background: var(--yc); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 800 }
+    .nav-search { flex: 1; max-width: 520px; position: relative }
+    .nav-search input { width: 100%; height: 36px; padding: 0 36px; border-radius: 18px; background: var(--s2); border: 1px solid var(--border); color: var(--t1); font-size: 13px; font-family: var(--font-b); outline: none; transition: border .2s, background .2s }
+    .nav-search input:focus { border-color: rgba(242,101,34,.35); background: var(--s1) }
+    .nav-search input::placeholder { color: var(--t4) }
+    .nav-search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--t4) }
+    .nav-links { display: flex; gap: 4px; font-size: 12px; font-weight: 500 }
+    .nav-links a { padding: 6px 12px; border-radius: 6px; color: var(--t3); text-decoration: none; transition: all .15s }
+    .nav-links a:hover { color: var(--t1); background: var(--s3) }
+    .nav-links a.active { color: var(--yc-l); background: rgba(242,101,34,.08); border: 1px solid rgba(242,101,34,.15) }
 
-    /* Flair */
-    .flair{font-size:10px;padding:2px 8px;border-radius:9999px;font-weight:600;letter-spacing:.02em}
+    /* ── SECTION CHOOSER ───────────────────────────────────── */
+    .chooser { padding: 48px 0 24px }
+    .chooser h1 { font-family: var(--font-d); font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -.02em; line-height: 1.1; margin-bottom: 8px }
+    .chooser h1 span { background: linear-gradient(135deg, var(--yc), var(--yc-l)); -webkit-background-clip: text; -webkit-text-fill-color: transparent }
+    .chooser .sub { color: var(--t3); font-size: 15px; margin-bottom: 32px; max-width: 600px }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px }
+    .card { background: var(--s1); border: 1px solid var(--border); border-radius: 12px; padding: 24px; cursor: pointer; transition: border .2s var(--ease), transform .25s var(--ease), box-shadow .25s var(--ease) }
+    .card:hover { border-color: var(--border-h); transform: translateY(-3px); box-shadow: var(--shadow-hover) }
+    .card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; transition: background .2s }
+    .card h3 { font-size: 14px; font-weight: 600; margin-bottom: 6px }
+    .card p { font-size: 12px; color: var(--t3); line-height: 1.6 }
+    .card .tag { font-size: 11px; font-weight: 600; margin-top: 14px; display: flex; align-items: center; gap: 4px }
 
-    /* Upvote bar */
-    .vote-bar{width:40px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0;color:#777;font-size:12px;font-weight:600}
-    .vote-bar svg{opacity:.4;transition:all .15s;cursor:pointer}
-    .vote-bar svg:hover{opacity:1;color:#F26522}
+    /* ── TABS ───────────────────────────────────────────────── */
+    .tabs { position: sticky; top: 48px; z-index: 40; background: rgba(9,9,11,.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border) }
+    .tabs-inner { max-width: var(--max-w); margin: 0 auto; padding: 0 20px; display: flex; overflow-x: auto; gap: 0 }
+    .tab { padding: 11px 18px; font-size: 13px; font-weight: 500; color: var(--t3); cursor: pointer; position: relative; white-space: nowrap; transition: color .15s; border: none; background: none }
+    .tab:hover { color: var(--t2) }
+    .tab.on { color: var(--yc) }
+    .tab.on::after { content: ''; position: absolute; bottom: 0; left: 18px; right: 18px; height: 2px; background: var(--yc); border-radius: 1px }
 
-    /* Tab underline */
-    .tab{position:relative;padding:10px 16px;font-size:13px;font-weight:500;color:#777;transition:all .15s;cursor:pointer;white-space:nowrap}
-    .tab:hover{color:#b0b0b0}
-    .tab.active{color:#F26522}
-    .tab.active::after{content:'';position:absolute;bottom:0;left:16px;right:16px;height:2px;background:#F26522;border-radius:1px}
+    /* ── LAYOUT ─────────────────────────────────────────────── */
+    .layout { max-width: var(--max-w); margin: 0 auto; padding: 16px 20px; display: grid; grid-template-columns: 1fr 280px; gap: 16px }
+    @media (max-width: 1024px) { .layout { grid-template-columns: 1fr } .layout aside { display: none } }
 
-    /* Subreddit header */
-    .sub-header{background:linear-gradient(180deg,#F2652210 0%,transparent 100%);border-bottom:1px solid #222}
+    /* ── SORT BAR (Reddit) ──────────────────────────────────── */
+    .sortbar { display: flex; align-items: center; gap: 4px; background: var(--s1); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; margin-bottom: 12px }
+    .sbtn { font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 20px; border: none; background: none; color: var(--t3); cursor: pointer; transition: all .15s; font-family: var(--font-b) }
+    .sbtn:hover { color: var(--t2); background: var(--s3) }
+    .sbtn.on { color: var(--t1); background: var(--s3) }
+    .scount { margin-left: auto; font-family: var(--font-m); font-size: 11px; color: var(--t4) }
 
-    /* Section cards */
-    .section-card{border:1px solid #222;border-radius:12px;padding:24px;transition:all .2s;cursor:pointer;background:#141414}
-    .section-card:hover{border-color:#F2652240;transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.4)}
+    /* ── POST (Reddit thread) ──────────────────────────────── */
+    .post { display: flex; border: 1px solid transparent; border-radius: 8px; transition: all .15s; cursor: pointer; overflow: hidden }
+    .post:hover { border-color: var(--border); background: var(--s1) }
+    .post + .post { margin-top: 4px }
+    .vote { width: 40px; display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 10px 0; color: var(--t4); font-size: 11px; font-weight: 600; font-family: var(--font-m); flex-shrink: 0; background: var(--s1); border-right: 1px solid var(--border) }
+    .vote svg { width: 18px; height: 18px; opacity: .3; transition: all .15s }
+    .vote svg:hover { opacity: .8; color: var(--yc) }
+    .pbody { flex: 1; padding: 10px 12px; min-width: 0 }
+    .pmeta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 11px; color: var(--t4); margin-bottom: 4px }
+    .flair { font-size: 10px; padding: 1px 8px; border-radius: 9999px; font-weight: 600; letter-spacing: .02em; line-height: 18px }
+    .ptitle { font-size: 14px; font-weight: 600; color: var(--t1); display: flex; align-items: center; gap: 6px; margin-bottom: 3px }
+    .ptitle img { width: 18px; height: 18px; border-radius: 4px; object-fit: cover; background: var(--s3) }
+    .pdesc { font-size: 12px; color: var(--t3); line-height: 1.5; margin-bottom: 6px }
+    .pfoot { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 11px; color: var(--t4) }
+    .pfoot a { color: var(--t4); text-decoration: none; display: flex; align-items: center; gap: 3px; transition: color .15s }
+    .pfoot a:hover { color: var(--yc-l) }
+    .ptag { font-size: 10px; padding: 2px 8px; border-radius: 4px; background: var(--s3); color: var(--t3) }
+    @media (max-width: 640px) { .vote { display: none } }
 
-    /* Tag cloud */
-    .tag-sm{font-size:11px;padding:3px 10px;border-radius:6px;background:#1a1a1a;border:1px solid #2a2a2a;color:#b0b0b0;transition:all .15s;cursor:pointer}
-    .tag-sm:hover{border-color:#F2652240;color:#FF8A50}
-    .tag-sm.active{background:#F2652218;border-color:#F26522;color:#FF8A50}
+    /* ── DESIGN GRID ───────────────────────────────────────── */
+    .dgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px }
+    .dcard { background: var(--s1); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: all .2s var(--ease); cursor: pointer }
+    .dcard:hover { border-color: var(--border-h); transform: translateY(-3px); box-shadow: var(--shadow-hover) }
+    .dthumb { aspect-ratio: 16/10; background: var(--s2); position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden }
+    .dthumb .initial { font-size: 32px; font-weight: 800; color: var(--s5); font-family: var(--font-d) }
+    .dthumb .domain { font-size: 10px; color: var(--t4); font-family: var(--font-m); margin-top: 4px; text-align: center }
+    .dthumb .hover-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(0,0,0,.8)); opacity: 0; transition: opacity .2s; display: flex; align-items: flex-end; padding: 10px }
+    .dcard:hover .hover-overlay { opacity: 1 }
+    .dbody { padding: 12px }
+    .dbody h4 { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; margin-bottom: 4px }
+    .dbody h4 img { width: 16px; height: 16px; border-radius: 3px }
+    .dbody p { font-size: 11px; color: var(--t3); line-height: 1.5 }
+    .dbody .dom { font-size: 10px; color: var(--t4); font-family: var(--font-m); margin-top: 6px }
 
-    /* Company thread */
-    .thread-card{border:1px solid #222;border-radius:8px;overflow:hidden;transition:all .15s}
-    .thread-card:hover{border-color:#333}
+    /* ── SIDEBAR ────────────────────────────────────────────── */
+    aside .box { background: var(--s1); border: 1px solid var(--border); border-radius: 10px; overflow: hidden }
+    aside .box + .box { margin-top: 12px }
+    aside .box-head { padding: 12px 14px; font-size: 11px; font-weight: 600; color: var(--t3); text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid var(--border) }
+    aside .box-body { padding: 10px }
+    .sb-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; border-radius: 6px; font-size: 12px; color: var(--t2); border: none; background: none; cursor: pointer; transition: all .15s; font-family: var(--font-b); text-align: left }
+    .sb-btn:hover { background: var(--s2) }
+    .sb-btn.on { background: rgba(242,101,34,.06); color: var(--yc-l) }
+    .sb-btn .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0 }
+    .sb-btn .ct { font-family: var(--font-m); font-size: 10px; color: var(--t4) }
+    .tcloud { display: flex; flex-wrap: wrap; gap: 6px; padding: 2px }
+    .tpill { font-size: 11px; padding: 4px 10px; border-radius: 6px; background: var(--s2); border: 1px solid var(--border); color: var(--t2); cursor: pointer; transition: all .15s; font-family: var(--font-b) }
+    .tpill:hover { border-color: var(--border-h); color: var(--yc-l) }
+    .tpill.on { background: rgba(242,101,34,.08); border-color: rgba(242,101,34,.25); color: var(--yc-l) }
+    .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px }
+    .bar-row .label { width: 70px; font-size: 10px; color: var(--t3); text-align: right; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+    .bar-row .track { flex: 1; height: 6px; background: var(--s3); border-radius: 3px; overflow: hidden }
+    .bar-row .fill { height: 100%; border-radius: 3px; transition: width .8s var(--ease) }
+    .bar-row .val { width: 30px; font-size: 10px; font-family: var(--font-m); color: var(--t4); text-align: right }
 
-    /* Screenshot frame */
-    .ss-frame{aspect-ratio:16/10;background:#1a1a1a;border-radius:8px;overflow:hidden;border:1px solid #222;position:relative}
-    .ss-frame img{width:100%;height:100%;object-fit:cover}
-    .ss-frame .overlay{position:absolute;inset:0;background:linear-gradient(transparent 60%,rgba(0,0,0,.8));opacity:0;transition:opacity .2s}
-    .ss-frame:hover .overlay{opacity:1}
+    /* ── STATIC SECTIONS (Apply, Stats) ────────────────────── */
+    .sbox { background: var(--s1); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 12px }
+    .sbox h2, .sbox h3 { font-family: var(--font-d); margin-bottom: 12px }
+    .sbox h2 { font-size: 22px; font-weight: 700 }
+    .sbox h3 { font-size: 16px; font-weight: 600 }
+    .sbox p { font-size: 13px; color: var(--t3); line-height: 1.6 }
+    .tip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0 }
+    @media (max-width: 640px) { .tip-grid { grid-template-columns: 1fr } }
+    .tip-box { background: var(--s2); border: 1px solid var(--border); border-radius: 8px; padding: 14px }
+    .tip-box h4 { font-size: 12px; font-weight: 600; margin-bottom: 8px }
+    .tip-box ul { font-size: 11px; color: var(--t3); padding-left: 16px; list-style: disc }
+    .tip-box li { margin-bottom: 4px; line-height: 1.5 }
+    .rfs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
+    @media (max-width: 640px) { .rfs-grid { grid-template-columns: 1fr } }
+    .rfs-item { background: var(--s2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; display: flex; align-items: flex-start; gap: 10px }
+    .rfs-num { font-family: var(--font-m); font-size: 11px; font-weight: 600; color: var(--yc); margin-top: 1px; flex-shrink: 0 }
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px }
+    @media (max-width: 640px) { .stat-grid { grid-template-columns: repeat(2, 1fr) } }
+    .stat-cell { background: var(--s2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; text-align: center }
+    .stat-cell .n { font-size: 20px; font-weight: 700; font-family: var(--font-m) }
+    .stat-cell .l { font-size: 10px; color: var(--t4); margin-top: 2px }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all .2s var(--ease); border: none; cursor: pointer; font-family: var(--font-b) }
+    .cta-btn.primary { background: var(--yc); color: #fff }
+    .cta-btn.primary:hover { background: var(--yc-d); transform: scale(1.02) }
+    .cta-btn.ghost { background: var(--s3); color: var(--t2); border: 1px solid var(--border) }
+    .cta-btn.ghost:hover { border-color: var(--border-h); color: var(--t1) }
 
-    /* Fade */
-    .fade-up{opacity:0;transform:translateY(16px);transition:all .5s ease}
-    .fade-up.show{opacity:1;transform:none}
+    /* ── MODAL ──────────────────────────────────────────────── */
+    .modal-bg { position: fixed; inset: 0; z-index: 70; background: rgba(0,0,0,.7); backdrop-filter: blur(4px); display: flex; align-items: flex-start; justify-content: center; padding: 64px 16px 32px; overflow-y: auto }
+    .modal-box { background: var(--s1); border: 1px solid var(--border); border-radius: 14px; max-width: 640px; width: 100%; box-shadow: var(--shadow-modal); position: relative }
+    .modal-box .close { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border-radius: 50%; background: var(--s3); border: none; color: var(--t3); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; z-index: 1 }
+    .modal-box .close:hover { color: var(--t1); background: var(--s4) }
+    .modal-inner { padding: 24px }
+    .modal-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px }
+    .modal-logo { width: 56px; height: 56px; border-radius: 12px; object-fit: cover; background: var(--s3); flex-shrink: 0 }
+    .modal-logo-fallback { width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, rgba(242,101,34,.15), rgba(242,101,34,.05)); display: flex; align-items: center; justify-content: center; font-family: var(--font-d); font-size: 22px; font-weight: 700; color: var(--yc); flex-shrink: 0 }
+    .modal-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px }
+    .modal-desc { background: var(--s2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 14px }
+    .modal-desc p { font-size: 12px; color: var(--t3); line-height: 1.6; white-space: pre-line }
+    .modal-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px }
+    .modal-stat { background: var(--s2); border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: center }
+    .modal-stat .v { font-size: 16px; font-weight: 700; font-family: var(--font-m) }
+    .modal-stat .l { font-size: 10px; color: var(--t4); margin-top: 2px }
+    .modal-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px }
+    .modal-actions { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 14px; border-top: 1px solid var(--border) }
 
-    /* Sidebar sticky */
-    .sidebar-sticky{position:sticky;top:56px;max-height:calc(100vh - 56px);overflow-y:auto}
+    /* ── CHIPS ──────────────────────────────────────────────── */
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px }
+    .chip { font-size: 11px; padding: 4px 10px; border-radius: 6px; background: rgba(242,101,34,.06); border: 1px solid rgba(242,101,34,.15); color: var(--yc-l); display: flex; align-items: center; gap: 4px; font-family: var(--font-b) }
+    .chip button { background: none; border: none; color: var(--t3); cursor: pointer; font-size: 14px; line-height: 1; padding: 0 }
+    .chip button:hover { color: var(--t1) }
 
-    /* Modal */
-    .modal-bg{background:rgba(0,0,0,.75);backdrop-filter:blur(4px)}
+    /* ── LOAD MORE / EMPTY ─────────────────────────────────── */
+    .load-more { text-align: center; padding: 24px 0 }
+    .load-more button { padding: 10px 24px; border-radius: 20px; background: var(--s2); border: 1px solid var(--border); color: var(--t2); font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; font-family: var(--font-b) }
+    .load-more button:hover { border-color: var(--border-h); color: var(--t1) }
+    .load-more .info { font-size: 11px; color: var(--t4); font-family: var(--font-m); margin-top: 6px }
+    .empty { text-align: center; padding: 64px 0; color: var(--t3) }
+    .empty .icon { font-size: 32px; opacity: .4; margin-bottom: 8px }
+    .empty button { color: var(--yc); background: none; border: none; cursor: pointer; font-size: 13px; margin-top: 8px; font-family: var(--font-b) }
+    .empty button:hover { text-decoration: underline }
 
-    /* Custom scrollbar for sidebar */
-    .sidebar-sticky::-webkit-scrollbar{width:4px}
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    .footer { border-top: 1px solid var(--border); margin-top: 48px; padding: 24px 0; text-align: center; font-size: 11px; color: var(--t4) }
+    .footer a { color: var(--t4); text-decoration: none; transition: color .15s }
+    .footer a:hover { color: var(--yc) }
 
-    /* Responsive grid */
-    @media(max-width:1024px){.main-grid{grid-template-columns:1fr!important}}
-    @media(max-width:640px){.vote-bar{display:none}}
-
-    /* Reddit thread line */
-    .thread-line{width:2px;background:#2a2a2a;margin:0 auto;flex-shrink:0;transition:background .15s}
-    .post:hover .thread-line{background:#F2652240}
+    /* ── ANIMATION ─────────────────────────────────────────── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: none } }
+    .anim { animation: fadeUp .4s var(--ease) both }
+    .anim-d1 { animation-delay: 100ms } .anim-d2 { animation-delay: 200ms } .anim-d3 { animation-delay: 300ms }
+    .hidden { display: none !important }
   </style>
 </head>
 <body>
 
-<!-- ═══════════════════════ TOP NAV ═══════════════════════ -->
-<nav class="fixed top-0 w-full z-50 bg-surface-1/95 backdrop-blur-md border-b border-surface-3" style="height:48px">
-  <div class="max-w-[1400px] mx-auto h-full flex items-center px-4 gap-4">
-    <!-- Logo -->
-    <a href="/wiki" class="flex items-center gap-2 shrink-0">
-      <div class="w-7 h-7 rounded-md bg-yc flex items-center justify-center">
-        <span class="text-white font-bold text-xs">W</span>
-      </div>
-      <span class="font-bold text-sm hidden sm:block">WikiYC</span>
-    </a>
-
-    <!-- Search -->
-    <div class="flex-1 max-w-xl relative">
-      <input type="text" id="global-search" placeholder="Search 3,387 startups..."
-        class="w-full h-9 pl-9 pr-4 rounded-full bg-surface-3 border border-surface-4 text-sm text-text-1 placeholder-text-3 focus:outline-none focus:border-yc/40 focus:bg-surface-2 transition">
-      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/wiki" class="nav-logo"><div class="nav-logo-icon">W</div><span>WikiYC</span></a>
+    <div class="nav-search">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input type="text" id="q" placeholder="Search companies, industries, tags...">
     </div>
-
-    <!-- Nav links -->
-    <div class="flex items-center gap-1 text-xs">
-      <a href="/" class="px-3 py-1.5 rounded-md text-text-3 hover:text-text-1 hover:bg-surface-3 transition">Home</a>
-      <a href="/builder" class="px-3 py-1.5 rounded-md text-text-3 hover:text-text-1 hover:bg-surface-3 transition">Builder</a>
-      <a href="/wiki" class="px-3 py-1.5 rounded-md bg-yc/10 text-yc-light border border-yc/20">Wiki</a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/builder">Builder</a>
+      <a href="/wiki" class="active">Wiki</a>
     </div>
   </div>
 </nav>
 
-<!-- ═══════════════════════ SUBREDDIT HEADER ═══════════════════════ -->
-<div class="sub-header pt-[48px]">
-  <div class="max-w-[1400px] mx-auto px-4 py-6">
-    <div class="flex items-center gap-4 mb-4">
-      <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-yc to-yc-dark flex items-center justify-center shadow-lg shadow-yc/20">
-        <span class="text-white font-bold text-2xl">Y</span>
+<!-- CHOOSER -->
+<div style="padding-top:48px">
+<div id="chooser" class="chooser mx anim">
+  <h1><span>Every YC Startup.</span> One Wiki.</h1>
+  <p class="sub">3,387 companies from 14 batches (2021-2026). Research, design inspiration, and YC application guide.</p>
+  <div class="cards">
+    <div class="card" onclick="go('companies')">
+      <div class="card-icon" style="background:rgba(59,130,246,.1)">
+        <svg width="20" height="20" fill="none" stroke="#3b82f6" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
       </div>
-      <div>
-        <h1 class="text-xl font-bold flex items-center gap-2">
-          WikiYC
-          <span class="text-xs px-2 py-0.5 rounded-full bg-yc/10 text-yc font-mono">v2</span>
-        </h1>
-        <p class="text-text-3 text-sm mt-0.5">The open encyclopedia of Y Combinator startups</p>
+      <h3>Company Research</h3>
+      <p>Browse every startup. Filter by batch, industry, year. See what they build, their team, and links.</p>
+      <div class="tag" style="color:var(--blue)">r/companies <span style="opacity:.5">&rarr;</span></div>
+    </div>
+    <div class="card" onclick="go('design')">
+      <div class="card-icon" style="background:rgba(168,85,247,.1)">
+        <svg width="20" height="20" fill="none" stroke="#a855f7" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
       </div>
+      <h3>Design Lab</h3>
+      <p>Explore YC startup websites. Study designs, landing pages, and visual patterns by industry.</p>
+      <div class="tag" style="color:var(--purple)">r/design <span style="opacity:.5">&rarr;</span></div>
     </div>
-    <div class="flex items-center gap-4 text-xs text-text-3">
-      <span><strong class="text-text-1 font-mono" id="h-total">3,387</strong> companies</span>
-      <span class="text-surface-4">|</span>
-      <span><strong class="text-text-1 font-mono">14</strong> batches</span>
-      <span class="text-surface-4">|</span>
-      <span><strong class="text-text-1 font-mono">5</strong> years (2021-2026)</span>
-      <span class="text-surface-4">|</span>
-      <span>Sources: YC, Algolia, YC-OSS</span>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════ SECTION CHOOSER (Home) ═══════════════════════ -->
-<div id="section-home" class="max-w-[1400px] mx-auto px-4 py-8">
-  <h2 class="font-display text-2xl font-bold mb-2">What are you looking for?</h2>
-  <p class="text-text-3 text-sm mb-6">Choose a section to get started. Each one is designed for a different use case.</p>
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-
-    <div class="section-card group" onclick="goSection('companies')">
-      <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center mb-3 group-hover:bg-blue-500/20 transition">
-        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+    <div class="card" onclick="go('apply')">
+      <div class="card-icon" style="background:rgba(34,197,94,.1)">
+        <svg width="20" height="20" fill="none" stroke="#22c55e" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
       </div>
-      <h3 class="font-semibold text-sm mb-1">Company Research</h3>
-      <p class="text-text-3 text-xs leading-relaxed">Browse 3,387 YC startups. Filter by batch, industry, year. See what every company does, their team, stage, and links.</p>
-      <div class="mt-3 text-xs text-blue-400 font-medium">r/companies &rarr;</div>
+      <h3>Apply to YC</h3>
+      <p>Application builder with AI scoring. Tips from partners, common mistakes, and RFS 2026.</p>
+      <div class="tag" style="color:var(--green)">r/apply <span style="opacity:.5">&rarr;</span></div>
     </div>
-
-    <div class="section-card group" onclick="goSection('design')">
-      <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center mb-3 group-hover:bg-purple-500/20 transition">
-        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+    <div class="card" onclick="go('stats')">
+      <div class="card-icon" style="background:rgba(242,101,34,.1)">
+        <svg width="20" height="20" fill="none" stroke="#F26522" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
       </div>
-      <h3 class="font-semibold text-sm mb-1">Design Lab</h3>
-      <p class="text-text-3 text-xs leading-relaxed">Research YC startup designs. Visit live sites, study landing pages, compare by industry. Inspiration for your own startup.</p>
-      <div class="mt-3 text-xs text-purple-400 font-medium">r/design &rarr;</div>
-    </div>
-
-    <div class="section-card group" onclick="goSection('apply')">
-      <div class="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center mb-3 group-hover:bg-green-500/20 transition">
-        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
-      </div>
-      <h3 class="font-semibold text-sm mb-1">Apply to YC</h3>
-      <p class="text-text-3 text-xs leading-relaxed">Interactive application builder with AI scoring. Tips from partners, common mistakes, and what the best applications look like.</p>
-      <div class="mt-3 text-xs text-green-400 font-medium">r/apply &rarr;</div>
-    </div>
-
-    <div class="section-card group" onclick="goSection('stats')">
-      <div class="w-10 h-10 rounded-lg bg-yc/10 flex items-center justify-center mb-3 group-hover:bg-yc/20 transition">
-        <svg class="w-5 h-5 text-yc" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-      </div>
-      <h3 class="font-semibold text-sm mb-1">Batch Intelligence</h3>
-      <p class="text-text-3 text-xs leading-relaxed">Trends, stats, and analysis across all 14 batches. AI trajectory, industry breakdown, team composition, and more.</p>
-      <div class="mt-3 text-xs text-yc font-medium">r/intel &rarr;</div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ═══════════════════════ SECTION TABS ═══════════════════════ -->
-<div class="border-b border-surface-3 bg-surface-1 sticky top-[48px] z-40">
-  <div class="max-w-[1400px] mx-auto px-4 flex overflow-x-auto">
-    <div class="tab active" data-section="companies" onclick="goSection('companies')">
-      <svg class="w-3.5 h-3.5 inline mr-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5"/></svg>
-      Companies
-    </div>
-    <div class="tab" data-section="design" onclick="goSection('design')">
-      <svg class="w-3.5 h-3.5 inline mr-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14"/></svg>
-      Design Lab
-    </div>
-    <div class="tab" data-section="apply" onclick="goSection('apply')">
-      <svg class="w-3.5 h-3.5 inline mr-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/></svg>
-      Apply to YC
-    </div>
-    <div class="tab" data-section="stats" onclick="goSection('stats')">
-      <svg class="w-3.5 h-3.5 inline mr-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6"/></svg>
-      Intel
+      <h3>Batch Intelligence</h3>
+      <p>Trends and analysis across 14 batches. AI trajectory, industry breakdown, team composition.</p>
+      <div class="tag tc">r/intel <span style="opacity:.5">&rarr;</span></div>
     </div>
   </div>
 </div>
+</div>
 
-<!-- ═══════════════════════ MAIN CONTENT ═══════════════════════ -->
-<div class="max-w-[1400px] mx-auto px-4 py-4">
-  <div class="main-grid grid gap-4" style="grid-template-columns:1fr 300px">
-
-    <!-- ─── LEFT FEED ─────────────────────────────────── -->
-    <div>
-
-      <!-- Sort bar (Reddit-style) -->
-      <div id="sort-bar" class="flex items-center gap-1 bg-surface-1 border border-surface-3 rounded-lg px-3 py-2 mb-4">
-        <button onclick="setSort('batch-new')" class="sort-btn active text-xs px-3 py-1.5 rounded-full transition" data-sort="batch-new">
-          <svg class="w-3 h-3 inline mr-1 -mt-0.5" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1l2.3 4.7 5.2.7-3.8 3.7.9 5.2L8 12.8l-4.6 2.5.9-5.2L.5 6.4l5.2-.7z"/></svg>Hot
-        </button>
-        <button onclick="setSort('name')" class="sort-btn text-xs px-3 py-1.5 rounded-full transition" data-sort="name">New</button>
-        <button onclick="setSort('team-size')" class="sort-btn text-xs px-3 py-1.5 rounded-full transition" data-sort="team-size">Top</button>
-        <button onclick="setSort('batch-old')" class="sort-btn text-xs px-3 py-1.5 rounded-full transition" data-sort="batch-old">Rising</button>
-        <div class="flex-1"></div>
-        <span class="text-[11px] text-text-3 font-mono" id="result-count"></span>
-      </div>
-
-      <!-- Active filter chips -->
-      <div id="filter-chips" class="hidden flex flex-wrap gap-2 mb-4"></div>
-
-      <!-- Feed -->
-      <div id="feed" class="space-y-2"></div>
-
-      <!-- Design section -->
-      <div id="design-feed" class="hidden">
-        <div id="design-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
-      </div>
-
-      <!-- Apply section -->
-      <div id="apply-section" class="hidden space-y-4">
-        <div class="bg-surface-1 border border-surface-3 rounded-lg p-6">
-          <h2 class="font-display text-xl font-bold mb-3">How to Apply to Y Combinator</h2>
-          <p class="text-text-2 text-sm leading-relaxed mb-4">YC accepts ~1% of applicants (~70-80K applications/year). The application is short but every word matters. Here's what we've learned from analyzing thousands of successful applications.</p>
-
-          <div class="grid sm:grid-cols-2 gap-4 mb-6">
-            <div class="bg-surface-2 rounded-lg p-4 border border-surface-3">
-              <div class="text-green-400 font-semibold text-sm mb-2">What works</div>
-              <ul class="text-xs text-text-2 space-y-1.5">
-                <li>Clear, specific one-liner (under 50 chars)</li>
-                <li>Measurable traction (revenue, users, growth %)</li>
-                <li>Domain expertise proof ("I worked 10 years in...")</li>
-                <li>Technical co-founder with shared history</li>
-                <li>Authentic 1-min video (no scripts, no polish)</li>
-              </ul>
-            </div>
-            <div class="bg-surface-2 rounded-lg p-4 border border-surface-3">
-              <div class="text-red-400 font-semibold text-sm mb-2">Common mistakes</div>
-              <ul class="text-xs text-text-2 space-y-1.5">
-                <li>Buzzword-heavy descriptions ("AI-powered synergy")</li>
-                <li>No traction data or vague metrics</li>
-                <li>Overly produced founder video</li>
-                <li>TAM from Google search ("$400B market")</li>
-                <li>Feature list instead of insight/thesis</li>
-              </ul>
-            </div>
-          </div>
-
-          <a href="/builder" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-yc text-white text-sm font-semibold hover:bg-yc-dark transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-            Open Application Builder
-          </a>
-        </div>
-
-        <div class="bg-surface-1 border border-surface-3 rounded-lg p-6">
-          <h3 class="font-semibold text-sm mb-3">YC Batch Stats (Application Context)</h3>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="bg-surface-2 rounded-lg p-3 text-center"><div class="text-lg font-bold font-mono text-yc">~1%</div><div class="text-[10px] text-text-3 mt-1">Acceptance Rate</div></div>
-            <div class="bg-surface-2 rounded-lg p-3 text-center"><div class="text-lg font-bold font-mono">63%</div><div class="text-[10px] text-text-3 mt-1">2-Person Teams</div></div>
-            <div class="bg-surface-2 rounded-lg p-3 text-center"><div class="text-lg font-bold font-mono">92%</div><div class="text-[10px] text-text-3 mt-1">AI-Native (F25)</div></div>
-            <div class="bg-surface-2 rounded-lg p-3 text-center"><div class="text-lg font-bold font-mono">$500K</div><div class="text-[10px] text-text-3 mt-1">Standard Deal</div></div>
-          </div>
-        </div>
-
-        <div class="bg-surface-1 border border-surface-3 rounded-lg p-6">
-          <h3 class="font-semibold text-sm mb-3">RFS Spring 2026 (Requests for Startups)</h3>
-          <p class="text-text-3 text-xs mb-3">These are areas YC is actively looking for applications in:</p>
-          <div class="grid sm:grid-cols-2 gap-2">
-            <div class="bg-surface-2 rounded-lg p-3 flex items-start gap-3"><span class="text-yc font-mono text-xs font-bold mt-0.5">01</span><span class="text-xs text-text-2">Cursor for Product Managers</span></div>
-            <div class="bg-surface-2 rounded-lg p-3 flex items-start gap-3"><span class="text-yc font-mono text-xs font-bold mt-0.5">02</span><span class="text-xs text-text-2">AI-Native Hedge Funds</span></div>
-            <div class="bg-surface-2 rounded-lg p-3 flex items-start gap-3"><span class="text-yc font-mono text-xs font-bold mt-0.5">03</span><span class="text-xs text-text-2">AI-Native Agencies</span></div>
-            <div class="bg-surface-2 rounded-lg p-3 flex items-start gap-3"><span class="text-yc font-mono text-xs font-bold mt-0.5">04</span><span class="text-xs text-text-2">Stablecoin Financial Services</span></div>
-            <div class="bg-surface-2 rounded-lg p-3 flex items-start gap-3"><span class="text-yc font-mono text-xs font-bold mt-0.5">05</span><span class="text-xs text-text-2">AI for Government</span></div>
-            <div class="bg-surface-2 rounded-lg p-3 flex items-start gap-3"><span class="text-yc font-mono text-xs font-bold mt-0.5">06</span><span class="text-xs text-text-2">Modern Metal Mills</span></div>
-            <div class="bg-surface-2 rounded-lg p-3 flex items-start gap-3"><span class="text-yc font-mono text-xs font-bold mt-0.5">07</span><span class="text-xs text-text-2">AI Guidance for Physical Work</span></div>
-            <div class="bg-surface-2 rounded-lg p-3 flex items-start gap-3"><span class="text-yc font-mono text-xs font-bold mt-0.5">08</span><span class="text-xs text-text-2">Large Spatial Models</span></div>
-            <div class="bg-surface-2 rounded-lg p-3 flex items-start gap-3"><span class="text-yc font-mono text-xs font-bold mt-0.5">09</span><span class="text-xs text-text-2">Infra for Government Fraud Hunters</span></div>
-            <div class="bg-surface-2 rounded-lg p-3 flex items-start gap-3"><span class="text-yc font-mono text-xs font-bold mt-0.5">10</span><span class="text-xs text-text-2">Make LLMs Easy to Train</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stats section -->
-      <div id="stats-section" class="hidden space-y-4">
-        <div class="bg-surface-1 border border-surface-3 rounded-lg p-6">
-          <h2 class="font-display text-xl font-bold mb-4">Batch Intelligence</h2>
-          <div id="batch-chart" class="space-y-2"></div>
-        </div>
-        <div class="bg-surface-1 border border-surface-3 rounded-lg p-6">
-          <h3 class="font-semibold text-sm mb-4">Industry Breakdown</h3>
-          <div id="industry-chart" class="space-y-2"></div>
-        </div>
-        <div class="bg-surface-1 border border-surface-3 rounded-lg p-6">
-          <h3 class="font-semibold text-sm mb-4">AI Trajectory Across Batches</h3>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="bg-surface-2 rounded-lg p-3 text-center"><div class="text-lg font-bold font-mono text-blue-400">36%</div><div class="text-[10px] text-text-3 mt-1">W25 AI Agents</div></div>
-            <div class="bg-surface-2 rounded-lg p-3 text-center"><div class="text-lg font-bold font-mono text-purple-400">46%</div><div class="text-[10px] text-text-3 mt-1">Sp25 AI Agents</div></div>
-            <div class="bg-surface-2 rounded-lg p-3 text-center"><div class="text-lg font-bold font-mono text-yc">88%</div><div class="text-[10px] text-text-3 mt-1">S25 AI-Native</div></div>
-            <div class="bg-surface-2 rounded-lg p-3 text-center"><div class="text-lg font-bold font-mono text-green-400">92%</div><div class="text-[10px] text-text-3 mt-1">F25 AI-Native</div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Load more -->
-      <div id="load-more" class="hidden text-center py-6">
-        <button onclick="loadMore()" class="px-6 py-2.5 rounded-full bg-surface-2 border border-surface-4 text-text-2 text-sm hover:border-yc/30 hover:text-yc-light transition">
-          Load more <span id="remaining-count" class="font-mono text-text-3"></span>
-        </button>
-      </div>
-
-      <!-- Empty -->
-      <div id="empty" class="hidden text-center py-16">
-        <div class="text-3xl mb-3 opacity-50">:/</div>
-        <div class="text-text-3">No results found</div>
-        <button onclick="resetFilters()" class="text-yc text-sm mt-2 hover:underline">Clear all filters</button>
-      </div>
-    </div>
-
-    <!-- ─── RIGHT SIDEBAR ─────────────────────────────── -->
-    <aside class="hidden lg:block">
-      <div class="sidebar-sticky space-y-4 pb-8">
-
-        <!-- About -->
-        <div class="bg-surface-1 border border-surface-3 rounded-lg overflow-hidden">
-          <div class="h-12 bg-gradient-to-r from-yc/20 to-purple-500/10"></div>
-          <div class="p-4 -mt-2">
-            <h3 class="font-semibold text-sm mb-1">About WikiYC</h3>
-            <p class="text-text-3 text-xs leading-relaxed">The most complete public database of Y Combinator startups. 3,387 companies from 14 batches (2021-2026). Use it for startup research, competitive analysis, design inspiration, or preparing your YC application.</p>
-            <div class="flex gap-4 mt-3 pt-3 border-t border-surface-3 text-xs text-text-3">
-              <div><span class="text-text-1 font-bold font-mono" id="sb-total">3,387</span><br>Companies</div>
-              <div><span class="text-text-1 font-bold font-mono">14</span><br>Batches</div>
-              <div><span class="text-text-1 font-bold font-mono">8</span><br>Industries</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Batches -->
-        <div class="bg-surface-1 border border-surface-3 rounded-lg p-4">
-          <h3 class="text-xs font-semibold text-text-3 uppercase tracking-wider mb-3">Batches</h3>
-          <div class="space-y-0.5" id="sb-batches"></div>
-        </div>
-
-        <!-- Industries -->
-        <div class="bg-surface-1 border border-surface-3 rounded-lg p-4">
-          <h3 class="text-xs font-semibold text-text-3 uppercase tracking-wider mb-3">Industries</h3>
-          <div class="flex flex-wrap gap-1.5" id="sb-industries"></div>
-        </div>
-
-        <!-- Years -->
-        <div class="bg-surface-1 border border-surface-3 rounded-lg p-4">
-          <h3 class="text-xs font-semibold text-text-3 uppercase tracking-wider mb-3">Years</h3>
-          <div class="flex flex-wrap gap-1.5" id="sb-years"></div>
-        </div>
-
-        <!-- Footer -->
-        <div class="text-[10px] text-text-4 leading-relaxed px-2">
-          Data from <a href="https://www.ycombinator.com/companies" class="hover:text-yc transition" target="_blank">ycombinator.com</a>
-          &middot; Built with Python + Flask
-          &middot; <a href="/" class="hover:text-yc transition">YC Intelligence</a>
-        </div>
-      </div>
-    </aside>
-
+<!-- TABS -->
+<div class="tabs" id="tabs">
+  <div class="tabs-inner">
+    <button class="tab on" data-s="companies" onclick="go('companies')">Companies</button>
+    <button class="tab" data-s="design" onclick="go('design')">Design Lab</button>
+    <button class="tab" data-s="apply" onclick="go('apply')">Apply to YC</button>
+    <button class="tab" data-s="stats" onclick="go('stats')">Intel</button>
   </div>
 </div>
 
-<!-- ═══════════════════════ MODAL ═══════════════════════ -->
-<div id="modal" class="hidden fixed inset-0 z-[70] modal-bg flex items-start justify-center pt-16 px-4 overflow-y-auto pb-8" onclick="if(event.target===this)closeModal()">
-  <div class="bg-surface-1 border border-surface-3 rounded-xl max-w-2xl w-full relative">
-    <button onclick="closeModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-3 flex items-center justify-center text-text-3 hover:text-text-1 transition z-10">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-    </button>
-    <div id="modal-body" class="p-6"></div>
+<!-- MAIN -->
+<div class="layout">
+  <div>
+    <!-- Sort -->
+    <div class="sortbar" id="sortbar">
+      <button class="sbtn on" data-v="batch-new" onclick="setSort('batch-new')">Hot</button>
+      <button class="sbtn" data-v="name" onclick="setSort('name')">A-Z</button>
+      <button class="sbtn" data-v="team-size" onclick="setSort('team-size')">Top</button>
+      <button class="sbtn" data-v="batch-old" onclick="setSort('batch-old')">Oldest</button>
+      <span class="scount" id="scount"></span>
+    </div>
+
+    <div class="chips hidden" id="chips"></div>
+
+    <!-- Feeds -->
+    <div id="feed"></div>
+    <div id="dfeed" class="hidden"></div>
+
+    <!-- Apply -->
+    <div id="sec-apply" class="hidden">
+      <div class="sbox"><h2>How to Apply to Y Combinator</h2><p>YC accepts ~1% of applicants (~70-80K applications/year). The application is short but every word matters.</p>
+        <div class="tip-grid">
+          <div class="tip-box"><h4 style="color:var(--green)">What works</h4><ul><li>Clear one-liner under 50 chars</li><li>Measurable traction (revenue, users, growth %)</li><li>Domain expertise proof</li><li>Technical co-founder with shared history</li><li>Authentic 1-min video (no scripts)</li></ul></div>
+          <div class="tip-box"><h4 style="color:var(--rose)">Common mistakes</h4><ul><li>Buzzword-heavy descriptions</li><li>No traction data or vague metrics</li><li>Overly produced founder video</li><li>TAM from Google search</li><li>Feature list instead of insight</li></ul></div>
+        </div>
+        <a href="/builder" class="cta-btn primary">Open Application Builder</a>
+      </div>
+      <div class="sbox"><h3>YC Stats (Application Context)</h3><div class="stat-grid"><div class="stat-cell"><div class="n tc">~1%</div><div class="l">Acceptance Rate</div></div><div class="stat-cell"><div class="n">63%</div><div class="l">2-Person Teams</div></div><div class="stat-cell"><div class="n">92%</div><div class="l">AI-Native (F25)</div></div><div class="stat-cell"><div class="n">$500K</div><div class="l">Standard Deal</div></div></div></div>
+      <div class="sbox"><h3>RFS Spring 2026</h3><p style="margin-bottom:12px">Areas YC is actively looking for applications in:</p><div class="rfs-grid"><div class="rfs-item"><span class="rfs-num">01</span><span style="font-size:12px;color:var(--t2)">Cursor for Product Managers</span></div><div class="rfs-item"><span class="rfs-num">02</span><span style="font-size:12px;color:var(--t2)">AI-Native Hedge Funds</span></div><div class="rfs-item"><span class="rfs-num">03</span><span style="font-size:12px;color:var(--t2)">AI-Native Agencies</span></div><div class="rfs-item"><span class="rfs-num">04</span><span style="font-size:12px;color:var(--t2)">Stablecoin Financial Services</span></div><div class="rfs-item"><span class="rfs-num">05</span><span style="font-size:12px;color:var(--t2)">AI for Government</span></div><div class="rfs-item"><span class="rfs-num">06</span><span style="font-size:12px;color:var(--t2)">Modern Metal Mills</span></div><div class="rfs-item"><span class="rfs-num">07</span><span style="font-size:12px;color:var(--t2)">AI Guidance for Physical Work</span></div><div class="rfs-item"><span class="rfs-num">08</span><span style="font-size:12px;color:var(--t2)">Large Spatial Models</span></div><div class="rfs-item"><span class="rfs-num">09</span><span style="font-size:12px;color:var(--t2)">Infra for Government Fraud Hunters</span></div><div class="rfs-item"><span class="rfs-num">10</span><span style="font-size:12px;color:var(--t2)">Make LLMs Easy to Train</span></div></div></div>
+    </div>
+
+    <!-- Stats -->
+    <div id="sec-stats" class="hidden">
+      <div class="sbox"><h2>Batch Intelligence</h2><div id="chart-batches"></div></div>
+      <div class="sbox"><h3>Industry Breakdown</h3><div id="chart-industries"></div></div>
+      <div class="sbox"><h3>AI Trajectory</h3><div class="stat-grid"><div class="stat-cell"><div class="n" style="color:var(--blue)">36%</div><div class="l">W25 AI Agents</div></div><div class="stat-cell"><div class="n" style="color:var(--purple)">46%</div><div class="l">Sp25 AI Agents</div></div><div class="stat-cell"><div class="n tc">88%</div><div class="l">S25 AI-Native</div></div><div class="stat-cell"><div class="n" style="color:var(--green)">92%</div><div class="l">F25 AI-Native</div></div></div></div>
+    </div>
+
+    <div class="load-more hidden" id="loadmore"><button onclick="more()">Load more <span class="font-m" id="remct"></span></button><div class="info" id="reminfo"></div></div>
+    <div class="empty hidden" id="empty"><div class="icon">:/</div><div>No results found</div><button onclick="reset()">Clear all filters</button></div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="box">
+      <div style="height:40px;background:linear-gradient(90deg,rgba(242,101,34,.12),rgba(168,85,247,.08))"></div>
+      <div class="box-body" style="padding:14px">
+        <div style="font-size:13px;font-weight:600;margin-bottom:4px">About WikiYC</div>
+        <p style="font-size:11px;color:var(--t3);line-height:1.6;margin-bottom:10px">The most complete public database of Y Combinator startups. Research, competitive analysis, design inspiration.</p>
+        <div style="display:flex;gap:16px;padding-top:8px;border-top:1px solid var(--border);font-size:10px;color:var(--t4)">
+          <div><strong class="font-m" style="color:var(--t1);font-size:12px" id="sb-t">3,387</strong><br>Companies</div>
+          <div><strong class="font-m" style="color:var(--t1);font-size:12px">14</strong><br>Batches</div>
+          <div><strong class="font-m" style="color:var(--t1);font-size:12px" id="sb-i">8</strong><br>Industries</div>
+        </div>
+      </div>
+    </div>
+    <div class="box"><div class="box-head">Batches</div><div class="box-body" id="sb-b"></div></div>
+    <div class="box"><div class="box-head">Industries</div><div class="box-body"><div class="tcloud" id="sb-ind"></div></div></div>
+    <div class="box"><div class="box-head">Years</div><div class="box-body"><div class="tcloud" id="sb-y"></div></div></div>
+    <div style="font-size:10px;color:var(--t4);padding:12px 4px;line-height:1.6">
+      Data from <a href="https://www.ycombinator.com/companies" style="color:var(--t4)" target="_blank">ycombinator.com</a> &middot; <a href="/" style="color:var(--t4)">YC Intelligence</a>
+    </div>
+  </aside>
+</div>
+
+<div class="footer"><div class="mx">WikiYC &middot; <span id="ft-t">3,387</span> companies &middot; 14 batches &middot; 2021-2026 &middot; <a href="/">YC Intelligence</a></div></div>
+
+<!-- MODAL -->
+<div id="modal" class="hidden" style="position:fixed;inset:0;z-index:70">
+  <div class="modal-bg" onclick="if(event.target===this)closeM()">
+    <div class="modal-box">
+      <button class="close" onclick="closeM()"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+      <div class="modal-inner" id="mbody"></div>
+    </div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════ STATE ═══════════════════════
-let DATA = null;
-let filtered = [];
-let batch = 'all', industry = 'all', year = 'all', search = '', sort = 'batch-new';
-let section = 'companies';
-let shown = 50;
-const PER_PAGE = 50;
+const BO={{ batch_order | tojson }};
+const BD={{ batch_display | tojson }};
+const BY={{ batch_year | tojson }};
+const BC={W21:'#6366f1',S21:'#818cf8',W22:'#a78bfa',S22:'#c084fc',W23:'#e879f9',S23:'#f472b6',W24:'#fb7185',S24:'#f87171',F24:'#ef4444',W25:'#F26522',Sp25:'#f59e0b',S25:'#eab308',F25:'#84cc16',W26:'#22c55e'};
+const IC={B2B:'#3b82f6',Fintech:'#a855f7',Healthcare:'#06b6d4',Consumer:'#f472b6',Industrials:'#f59e0b',Education:'#22c55e','Real Estate and Construction':'#ef4444',Government:'#6366f1'};
 
-const BATCH_ORDER = {{ batch_order | tojson }};
-const BATCH_DISPLAY = {{ batch_display | tojson }};
-const BATCH_YEAR = {{ batch_year | tojson }};
-const BATCH_COLORS = {
-  W21:'#6366f1',S21:'#818cf8',W22:'#a78bfa',S22:'#c084fc',
-  W23:'#e879f9',S23:'#f472b6',W24:'#fb7185',S24:'#f87171',
-  F24:'#ef4444',W25:'#F26522',Sp25:'#f59e0b',S25:'#eab308',
-  F25:'#84cc16',W26:'#22c55e'
-};
-const IND_COLORS = {
-  B2B:'#3b82f6',Fintech:'#8b5cf6',Healthcare:'#06b6d4',Consumer:'#f472b6',
-  Industrials:'#f59e0b',Education:'#10b981','Real Estate and Construction':'#ef4444',Government:'#6366f1'
-};
+let D,F=[],bat='all',ind='all',yr='all',q='',srt='batch-new',sec='companies',sh=50,PP=50;
 
-// ═══════════════════════ INIT ═══════════════════════
-document.addEventListener('DOMContentLoaded', async()=>{
-  const r = await fetch('/api/wiki');
-  DATA = await r.json();
-  buildSidebar();
-  buildStats();
-  applyFilters();
-
-  let t;
-  document.getElementById('global-search').addEventListener('input',e=>{
-    clearTimeout(t);
-    t=setTimeout(()=>{search=e.target.value.trim().toLowerCase();shown=PER_PAGE;applyFilters()},180);
-  });
-
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+document.addEventListener('DOMContentLoaded',async()=>{
+  D=await(await fetch('/api/wiki')).json();
+  sidebar();stats();apply();
+  let t;document.getElementById('q').addEventListener('input',e=>{clearTimeout(t);t=setTimeout(()=>{q=e.target.value.trim().toLowerCase();sh=PP;apply()},180)});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
 });
 
-// ═══════════════════════ SECTIONS ═══════════════════════
-function goSection(s){
-  section=s;
-  // Update tabs
-  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.section===s));
-  // Hide section home
-  document.getElementById('section-home').style.display='none';
-  // Toggle content
-  document.getElementById('feed').classList.toggle('hidden',s==='design'||s==='apply'||s==='stats');
-  document.getElementById('design-feed').classList.toggle('hidden',s!=='design');
-  document.getElementById('apply-section').classList.toggle('hidden',s!=='apply');
-  document.getElementById('stats-section').classList.toggle('hidden',s!=='stats');
-  document.getElementById('sort-bar').classList.toggle('hidden',s==='apply'||s==='stats');
-  document.getElementById('load-more').classList.add('hidden');
-  document.getElementById('empty').classList.add('hidden');
+function all(){if(!D)return[];let a=[];BO.forEach(b=>{a=a.concat(D.batches[b]||[])});return a}
 
-  if(s==='companies'||s==='design'){shown=PER_PAGE;applyFilters()}
-  window.scrollTo({top:0,behavior:'smooth'});
+function go(s){
+  sec=s;
+  document.getElementById('chooser').classList.add('hidden');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.s===s));
+  ['feed','dfeed','sec-apply','sec-stats','sortbar','loadmore','empty'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  if(s==='companies'){document.getElementById('feed').classList.remove('hidden');document.getElementById('sortbar').classList.remove('hidden')}
+  if(s==='design'){document.getElementById('dfeed').classList.remove('hidden');document.getElementById('sortbar').classList.remove('hidden')}
+  if(s==='apply')document.getElementById('sec-apply').classList.remove('hidden');
+  if(s==='stats')document.getElementById('sec-stats').classList.remove('hidden');
+  sh=PP;apply();
 }
 
-// ═══════════════════════ SIDEBAR ═══════════════════════
-function buildSidebar(){
-  const all=getAllCompanies();
-  document.getElementById('sb-total').textContent=all.length.toLocaleString();
-  document.getElementById('h-total').textContent=all.length.toLocaleString();
+function sidebar(){
+  const a=all();
+  document.getElementById('sb-t').textContent=a.length.toLocaleString();
+  document.getElementById('ft-t').textContent=a.length.toLocaleString();
 
-  // Batches
-  const bc=document.getElementById('sb-batches');
-  BATCH_ORDER.forEach(b=>{
-    const n=(DATA.batches[b]||[]).length;if(!n)return;
-    const d=document.createElement('button');
-    d.className='w-full flex items-center justify-between px-2.5 py-1.5 rounded-md text-xs text-text-2 hover:bg-surface-2 transition';
-    d.dataset.batch=b;
-    d.onclick=()=>{batch=batch===b?'all':b;year='all';shown=PER_PAGE;updateSbActive();applyFilters()};
-    d.innerHTML=`<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full shrink-0" style="background:${BATCH_COLORS[b]}"></span>${BATCH_DISPLAY[b]}</span><span class="font-mono text-text-4">${n}</span>`;
-    bc.appendChild(d);
-  });
+  const bc=document.getElementById('sb-b');
+  BO.forEach(b=>{const n=(D.batches[b]||[]).length;if(!n)return;const d=document.createElement('button');d.className='sb-btn';d.dataset.b=b;d.onclick=()=>{bat=bat===b?'all':b;yr='all';sh=PP;sbActive();apply()};d.innerHTML=`<span style="display:flex;align-items:center;gap:8px"><span class="dot" style="background:${BC[b]}"></span>${BD[b]}</span><span class="ct">${n}</span>`;bc.appendChild(d)});
 
-  // Industries
-  const ic=document.getElementById('sb-industries');
-  const inds={};all.forEach(c=>{const i=c.industry||'Other';inds[i]=(inds[i]||0)+1});
-  Object.entries(inds).sort((a,b)=>b[1]-a[1]).forEach(([ind,n])=>{
-    ic.innerHTML+=`<button class="tag-sm" data-ind="${esc(ind)}" onclick="toggleIndustry('${esc(ind)}')">${esc(ind)} <span class="text-text-4 font-mono">${n}</span></button>`;
-  });
+  const inds={};a.forEach(c=>{const i=c.industry||'Other';inds[i]=(inds[i]||0)+1});
+  const si=document.getElementById('sb-ind');
+  Object.entries(inds).sort((a,b)=>b[1]-a[1]).forEach(([i,n])=>{si.innerHTML+=`<button class="tpill" data-i="${h(i)}" onclick="tInd('${h(i)}')">${h(i)} <span style="color:var(--t4);font-family:var(--font-m)">${n}</span></button>`});
+  document.getElementById('sb-i').textContent=Object.keys(inds).length;
 
-  // Years
-  const yc=document.getElementById('sb-years');
-  const years={};all.forEach(c=>{const y=BATCH_YEAR[c.batch]||'?';years[y]=(years[y]||0)+1});
-  Object.keys(years).sort((a,b)=>b-a).forEach(y=>{
-    yc.innerHTML+=`<button class="tag-sm" data-year="${y}" onclick="toggleYear('${y}')">${y} <span class="text-text-4 font-mono">${years[y]}</span></button>`;
-  });
+  const years={};a.forEach(c=>{const y=BY[c.batch]||'?';years[y]=(years[y]||0)+1});
+  const sy=document.getElementById('sb-y');
+  Object.keys(years).sort((a,b)=>b-a).forEach(y=>{sy.innerHTML+=`<button class="tpill" data-y="${y}" onclick="tYr('${y}')">${y} <span style="color:var(--t4);font-family:var(--font-m)">${years[y]}</span></button>`});
 }
 
-function updateSbActive(){
-  document.querySelectorAll('#sb-batches button').forEach(b=>b.classList.toggle('bg-yc/10',b.dataset.batch===batch));
-  document.querySelectorAll('#sb-industries .tag-sm').forEach(b=>b.classList.toggle('active',b.dataset.ind===industry));
-  document.querySelectorAll('#sb-years .tag-sm').forEach(b=>b.classList.toggle('active',b.dataset.year===String(year)));
+function sbActive(){
+  document.querySelectorAll('#sb-b .sb-btn').forEach(b=>b.classList.toggle('on',b.dataset.b===bat));
+  document.querySelectorAll('#sb-ind .tpill').forEach(b=>b.classList.toggle('on',b.dataset.i===ind));
+  document.querySelectorAll('#sb-y .tpill').forEach(b=>b.classList.toggle('on',b.dataset.y===String(yr)));
+}
+function tInd(i){ind=ind===i?'all':i;sh=PP;sbActive();apply()}
+function tYr(y){yr=yr===String(y)?'all':String(y);bat='all';sh=PP;sbActive();apply()}
+function reset(){bat='all';ind='all';yr='all';q='';document.getElementById('q').value='';sh=PP;sbActive();apply()}
+
+function apply(){
+  let l=all();
+  if(bat!=='all')l=l.filter(c=>c.batch===bat);
+  if(yr!=='all'){const yb=BO.filter(b=>String(BY[b])===String(yr));l=l.filter(c=>yb.includes(c.batch))}
+  if(ind!=='all')l=l.filter(c=>(c.industry||'Other')===ind);
+  if(q)l=l.filter(c=>`${c.name} ${c.one_liner} ${c.long_description} ${c.industry} ${(c.tags||[]).join(' ')} ${c.location}`.toLowerCase().includes(q));
+  l=doSort(l);F=l;
+
+  const ch=document.getElementById('chips');
+  let p=[];
+  if(bat!=='all')p.push(`<span class="chip">${BD[bat]}<button onclick="bat='all';sh=PP;sbActive();apply()">&times;</button></span>`);
+  if(yr!=='all')p.push(`<span class="chip">${yr}<button onclick="yr='all';sh=PP;sbActive();apply()">&times;</button></span>`);
+  if(ind!=='all')p.push(`<span class="chip">${h(ind)}<button onclick="ind='all';sh=PP;sbActive();apply()">&times;</button></span>`);
+  if(q)p.push(`<span class="chip">"${h(q)}"<button onclick="q='';document.getElementById('q').value='';sh=PP;apply()">&times;</button></span>`);
+  ch.innerHTML=p.join('');ch.classList.toggle('hidden',!p.length);
+  document.getElementById('scount').textContent=F.length.toLocaleString()+' results';
+
+  if(sec==='companies')renderFeed();else if(sec==='design')renderDesign();
 }
 
-function toggleIndustry(i){industry=industry===i?'all':i;shown=PER_PAGE;updateSbActive();applyFilters()}
-function toggleYear(y){year=year===String(y)?'all':String(y);batch='all';shown=PER_PAGE;updateSbActive();applyFilters()}
-function resetFilters(){batch='all';industry='all';year='all';search='';document.getElementById('global-search').value='';shown=PER_PAGE;updateSbActive();applyFilters()}
+function doSort(l){const c=[...l];const bi=b=>BO.indexOf(b);switch(srt){case'name':return c.sort((a,b)=>a.name.localeCompare(b.name));case'batch-new':return c.sort((a,b)=>bi(b.batch)-bi(a.batch)||a.name.localeCompare(b.name));case'batch-old':return c.sort((a,b)=>bi(a.batch)-bi(b.batch)||a.name.localeCompare(b.name));case'team-size':return c.sort((a,b)=>(b.team_size||0)-(a.team_size||0));default:return c}}
+function setSort(s){srt=s;sh=PP;document.querySelectorAll('.sbtn').forEach(b=>{b.classList.toggle('on',b.dataset.v===s)});apply()}
 
-// ═══════════════════════ FILTER + SORT ═══════════════════════
-function getAllCompanies(){
-  if(!DATA)return[];
-  let a=[];BATCH_ORDER.forEach(b=>{a=a.concat(DATA.batches[b]||[])});return a;
-}
-
-function applyFilters(){
-  let list=getAllCompanies();
-  if(batch!=='all')list=list.filter(c=>c.batch===batch);
-  if(year!=='all'){const yb=BATCH_ORDER.filter(b=>String(BATCH_YEAR[b])===String(year));list=list.filter(c=>yb.includes(c.batch))}
-  if(industry!=='all')list=list.filter(c=>(c.industry||'Other')===industry);
-  if(search)list=list.filter(c=>`${c.name} ${c.one_liner} ${c.long_description} ${c.industry} ${(c.tags||[]).join(' ')} ${c.location}`.toLowerCase().includes(search));
-  list=sortList(list);
-  filtered=list;
-
-  // Chips
-  const chips=document.getElementById('filter-chips');
-  const parts=[];
-  if(batch!=='all')parts.push(`<span class="tag-sm flex items-center gap-1">${BATCH_DISPLAY[batch]}<button onclick="batch='all';shown=PER_PAGE;updateSbActive();applyFilters()" class="ml-1 text-text-3 hover:text-text-1">&times;</button></span>`);
-  if(year!=='all')parts.push(`<span class="tag-sm flex items-center gap-1">${year}<button onclick="year='all';shown=PER_PAGE;updateSbActive();applyFilters()" class="ml-1 text-text-3 hover:text-text-1">&times;</button></span>`);
-  if(industry!=='all')parts.push(`<span class="tag-sm flex items-center gap-1">${esc(industry)}<button onclick="industry='all';shown=PER_PAGE;updateSbActive();applyFilters()" class="ml-1 text-text-3 hover:text-text-1">&times;</button></span>`);
-  if(search)parts.push(`<span class="tag-sm flex items-center gap-1">"${esc(search)}"<button onclick="search='';document.getElementById('global-search').value='';shown=PER_PAGE;applyFilters()" class="ml-1 text-text-3 hover:text-text-1">&times;</button></span>`);
-  chips.innerHTML=parts.join('');
-  chips.classList.toggle('hidden',!parts.length);
-
-  document.getElementById('result-count').textContent=`${filtered.length.toLocaleString()} results`;
-
-  if(section==='companies')renderFeed();
-  else if(section==='design')renderDesign();
-}
-
-function sortList(list){
-  const c=[...list];
-  const bi=b=>BATCH_ORDER.indexOf(b);
-  switch(sort){
-    case 'name':return c.sort((a,b)=>a.name.localeCompare(b.name));
-    case 'batch-new':return c.sort((a,b)=>bi(b.batch)-bi(a.batch)||a.name.localeCompare(b.name));
-    case 'batch-old':return c.sort((a,b)=>bi(a.batch)-bi(b.batch)||a.name.localeCompare(b.name));
-    case 'team-size':return c.sort((a,b)=>(b.team_size||0)-(a.team_size||0));
-    default:return c;
-  }
-}
-
-function setSort(s){
-  sort=s;shown=PER_PAGE;
-  document.querySelectorAll('.sort-btn').forEach(b=>{b.classList.toggle('active',b.dataset.sort===s);b.classList.toggle('bg-surface-3',b.dataset.sort===s);b.classList.toggle('text-text-1',b.dataset.sort===s)});
-  applyFilters();
-}
-
-// ═══════════════════════ RENDER: COMPANIES (Reddit posts) ═══════════════════════
 function renderFeed(){
-  const vis=filtered.slice(0,shown);
-  const feed=document.getElementById('feed');
-
-  feed.innerHTML=vis.map((c,i)=>{
-    const color=BATCH_COLORS[c.batch]||'#F26522';
-    const icolor=IND_COLORS[c.industry]||'#555';
-    const tags=(c.tags||[]).slice(0,4);
-    const hasUrl=!!c.website;
-
-    return `
-    <div class="post rounded-lg flex overflow-hidden cursor-pointer" onclick='openModal(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
-      <!-- Vote bar -->
-      <div class="vote-bar shrink-0 bg-surface-1">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg>
-        <span class="text-text-2">${c.team_size||'--'}</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 20l8-8h-5V4H9v8H4z"/></svg>
-      </div>
-      <!-- Content -->
-      <div class="flex-1 p-3 min-w-0">
-        <!-- Meta line -->
-        <div class="flex items-center gap-2 text-[11px] text-text-3 mb-1.5 flex-wrap">
-          <span class="flair" style="background:${color}18;color:${color}">${c.batch}</span>
-          ${c.industry?`<span class="flair" style="background:${icolor}18;color:${icolor}">${esc(c.industry)}</span>`:''}
-          ${c.status==='Active'?'<span class="text-green-500/60">Active</span>':''}
-          ${c.location?`<span class="truncate max-w-[200px]">${esc(c.location)}</span>`:''}
-        </div>
-        <!-- Title -->
-        <h3 class="font-semibold text-sm text-text-1 mb-1 flex items-center gap-2">
-          ${c.logo?`<img src="${c.logo}" class="w-5 h-5 rounded object-cover bg-surface-3 shrink-0" onerror="this.remove()">`:''}
-          <span class="truncate">${esc(c.name)}</span>
-          ${c.top_company?'<span class="flair bg-yellow-500/10 text-yellow-500">Top</span>':''}
-        </h3>
-        <!-- Description -->
-        <p class="text-xs text-text-2 leading-relaxed mb-2 line-clamp-2">${esc(c.one_liner||'')}</p>
-        <!-- Bottom bar -->
-        <div class="flex items-center gap-3 text-[11px] text-text-3">
-          ${hasUrl?`<a href="${esc(c.website)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="flex items-center gap-1 hover:text-yc-light transition"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>Website</a>`:''}
-          ${c.yc_url?`<a href="${esc(c.yc_url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="flex items-center gap-1 hover:text-yc-light transition"><span class="font-bold text-[10px] text-yc/60">YC</span>Profile</a>`:''}
-          ${tags.length?`<span class="flex gap-1 overflow-hidden">${tags.map(t=>`<span class="bg-surface-3 px-1.5 py-0.5 rounded text-[10px] text-text-3 truncate max-w-[80px]">${esc(t)}</span>`).join('')}</span>`:''}
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-
-  document.getElementById('load-more').classList.toggle('hidden',shown>=filtered.length);
-  document.getElementById('remaining-count').textContent=`(${Math.max(0,filtered.length-shown)} more)`;
-  document.getElementById('empty').classList.toggle('hidden',filtered.length>0);
+  const v=F.slice(0,sh);
+  document.getElementById('feed').innerHTML=v.map(c=>{
+    const col=BC[c.batch]||'#F26522';const ic=IC[c.industry]||'#555';const tags=(c.tags||[]).slice(0,3);
+    return `<div class="post" onclick='openM(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
+      <div class="vote"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg><span>${c.team_size||'--'}</span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20l8-8h-5V4H9v8H4z"/></svg></div>
+      <div class="pbody">
+        <div class="pmeta"><span class="flair" style="background:${col}15;color:${col}">${c.batch}</span>${c.industry?`<span class="flair" style="background:${ic}15;color:${ic}">${h(c.industry)}</span>`:''}${c.status==='Active'?'<span style="color:var(--green);opacity:.6">Active</span>':''}${c.location?`<span class="truncate" style="max-width:200px">${h(c.location)}</span>`:''}</div>
+        <div class="ptitle">${c.logo?`<img src="${c.logo}" onerror="this.remove()">`:''}${h(c.name)}${c.top_company?'<span class="flair" style="background:rgba(245,158,11,.1);color:var(--amber)">Top</span>':''}</div>
+        <div class="pdesc line-clamp-2">${h(c.one_liner||'')}</div>
+        <div class="pfoot">${c.website?`<a href="${h(c.website)}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>Site</a>`:''}${c.yc_url?`<a href="${h(c.yc_url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span style="font-weight:700;font-size:10px;color:var(--yc);opacity:.5">YC</span>Profile</a>`:''}${tags.map(t=>`<span class="ptag">${h(t)}</span>`).join('')}</div>
+      </div></div>`}).join('');
+  updMore(F.length);
 }
 
-// ═══════════════════════ RENDER: DESIGN LAB ═══════════════════════
 function renderDesign(){
-  const withUrl=filtered.filter(c=>c.website);
-  const vis=withUrl.slice(0,shown);
-  const grid=document.getElementById('design-grid');
+  const wl=F.filter(c=>c.website);const v=wl.slice(0,sh);
+  document.getElementById('dfeed').innerHTML=`<div class="dgrid">${v.map(c=>{
+    const col=BC[c.batch]||'#F26522';const dom=(c.website||'').replace(/^https?:\/\//,'').replace(/\/$/,'');
+    return `<div class="dcard" onclick="window.open('${h(c.website)}','_blank')">
+      <div class="dthumb"><div><div class="initial">${h(c.name.charAt(0))}</div><div class="domain">${h(dom)}</div></div><div class="hover-overlay"><span style="font-size:11px;color:#fff;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:4px">Visit &rarr;</span></div></div>
+      <div class="dbody"><h4>${c.logo?`<img src="${c.logo}" onerror="this.remove()">`:''}${h(c.name)}<span class="flair" style="background:${col}15;color:${col};margin-left:auto">${c.batch}</span></h4><p class="line-clamp-2">${h(c.one_liner||'')}</p><div class="dom">${h(dom)}</div></div></div>`}).join('')}</div>`;
+  updMore(wl.length);
+}
 
-  grid.innerHTML=vis.map(c=>{
-    const color=BATCH_COLORS[c.batch]||'#F26522';
-    const domain=(c.website||'').replace(/^https?:\/\//,'').replace(/\/$/,'');
-    return `
-    <div class="thread-card bg-surface-1 cursor-pointer" onclick="window.open('${esc(c.website)}','_blank')">
-      <div class="ss-frame">
-        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-surface-2 to-surface-3">
-          <div class="text-center px-4">
-            <div class="text-2xl font-bold text-text-4 mb-1">${esc(c.name.charAt(0))}</div>
-            <div class="text-[10px] text-text-4 font-mono truncate">${esc(domain)}</div>
-          </div>
-        </div>
-        <div class="overlay flex items-end p-3">
-          <span class="text-xs text-white font-medium bg-black/60 px-2 py-1 rounded">Visit Site &rarr;</span>
-        </div>
-      </div>
-      <div class="p-3">
-        <div class="flex items-center gap-2 mb-1">
-          ${c.logo?`<img src="${c.logo}" class="w-5 h-5 rounded object-cover bg-surface-3" onerror="this.remove()">`:''}
-          <span class="font-semibold text-sm text-text-1 truncate">${esc(c.name)}</span>
-          <span class="flair ml-auto shrink-0" style="background:${color}18;color:${color}">${c.batch}</span>
-        </div>
-        <p class="text-[11px] text-text-3 leading-relaxed line-clamp-2">${esc(c.one_liner||'')}</p>
-        <div class="mt-2 text-[10px] text-text-4 font-mono truncate">${esc(domain)}</div>
-      </div>
+function updMore(total){
+  const r=total-sh;
+  document.getElementById('loadmore').classList.toggle('hidden',r<=0);
+  document.getElementById('remct').textContent=`(${Math.max(0,r)})`;
+  document.getElementById('empty').classList.toggle('hidden',total>0);
+}
+function more(){sh+=PP;if(sec==='design')renderDesign();else renderFeed()}
+
+function stats(){
+  if(!D)return;const a=all();
+  const cb=document.getElementById('chart-batches');
+  const mx=Math.max(...BO.map(b=>(D.batches[b]||[]).length));
+  cb.innerHTML=BO.filter(b=>(D.batches[b]||[]).length).map(b=>{const n=(D.batches[b]||[]).length;const p=Math.round(n/mx*100);return `<div class="bar-row"><span class="label">${BD[b]}</span><div class="track"><div class="fill" style="width:${p}%;background:${BC[b]}"></div></div><span class="val">${n}</span></div>`}).join('');
+
+  const ci=document.getElementById('chart-industries');
+  const inds={};a.forEach(c=>{const i=c.industry||'Other';inds[i]=(inds[i]||0)+1});
+  const sorted=Object.entries(inds).sort((a,b)=>b[1]-a[1]);const mi=sorted[0]?.[1]||1;
+  ci.innerHTML=sorted.map(([i,n])=>{const p=Math.round(n/mi*100);return `<div class="bar-row"><span class="label">${h(i)}</span><div class="track"><div class="fill" style="width:${p}%;background:${IC[i]||'#555'}"></div></div><span class="val">${n}</span></div>`}).join('');
+}
+
+function openM(c){
+  const col=BC[c.batch]||'#F26522';const ic=IC[c.industry]||'#555';const tags=c.tags||[];
+  document.getElementById('mbody').innerHTML=`
+    <div class="modal-header">
+      ${c.logo?`<img src="${c.logo}" class="modal-logo" onerror="this.outerHTML='<div class=modal-logo-fallback>${h(c.name.charAt(0))}</div>'">`:`<div class="modal-logo-fallback">${h(c.name.charAt(0))}</div>`}
+      <div style="min-width:0"><h2 style="font-family:var(--font-d);font-size:20px;font-weight:700">${h(c.name)}</h2><div class="modal-badges"><span class="flair" style="background:${col}15;color:${col}">${BD[c.batch]||c.batch}</span>${c.industry?`<span class="flair" style="background:${ic}15;color:${ic}">${h(c.industry)}</span>`:''}${c.status?`<span class="flair" style="background:rgba(34,197,94,.1);color:var(--green)">${h(c.status)}</span>`:''}${c.top_company?`<span class="flair" style="background:rgba(245,158,11,.1);color:var(--amber)">Top Company</span>`:''}</div></div>
+    </div>
+    ${c.one_liner?`<p style="font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:14px">${h(c.one_liner)}</p>`:''}
+    ${c.long_description?`<div class="modal-desc"><p>${h(c.long_description)}</p></div>`:''}
+    <div class="modal-stats">${c.team_size?`<div class="modal-stat"><div class="v">${c.team_size}</div><div class="l">Team</div></div>`:''}${c.stage?`<div class="modal-stat"><div class="v">${h(c.stage)}</div><div class="l">Stage</div></div>`:''}${c.location?`<div class="modal-stat"><div class="v" style="font-size:11px">${h(c.location)}</div><div class="l">Location</div></div>`:''}</div>
+    ${tags.length?`<div class="modal-tags">${tags.map(t=>`<span class="tpill">${h(t)}</span>`).join('')}</div>`:''}
+    <div class="modal-actions">
+      ${c.website?`<a href="${h(c.website)}" target="_blank" rel="noopener" class="cta-btn primary" style="font-size:12px;padding:8px 16px"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>Visit Website</a>`:''}
+      ${c.yc_url?`<a href="${h(c.yc_url)}" target="_blank" rel="noopener" class="cta-btn ghost" style="font-size:12px;padding:8px 16px"><span style="font-weight:700;font-size:10px;color:var(--yc)">YC</span>Profile</a>`:''}
     </div>`;
-  }).join('');
-
-  document.getElementById('load-more').classList.toggle('hidden',shown>=withUrl.length);
-  document.getElementById('remaining-count').textContent=`(${Math.max(0,withUrl.length-shown)} more)`;
-  document.getElementById('empty').classList.toggle('hidden',withUrl.length>0);
+  document.getElementById('modal').classList.remove('hidden');document.body.style.overflow='hidden';
 }
+function closeM(){document.getElementById('modal').classList.add('hidden');document.body.style.overflow=''}
 
-// ═══════════════════════ STATS ═══════════════════════
-function buildStats(){
-  if(!DATA)return;
-  const all=getAllCompanies();
-
-  // Batch chart
-  const bc=document.getElementById('batch-chart');
-  const maxBatch=Math.max(...BATCH_ORDER.map(b=>(DATA.batches[b]||[]).length));
-  bc.innerHTML=BATCH_ORDER.filter(b=>(DATA.batches[b]||[]).length).map(b=>{
-    const n=(DATA.batches[b]||[]).length;
-    const pct=Math.round(n/maxBatch*100);
-    const color=BATCH_COLORS[b];
-    return `<div class="flex items-center gap-3"><span class="w-20 text-xs text-text-3 text-right shrink-0">${BATCH_DISPLAY[b]}</span><div class="flex-1 h-5 bg-surface-2 rounded overflow-hidden"><div class="h-full rounded transition-all duration-700" style="width:${pct}%;background:${color}"></div></div><span class="w-10 text-xs font-mono text-text-3 text-right">${n}</span></div>`;
-  }).join('');
-
-  // Industry chart
-  const ic=document.getElementById('industry-chart');
-  const inds={};all.forEach(c=>{const i=c.industry||'Other';inds[i]=(inds[i]||0)+1});
-  const sorted=Object.entries(inds).sort((a,b)=>b[1]-a[1]);
-  const maxInd=sorted[0]?.[1]||1;
-  ic.innerHTML=sorted.map(([ind,n])=>{
-    const pct=Math.round(n/maxInd*100);
-    const color=IND_COLORS[ind]||'#555';
-    return `<div class="flex items-center gap-3"><span class="w-28 text-xs text-text-3 text-right shrink-0 truncate">${esc(ind)}</span><div class="flex-1 h-5 bg-surface-2 rounded overflow-hidden"><div class="h-full rounded transition-all duration-700" style="width:${pct}%;background:${color}"></div></div><span class="w-12 text-xs font-mono text-text-3 text-right">${n}</span></div>`;
-  }).join('');
-}
-
-// ═══════════════════════ MODAL ═══════════════════════
-function openModal(c){
-  const color=BATCH_COLORS[c.batch]||'#F26522';
-  const icolor=IND_COLORS[c.industry]||'#555';
-  const tags=c.tags||[];
-  const m=document.getElementById('modal');
-  const b=document.getElementById('modal-body');
-
-  b.innerHTML=`
-    <div class="flex items-start gap-4 mb-5">
-      ${c.logo?`<img src="${c.logo}" class="w-14 h-14 rounded-xl object-cover bg-surface-3" onerror="this.remove()">`:`<div class="w-14 h-14 rounded-xl bg-gradient-to-br from-yc/20 to-yc/5 flex items-center justify-center text-yc font-bold text-xl">${esc(c.name.charAt(0))}</div>`}
-      <div class="min-w-0">
-        <h2 class="font-display text-xl font-bold text-text-1">${esc(c.name)}</h2>
-        <div class="flex flex-wrap items-center gap-2 mt-1">
-          <span class="flair text-xs" style="background:${color}18;color:${color}">${BATCH_DISPLAY[c.batch]||c.batch}</span>
-          ${c.industry?`<span class="flair text-xs" style="background:${icolor}18;color:${icolor}">${esc(c.industry)}</span>`:''}
-          ${c.status?`<span class="flair text-xs bg-green-500/10 text-green-400">${esc(c.status)}</span>`:''}
-          ${c.top_company?`<span class="flair text-xs bg-yellow-500/10 text-yellow-500">Top Company</span>`:''}
-        </div>
-      </div>
-    </div>
-
-    ${c.one_liner?`<p class="text-text-2 text-sm leading-relaxed mb-4">${esc(c.one_liner)}</p>`:''}
-    ${c.long_description?`<div class="bg-surface-2 border border-surface-3 rounded-lg p-4 mb-4"><p class="text-text-3 text-xs leading-relaxed whitespace-pre-line">${esc(c.long_description)}</p></div>`:''}
-
-    <div class="grid grid-cols-3 gap-2 mb-4">
-      ${c.team_size?`<div class="bg-surface-2 rounded-lg p-3 text-center border border-surface-3"><div class="text-base font-bold font-mono text-text-1">${c.team_size}</div><div class="text-[10px] text-text-4 mt-0.5">Team</div></div>`:''}
-      ${c.stage?`<div class="bg-surface-2 rounded-lg p-3 text-center border border-surface-3"><div class="text-base font-bold font-mono text-text-1">${esc(c.stage)}</div><div class="text-[10px] text-text-4 mt-0.5">Stage</div></div>`:''}
-      ${c.location?`<div class="bg-surface-2 rounded-lg p-3 text-center border border-surface-3"><div class="text-xs font-medium text-text-1 truncate">${esc(c.location)}</div><div class="text-[10px] text-text-4 mt-0.5">Location</div></div>`:''}
-    </div>
-
-    ${tags.length?`<div class="flex flex-wrap gap-1.5 mb-5">${tags.map(t=>`<span class="tag-sm">${esc(t)}</span>`).join('')}</div>`:''}
-
-    <div class="flex flex-wrap gap-2 pt-2 border-t border-surface-3">
-      ${c.website?`<a href="${esc(c.website)}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-yc text-white text-xs font-semibold hover:bg-yc-dark transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>Visit Website</a>`:''}
-      ${c.yc_url?`<a href="${esc(c.yc_url)}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-3 text-text-2 text-xs hover:text-yc-light transition"><span class="font-bold text-yc text-[10px]">YC</span>YC Profile</a>`:''}
-    </div>
-  `;
-
-  m.classList.remove('hidden');
-  document.body.style.overflow='hidden';
-}
-
-function closeModal(){
-  document.getElementById('modal').classList.add('hidden');
-  document.body.style.overflow='';
-}
-
-function loadMore(){shown+=PER_PAGE;if(section==='design')renderDesign();else renderFeed()}
-
-// ═══════════════════════ UTILS ═══════════════════════
-function esc(s){if(!s)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function h(s){if(!s)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 </script>
 </body>
 </html>
