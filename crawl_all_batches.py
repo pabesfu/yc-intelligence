@@ -62,6 +62,21 @@ def fetch_url(url, headers=None, data=None):
         return json.loads(resp.read().decode("utf-8"))
 
 
+FULL_TO_SHORT = {
+    "Winter 2021": "W21", "Summer 2021": "S21",
+    "Winter 2022": "W22", "Summer 2022": "S22",
+    "Winter 2023": "W23", "Summer 2023": "S23",
+    "Winter 2024": "W24", "Summer 2024": "S24", "Fall 2024": "F24",
+    "Winter 2025": "W25", "Spring 2025": "Sp25", "Summer 2025": "S25", "Fall 2025": "F25",
+    "Winter 2026": "W26",
+}
+
+
+def normalize_batch(batch_str):
+    """Convert full batch name to short code (e.g. 'Winter 2025' -> 'W25')."""
+    return FULL_TO_SHORT.get(batch_str, batch_str)
+
+
 def normalize_company(raw, source="yc-oss"):
     """Normalize company data to a standard format."""
     if source == "yc-oss":
@@ -72,7 +87,7 @@ def normalize_company(raw, source="yc-oss"):
             "long_description": raw.get("long_description", ""),
             "website": raw.get("website", ""),
             "yc_url": raw.get("url", ""),
-            "batch": raw.get("batch", ""),
+            "batch": normalize_batch(raw.get("batch", "")),
             "industry": raw.get("industry", ""),
             "subindustry": raw.get("subindustry", ""),
             "tags": raw.get("tags", []),
