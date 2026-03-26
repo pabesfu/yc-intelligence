@@ -138,5 +138,22 @@ def api_company(name):
     return jsonify({"error": "Company not found"}), 404
 
 
+# --- Wiki API ---
+
+@app.route("/api/wiki")
+def api_wiki():
+    """Full wiki dataset — all batches, all companies."""
+    return jsonify(WIKI_DATA)
+
+
+@app.route("/api/wiki/batch/<batch>")
+def api_wiki_batch(batch):
+    """Companies for a single batch."""
+    companies = WIKI_DATA.get("batches", {}).get(batch, [])
+    if not companies:
+        return jsonify({"error": f"Batch {batch} not found"}), 404
+    return jsonify({"batch": batch, "display": BATCH_DISPLAY.get(batch, batch), "count": len(companies), "companies": companies})
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5054, debug=True)
