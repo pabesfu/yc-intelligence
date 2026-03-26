@@ -21,8 +21,30 @@ def load_intelligence():
         return path.read_text(encoding="utf-8")
     return ""
 
+def load_wiki_data():
+    path = DATA_DIR / "yc_wiki_master.json"
+    if path.exists():
+        return json.loads(path.read_text(encoding="utf-8"))
+    return {"metadata": {}, "batches": {}, "batch_stats": [], "top_industries": []}
+
 COMPANIES, METADATA = load_companies()
 INTELLIGENCE = load_intelligence()
+WIKI_DATA = load_wiki_data()
+
+BATCH_ORDER = ["W21", "S21", "W22", "S22", "W23", "S23", "W24", "S24", "F24", "W25", "Sp25", "S25", "F25", "W26"]
+BATCH_DISPLAY = {
+    "W21": "Winter 2021", "S21": "Summer 2021",
+    "W22": "Winter 2022", "S22": "Summer 2022",
+    "W23": "Winter 2023", "S23": "Summer 2023",
+    "W24": "Winter 2024", "S24": "Summer 2024", "F24": "Fall 2024",
+    "W25": "Winter 2025", "Sp25": "Spring 2025", "S25": "Summer 2025", "F25": "Fall 2025",
+    "W26": "Winter 2026",
+}
+BATCH_YEAR = {
+    "W21": 2021, "S21": 2021, "W22": 2022, "S22": 2022,
+    "W23": 2023, "S23": 2023, "W24": 2024, "S24": 2024, "F24": 2024,
+    "W25": 2025, "Sp25": 2025, "S25": 2025, "F25": 2025, "W26": 2026,
+}
 
 
 # --- HTML Routes ---
