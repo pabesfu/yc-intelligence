@@ -66,9 +66,22 @@ def builder():
     )
 
 
+@app.route("/wiki")
+def wiki():
+    """YC Startup Wiki — 3,387 companies, 14 batches, 5 years."""
+    active_batches = [b for b in BATCH_ORDER if b in WIKI_DATA.get("batches", {})]
+    return render_template(
+        "wiki.html",
+        batch_order=active_batches,
+        batch_display=BATCH_DISPLAY,
+        batch_year=BATCH_YEAR,
+    )
+
+
 @app.route("/health")
 def health():
-    return jsonify({"status": "ok", "companies": len(COMPANIES)})
+    wiki_total = sum(len(v) for v in WIKI_DATA.get("batches", {}).values())
+    return jsonify({"status": "ok", "companies": len(COMPANIES), "wiki_companies": wiki_total})
 
 
 # --- API Routes ---
