@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YC Startup Wiki | 3,387 Companies | 2021-2026</title>
+  <meta name="description" content="Complete wiki of every Y Combinator startup from the last 5 years. Browse 3,387 companies by batch, industry, and design.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            yc: { DEFAULT: '#F26522', dark: '#D4551A', light: '#FF8A50', glow: '#F2652233' },
+            dark: { 700: '#1e1e3a', 800: '#16162e', 900: '#0f0f23', 950: '#0a0a1a' },
+          },
+          fontFamily: {
+            display: ['Fraunces', 'serif'],
+            body: ['Space Grotesk', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { font-family: 'Space Grotesk', sans-serif; }
+    h1, h2, h3, .font-display { font-family: 'Fraunces', serif; }
+    body { background: #0a0a1a; color: #e2e8f0; }
+    .glass { background: rgba(30, 30, 58, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(242, 101, 34, 0.1); }
+    .glass-hover:hover { border-color: rgba(242, 101, 34, 0.3); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(242, 101, 34, 0.08); }
+    .gradient-text { background: linear-gradient(135deg, #F26522, #FF8A50); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .batch-pill { transition: all 0.2s; cursor: pointer; }
+    .batch-pill:hover, .batch-pill.active { background: #F26522; color: white; }
+    .company-card { transition: all 0.25s ease; }
+    .company-card:hover { border-color: rgba(242, 101, 34, 0.4); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+    .tag { background: rgba(242, 101, 34, 0.1); color: #FF8A50; border: 1px solid rgba(242, 101, 34, 0.2); }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .stat-glow { text-shadow: 0 0 30px rgba(242, 101, 34, 0.3); }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0a0a1a; }
+    ::-webkit-scrollbar-thumb { background: #1e1e3a; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #F26522; }
+    .industry-bar { transition: width 1s ease; }
+    .sidebar-link { transition: all 0.2s; border-left: 3px solid transparent; }
+    .sidebar-link:hover, .sidebar-link.active { border-left-color: #F26522; background: rgba(242, 101, 34, 0.05); color: #FF8A50; }
+    @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(242, 101, 34, 0.2); } 50% { box-shadow: 0 0 20px 4px rgba(242, 101, 34, 0.15); } }
+    .pulse-glow { animation: pulse-glow 3s infinite; }
+    .modal-overlay { background: rgba(10, 10, 26, 0.85); backdrop-filter: blur(8px); }
+    .screenshot-frame { border: 2px solid rgba(242, 101, 34, 0.2); border-radius: 12px; overflow: hidden; }
+    #loading-spinner { display: none; }
+    #loading-spinner.show { display: flex; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Nav -->
+  <nav class="fixed top-0 w-full z-50 glass border-b border-dark-700/50">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-yc flex items-center justify-center font-bold text-white text-sm">YC</div>
+        <span class="font-display text-lg font-semibold hidden sm:block">Wiki</span>
+      </a>
+      <div class="flex items-center gap-2 text-sm">
+        <a href="/" class="px-3 py-1.5 rounded-lg hover:bg-dark-700 transition">Home</a>
+        <a href="/builder" class="px-3 py-1.5 rounded-lg hover:bg-dark-700 transition">Builder</a>
+        <a href="/wiki" class="px-3 py-1.5 rounded-lg bg-yc/10 text-yc-light border border-yc/20">Wiki</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="pt-24 pb-12 px-4 sm:px-6 text-center">
+    <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-4">
+      <span class="gradient-text">Every YC Startup.</span><br>
+      <span class="text-white/90">5 Years. One Wiki.</span>
+    </h1>
+    <p class="text-lg text-white/50 max-w-2xl mx-auto mb-8">
+      Browse <span class="text-yc-light font-semibold" id="hero-total">3,387</span> companies from
+      <span class="text-white/70">14 batches</span> (2021-2026). Search, filter, explore.
+    </p>
+
+    <!-- Stats row -->
+    <div class="flex flex-wrap justify-center gap-4 sm:gap-8 mb-8">
+      <div class="glass rounded-xl px-5 py-3 text-center">
+        <div class="text-2xl font-bold gradient-text stat-glow" id="stat-total">3,387</div>
+        <div class="text-xs text-white/40 mt-1">Companies</div>
+      </div>
+      <div class="glass rounded-xl px-5 py-3 text-center">
+        <div class="text-2xl font-bold text-white/90" id="stat-batches">14</div>
+        <div class="text-xs text-white/40 mt-1">Batches</div>
+      </div>
+      <div class="glass rounded-xl px-5 py-3 text-center">
+        <div class="text-2xl font-bold text-white/90" id="stat-industries">8</div>
+        <div class="text-xs text-white/40 mt-1">Industries</div>
+      </div>
+      <div class="glass rounded-xl px-5 py-3 text-center">
+        <div class="text-2xl font-bold text-white/90">5</div>
+        <div class="text-xs text-white/40 mt-1">Years</div>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="max-w-2xl mx-auto relative">
+      <input type="text" id="search-input" placeholder="Search 3,387 startups by name, description, or industry..."
+        class="w-full px-5 py-3.5 pl-12 rounded-xl bg-dark-800 border border-dark-700 text-white placeholder-white/30 focus:border-yc/40 focus:outline-none focus:ring-2 focus:ring-yc/10 transition text-sm">
+      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <div id="search-count" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-white/30"></div>
+    </div>
+  </header>
+
+  <!-- Main layout -->
+  <div class="max-w-[1600px] mx-auto px-4 sm:px-6 flex gap-6">
+
+    <!-- Sidebar -->
+    <aside class="hidden lg:block w-64 shrink-0 sticky top-20 self-start max-h-[calc(100vh-6rem)] overflow-y-auto pb-8">
+      <!-- Batch filter -->
+      <div class="glass rounded-xl p-4 mb-4">
+        <h3 class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">By Batch</h3>
+        <div class="space-y-0.5" id="batch-sidebar">
+          <button onclick="filterBatch('all')" class="sidebar-link active w-full text-left px-3 py-2 rounded-lg text-sm flex justify-between items-center" data-batch="all">
+            <span>All Batches</span>
+            <span class="text-xs text-white/30" id="count-all"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Year filter -->
+      <div class="glass rounded-xl p-4 mb-4">
+        <h3 class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">By Year</h3>
+        <div class="space-y-0.5" id="year-sidebar"></div>
+      </div>
+
+      <!-- Industry filter -->
+      <div class="glass rounded-xl p-4 mb-4">
+        <h3 class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">By Industry</h3>
+        <div class="space-y-0.5" id="industry-sidebar"></div>
+      </div>
+
+      <!-- Quick stats -->
+      <div class="glass rounded-xl p-4">
+        <h3 class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">Industry Breakdown</h3>
+        <div id="industry-bars" class="space-y-2"></div>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <main class="flex-1 min-w-0 pb-16">
+
+      <!-- Mobile filters -->
+      <div class="lg:hidden mb-6">
+        <div class="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1" id="mobile-batch-pills"></div>
+        <div class="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1 mt-2" id="mobile-industry-pills"></div>
+      </div>
+
+      <!-- Active filters -->
+      <div id="active-filters" class="hidden mb-4 flex flex-wrap gap-2"></div>
+
+      <!-- Results header -->
+      <div class="flex items-center justify-between mb-4">
+        <div class="text-sm text-white/50">
+          Showing <span class="text-white font-medium" id="showing-count">0</span> companies
+          <span id="filter-label" class="text-yc-light"></span>
+        </div>
+        <div class="flex items-center gap-2">
+          <select id="sort-select" class="bg-dark-800 border border-dark-700 text-white/70 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-yc/30">
+            <option value="name">Name A-Z</option>
+            <option value="name-desc">Name Z-A</option>
+            <option value="batch-new">Newest Batch</option>
+            <option value="batch-old">Oldest Batch</option>
+            <option value="team-size">Team Size</option>
+          </select>
+          <button id="view-grid" onclick="setView('grid')" class="p-2 rounded-lg bg-dark-800 border border-dark-700 hover:border-yc/30 transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+          </button>
+          <button id="view-list" onclick="setView('list')" class="p-2 rounded-lg bg-dark-800 border border-dark-700 hover:border-yc/30 transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><rect x="1" y="2" width="14" height="2.5" rx="1"/><rect x="1" y="6.75" width="14" height="2.5" rx="1"/><rect x="1" y="11.5" width="14" height="2.5" rx="1"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading-spinner" class="justify-center py-20">
+        <div class="w-10 h-10 border-2 border-yc/20 border-t-yc rounded-full animate-spin"></div>
+      </div>
+
+      <!-- Company grid -->
+      <div id="companies-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+
+      <!-- List view -->
+      <div id="companies-list" class="hidden space-y-2"></div>
+
+      <!-- Load more -->
+      <div id="load-more-container" class="hidden text-center py-8">
+        <button onclick="loadMore()" class="px-6 py-3 rounded-xl bg-yc/10 border border-yc/20 text-yc-light hover:bg-yc/20 transition text-sm font-medium">
+          Load More Companies
+        </button>
+        <div class="text-xs text-white/30 mt-2" id="load-more-info"></div>
+      </div>
+
+      <!-- Empty state -->
+      <div id="empty-state" class="hidden text-center py-20">
+        <div class="text-4xl mb-4">&#128269;</div>
+        <div class="text-white/50 text-lg">No companies found</div>
+        <div class="text-white/30 text-sm mt-1">Try a different search or filter</div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Company detail modal -->
+  <div id="company-modal" class="hidden fixed inset-0 z-[60] modal-overlay flex items-start justify-center pt-20 px-4 overflow-y-auto pb-8" onclick="if(event.target===this)closeModal()">
+    <div class="glass rounded-2xl max-w-2xl w-full p-6 sm:p-8 relative">
+      <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-dark-800 flex items-center justify-center text-white/50 hover:text-white transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-dark-700/50 mt-16 py-8 px-4 text-center">
+    <div class="text-sm text-white/30">
+      <a href="/" class="hover:text-yc-light transition">YC Intelligence</a> &middot;
+      Data sourced from <a href="https://www.ycombinator.com/companies" class="hover:text-yc-light transition" target="_blank">ycombinator.com</a> &middot;
+      <span id="footer-total">3,387</span> companies &middot; 14 batches &middot; 2021-2026
+    </div>
+  </footer>
+
+  <script>
+    // ─── State ─────────────────────────────────────────────────
+    let ALL_DATA = null;
+    let filteredCompanies = [];
+    let currentBatch = 'all';
+    let currentIndustry = 'all';
+    let currentYear = 'all';
+    let currentSearch = '';
+    let currentSort = 'batch-new';
+    let currentView = 'grid';
+    let displayCount = 60;
+    const BATCH_PER_LOAD = 60;
+
+    const BATCH_ORDER = {{ batch_order | tojson }};
+    const BATCH_DISPLAY = {{ batch_display | tojson }};
+    const BATCH_YEAR = {{ batch_year | tojson }};
+    const BATCH_COLORS = {
+      'W21':'#6366f1','S21':'#818cf8','W22':'#a78bfa','S22':'#c084fc',
+      'W23':'#e879f9','S23':'#f472b6','W24':'#fb7185','S24':'#f87171',
+      'F24':'#ef4444','W25':'#F26522','Sp25':'#f59e0b','S25':'#eab308',
+      'F25':'#84cc16','W26':'#22c55e'
+    };
+
+    // ─── Init ──────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', async () => {
+      showLoading(true);
+      try {
+        const resp = await fetch('/api/wiki');
+        ALL_DATA = await resp.json();
+        initSidebar();
+        initMobileFilters();
+        document.getElementById('sort-select').value = 'batch-new';
+        applyFilters();
+      } catch (e) {
+        console.error('Failed to load data:', e);
+      }
+      showLoading(false);
+
+      // Search debounce
+      let timer;
+      document.getElementById('search-input').addEventListener('input', (e) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => { currentSearch = e.target.value.trim().toLowerCase(); displayCount = 60; applyFilters(); }, 200);
+      });
+
+      document.getElementById('sort-select').addEventListener('change', (e) => { currentSort = e.target.value; applyFilters(); });
+    });
+
+    // ─── Sidebar ───────────────────────────────────────────────
+    function initSidebar() {
+      const allCompanies = getAllCompanies();
+      document.getElementById('count-all').textContent = allCompanies.length;
+
+      // Batch sidebar
+      const batchContainer = document.getElementById('batch-sidebar');
+      BATCH_ORDER.forEach(b => {
+        const count = (ALL_DATA.batches[b] || []).length;
+        if (!count) return;
+        const btn = document.createElement('button');
+        btn.className = 'sidebar-link w-full text-left px-3 py-2 rounded-lg text-sm flex justify-between items-center';
+        btn.dataset.batch = b;
+        btn.onclick = () => filterBatch(b);
+        btn.innerHTML = `<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full" style="background:${BATCH_COLORS[b]||'#F26522'}"></span>${BATCH_DISPLAY[b]||b}</span><span class="text-xs text-white/30">${count}</span>`;
+        batchContainer.appendChild(btn);
+      });
+
+      // Year sidebar
+      const years = {};
+      allCompanies.forEach(c => {
+        const y = BATCH_YEAR[c.batch] || 'Unknown';
+        years[y] = (years[y]||0) + 1;
+      });
+      const yearContainer = document.getElementById('year-sidebar');
+      Object.keys(years).sort((a,b) => b-a).forEach(y => {
+        const btn = document.createElement('button');
+        btn.className = 'sidebar-link w-full text-left px-3 py-2 rounded-lg text-sm flex justify-between items-center';
+        btn.dataset.year = y;
+        btn.onclick = () => filterYear(y);
+        btn.innerHTML = `<span>${y}</span><span class="text-xs text-white/30">${years[y]}</span>`;
+        yearContainer.appendChild(btn);
+      });
+
+      // Industry sidebar
+      const industries = {};
+      allCompanies.forEach(c => {
+        const ind = c.industry || 'Other';
+        industries[ind] = (industries[ind]||0) + 1;
+      });
+      const sorted = Object.entries(industries).sort((a,b) => b[1]-a[1]);
+      const indContainer = document.getElementById('industry-sidebar');
+      sorted.forEach(([ind, count]) => {
+        const btn = document.createElement('button');
+        btn.className = 'sidebar-link w-full text-left px-3 py-2 rounded-lg text-sm flex justify-between items-center';
+        btn.dataset.industry = ind;
+        btn.onclick = () => filterIndustry(ind);
+        btn.innerHTML = `<span class="truncate mr-2">${ind}</span><span class="text-xs text-white/30 shrink-0">${count}</span>`;
+        indContainer.appendChild(btn);
+      });
+
+      // Industry bars
+      const barsContainer = document.getElementById('industry-bars');
+      const maxCount = sorted[0]?.[1] || 1;
+      sorted.slice(0, 8).forEach(([ind, count]) => {
+        const pct = Math.round((count / maxCount) * 100);
+        barsContainer.innerHTML += `
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-white/50 truncate">${ind}</span><span class="text-white/30">${count}</span></div>
+            <div class="h-1.5 rounded-full bg-dark-800 overflow-hidden"><div class="industry-bar h-full rounded-full bg-gradient-to-r from-yc to-yc-light" style="width:${pct}%"></div></div>
+          </div>`;
+      });
+
+      // Update stats
+      document.getElementById('stat-total').textContent = allCompanies.length.toLocaleString();
+      document.getElementById('hero-total').textContent = allCompanies.length.toLocaleString();
+      document.getElementById('footer-total').textContent = allCompanies.length.toLocaleString();
+      document.getElementById('stat-batches').textContent = BATCH_ORDER.filter(b => ALL_DATA.batches[b]?.length).length;
+      document.getElementById('stat-industries').textContent = Object.keys(industries).length;
+    }
+
+    function initMobileFilters() {
+      const pillsContainer = document.getElementById('mobile-batch-pills');
+      pillsContainer.innerHTML = `<button class="batch-pill active shrink-0 px-3 py-1.5 rounded-full text-xs border border-dark-700 bg-dark-800" onclick="filterBatch('all')">All</button>`;
+      BATCH_ORDER.forEach(b => {
+        if (!(ALL_DATA.batches[b]||[]).length) return;
+        pillsContainer.innerHTML += `<button class="batch-pill shrink-0 px-3 py-1.5 rounded-full text-xs border border-dark-700 bg-dark-800" onclick="filterBatch('${b}')" data-batch="${b}">${b}</button>`;
+      });
+      const indPills = document.getElementById('mobile-industry-pills');
+      const industries = {};
+      getAllCompanies().forEach(c => { const i = c.industry||'Other'; industries[i]=(industries[i]||0)+1; });
+      Object.entries(industries).sort((a,b)=>b[1]-a[1]).slice(0,6).forEach(([ind]) => {
+        indPills.innerHTML += `<button class="batch-pill shrink-0 px-3 py-1.5 rounded-full text-xs border border-dark-700 bg-dark-800" onclick="filterIndustry('${ind}')">${ind}</button>`;
+      });
+    }
+
+    // ─── Filters ───────────────────────────────────────────────
+    function getAllCompanies() {
+      if (!ALL_DATA) return [];
+      let all = [];
+      BATCH_ORDER.forEach(b => { all = all.concat(ALL_DATA.batches[b] || []); });
+      return all;
+    }
+
+    function filterBatch(b) {
+      currentBatch = b; currentYear = 'all'; displayCount = 60;
+      updateSidebarActive('batch', b);
+      applyFilters();
+    }
+    function filterYear(y) {
+      currentYear = y; currentBatch = 'all'; displayCount = 60;
+      updateSidebarActive('year', y);
+      applyFilters();
+    }
+    function filterIndustry(ind) {
+      currentIndustry = currentIndustry === ind ? 'all' : ind; displayCount = 60;
+      updateSidebarActive('industry', currentIndustry);
+      applyFilters();
+    }
+
+    function updateSidebarActive(type, value) {
+      if (type === 'batch') {
+        document.querySelectorAll('#batch-sidebar .sidebar-link').forEach(el => el.classList.toggle('active', el.dataset.batch === value));
+        document.querySelectorAll('#mobile-batch-pills .batch-pill').forEach(el => {
+          const isAll = !el.dataset.batch && value === 'all';
+          el.classList.toggle('active', isAll || el.dataset.batch === value);
+        });
+      }
+      if (type === 'year') {
+        document.querySelectorAll('#year-sidebar .sidebar-link').forEach(el => el.classList.toggle('active', el.dataset.year === value));
+      }
+      if (type === 'industry') {
+        document.querySelectorAll('#industry-sidebar .sidebar-link').forEach(el => el.classList.toggle('active', el.dataset.industry === value));
+      }
+    }
+
+    function applyFilters() {
+      let companies = getAllCompanies();
+
+      // Batch filter
+      if (currentBatch !== 'all') {
+        companies = companies.filter(c => c.batch === currentBatch);
+      }
+
+      // Year filter
+      if (currentYear !== 'all') {
+        const yearBatches = BATCH_ORDER.filter(b => String(BATCH_YEAR[b]) === String(currentYear));
+        companies = companies.filter(c => yearBatches.includes(c.batch));
+      }
+
+      // Industry filter
+      if (currentIndustry !== 'all') {
+        companies = companies.filter(c => (c.industry||'Other') === currentIndustry);
+      }
+
+      // Search
+      if (currentSearch) {
+        companies = companies.filter(c => {
+          const hay = `${c.name} ${c.one_liner} ${c.long_description} ${c.industry} ${(c.tags||[]).join(' ')} ${c.location}`.toLowerCase();
+          return hay.includes(currentSearch);
+        });
+      }
+
+      // Sort
+      companies = sortCompanies(companies, currentSort);
+
+      filteredCompanies = companies;
+
+      // Filter label
+      const labels = [];
+      if (currentBatch !== 'all') labels.push(BATCH_DISPLAY[currentBatch] || currentBatch);
+      if (currentYear !== 'all') labels.push(currentYear);
+      if (currentIndustry !== 'all') labels.push(currentIndustry);
+      if (currentSearch) labels.push(`"${currentSearch}"`);
+      document.getElementById('filter-label').textContent = labels.length ? `in ${labels.join(' / ')}` : '';
+
+      renderCompanies();
+    }
+
+    function sortCompanies(list, sort) {
+      const copy = [...list];
+      const batchIdx = b => BATCH_ORDER.indexOf(b);
+      switch (sort) {
+        case 'name': return copy.sort((a,b) => a.name.localeCompare(b.name));
+        case 'name-desc': return copy.sort((a,b) => b.name.localeCompare(a.name));
+        case 'batch-new': return copy.sort((a,b) => batchIdx(b.batch) - batchIdx(a.batch) || a.name.localeCompare(b.name));
+        case 'batch-old': return copy.sort((a,b) => batchIdx(a.batch) - batchIdx(b.batch) || a.name.localeCompare(b.name));
+        case 'team-size': return copy.sort((a,b) => (b.team_size||0) - (a.team_size||0));
+        default: return copy;
+      }
+    }
+
+    // ─── Render ────────────────────────────────────────────────
+    function renderCompanies() {
+      const visible = filteredCompanies.slice(0, displayCount);
+      const remaining = filteredCompanies.length - displayCount;
+
+      document.getElementById('showing-count').textContent = `${Math.min(displayCount, filteredCompanies.length)} of ${filteredCompanies.length}`;
+      document.getElementById('search-count').textContent = filteredCompanies.length > 0 ? `${filteredCompanies.length} results` : '';
+
+      // Grid view
+      const grid = document.getElementById('companies-grid');
+      const list = document.getElementById('companies-list');
+
+      if (currentView === 'grid') {
+        grid.classList.remove('hidden');
+        list.classList.add('hidden');
+        grid.innerHTML = visible.map(c => cardHTML(c)).join('');
+      } else {
+        grid.classList.add('hidden');
+        list.classList.remove('hidden');
+        list.innerHTML = visible.map(c => listItemHTML(c)).join('');
+      }
+
+      // Load more
+      const loadMore = document.getElementById('load-more-container');
+      if (remaining > 0) {
+        loadMore.classList.remove('hidden');
+        document.getElementById('load-more-info').textContent = `${remaining} more companies`;
+      } else {
+        loadMore.classList.add('hidden');
+      }
+
+      // Empty state
+      document.getElementById('empty-state').classList.toggle('hidden', filteredCompanies.length > 0);
+    }
+
+    function cardHTML(c) {
+      const color = BATCH_COLORS[c.batch] || '#F26522';
+      const tags = (c.tags || []).slice(0, 3);
+      const website = c.website || '';
+      const desc = (c.one_liner || '').slice(0, 120);
+      const logo = c.logo ? `<img src="${c.logo}" alt="${esc(c.name)}" class="w-10 h-10 rounded-lg object-cover bg-dark-800" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` : '';
+      const fallback = `<div class="${c.logo?'hidden':'flex'} w-10 h-10 rounded-lg bg-gradient-to-br from-yc/20 to-yc/5 items-center justify-center text-yc font-bold text-sm">${esc(c.name.charAt(0))}</div>`;
+
+      return `
+        <div class="company-card glass rounded-xl p-5 cursor-pointer" onclick='openModal(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
+          <div class="flex items-start gap-3 mb-3">
+            ${logo}${fallback}
+            <div class="min-w-0 flex-1">
+              <h3 class="font-semibold text-white text-sm truncate">${esc(c.name)}</h3>
+              <div class="flex items-center gap-2 mt-0.5">
+                <span class="text-xs px-2 py-0.5 rounded-full font-medium" style="background:${color}22;color:${color}">${c.batch}</span>
+                ${c.industry ? `<span class="text-xs text-white/30 truncate">${esc(c.industry)}</span>` : ''}
+              </div>
+            </div>
+          </div>
+          <p class="text-xs text-white/50 leading-relaxed mb-3 line-clamp-2">${esc(desc)}</p>
+          <div class="flex items-center justify-between">
+            <div class="flex flex-wrap gap-1">
+              ${tags.map(t => `<span class="tag text-[10px] px-2 py-0.5 rounded-full">${esc(t)}</span>`).join('')}
+            </div>
+            <div class="flex gap-1.5">
+              ${website ? `<a href="${esc(website)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="w-7 h-7 rounded-full bg-dark-800 flex items-center justify-center text-white/40 hover:text-yc-light hover:bg-yc/10 transition" title="Website"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>` : ''}
+              ${c.yc_url ? `<a href="${esc(c.yc_url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="w-7 h-7 rounded-full bg-dark-800 flex items-center justify-center text-white/40 hover:text-yc-light hover:bg-yc/10 transition" title="YC Profile"><span class="text-[10px] font-bold">YC</span></a>` : ''}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function listItemHTML(c) {
+      const color = BATCH_COLORS[c.batch] || '#F26522';
+      return `
+        <div class="company-card glass rounded-lg px-4 py-3 cursor-pointer flex items-center gap-4" onclick='openModal(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
+          <span class="text-xs px-2 py-0.5 rounded-full font-medium shrink-0" style="background:${color}22;color:${color}">${c.batch}</span>
+          <span class="font-medium text-sm text-white truncate w-40 shrink-0">${esc(c.name)}</span>
+          <span class="text-xs text-white/40 truncate flex-1">${esc(c.one_liner || '')}</span>
+          <span class="text-xs text-white/30 shrink-0 hidden sm:block">${esc(c.industry || '')}</span>
+          <div class="flex gap-1.5 shrink-0">
+            ${c.website ? `<a href="${esc(c.website)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="text-white/30 hover:text-yc-light transition text-xs">Visit</a>` : ''}
+          </div>
+        </div>`;
+    }
+
+    function loadMore() {
+      displayCount += BATCH_PER_LOAD;
+      renderCompanies();
+    }
+
+    // ─── Modal ─────────────────────────────────────────────────
+    function openModal(c) {
+      const color = BATCH_COLORS[c.batch] || '#F26522';
+      const tags = c.tags || [];
+      const modal = document.getElementById('company-modal');
+      const content = document.getElementById('modal-content');
+
+      content.innerHTML = `
+        <div class="flex items-start gap-4 mb-6">
+          ${c.logo ? `<img src="${c.logo}" class="w-14 h-14 rounded-xl object-cover bg-dark-800" onerror="this.remove()">` : ''}
+          <div>
+            <h2 class="font-display text-2xl font-bold text-white">${esc(c.name)}</h2>
+            <div class="flex flex-wrap items-center gap-2 mt-1">
+              <span class="text-sm px-3 py-1 rounded-full font-medium" style="background:${color}22;color:${color}">${BATCH_DISPLAY[c.batch] || c.batch}</span>
+              ${c.industry ? `<span class="text-sm text-white/40">${esc(c.industry)}</span>` : ''}
+              ${c.status ? `<span class="text-xs px-2 py-0.5 rounded-full bg-green-500/10 text-green-400">${esc(c.status)}</span>` : ''}
+            </div>
+          </div>
+        </div>
+
+        ${c.one_liner ? `<p class="text-white/70 text-sm leading-relaxed mb-4">${esc(c.one_liner)}</p>` : ''}
+        ${c.long_description ? `<div class="glass rounded-lg p-4 mb-4"><p class="text-white/50 text-sm leading-relaxed">${esc(c.long_description)}</p></div>` : ''}
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
+          ${c.team_size ? `<div class="glass rounded-lg p-3 text-center"><div class="text-lg font-bold text-white">${c.team_size}</div><div class="text-xs text-white/30">Team Size</div></div>` : ''}
+          ${c.stage ? `<div class="glass rounded-lg p-3 text-center"><div class="text-lg font-bold text-white">${esc(c.stage)}</div><div class="text-xs text-white/30">Stage</div></div>` : ''}
+          ${c.location ? `<div class="glass rounded-lg p-3 text-center"><div class="text-sm font-medium text-white truncate">${esc(c.location)}</div><div class="text-xs text-white/30">Location</div></div>` : ''}
+        </div>
+
+        ${tags.length ? `<div class="flex flex-wrap gap-1.5 mb-5">${tags.map(t => `<span class="tag text-xs px-3 py-1 rounded-full">${esc(t)}</span>`).join('')}</div>` : ''}
+
+        <div class="flex flex-wrap gap-2">
+          ${c.website ? `<a href="${esc(c.website)}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-yc text-white text-sm font-medium hover:bg-yc-dark transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>Visit Website</a>` : ''}
+          ${c.yc_url ? `<a href="${esc(c.yc_url)}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-dark-800 border border-dark-700 text-white/70 text-sm hover:border-yc/30 hover:text-yc-light transition"><span class="font-bold text-xs text-yc">YC</span>YC Profile</a>` : ''}
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('company-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    // ─── Utils ─────────────────────────────────────────────────
+    function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+    function showLoading(show) { document.getElementById('loading-spinner').classList.toggle('show', show); }
+
+    function setView(v) {
+      currentView = v;
+      document.getElementById('view-grid').classList.toggle('border-yc/40', v === 'grid');
+      document.getElementById('view-list').classList.toggle('border-yc/40', v === 'list');
+      renderCompanies();
+    }
+  </script>
+</body>
+</html>
